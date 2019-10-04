@@ -8,7 +8,7 @@ assignees: ''
 ---
 
 <!-- 1. Describe the proposed feature -->
-**Description:**
+**Description:** 
 
 <!-- 2. Specify the rationale (from the partial user story) -->
 **Rationale:** 
@@ -17,7 +17,8 @@ assignees: ''
 **Story points:** 
 
 <!-- 4. Record any backlog items it depends on. If there are no other dependencies, specify 'None' -->
-**Dependencies:**
+<!-- Note: record the issue numbers (E.g. #XX) -->
+**Dependencies:** 
 
 <!-- 5. Add a label to determine the risk level (low, medium, high) -->
 <!-- 6. Add this issue to the Product Backlog project -->
