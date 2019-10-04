@@ -1,7 +1,7 @@
 ---
 name: Partial User Story
 about: Template for adding a user story to the product backlog
-title: "[Product Backlog] Partial User Story"
+title: "[US XX.XX.XX] Short user story description"
 labels: product backlog
 assignees: ''
 
