@@ -1,4 +1,4 @@
-<!-- Each PR should close an issue from the product backlog -->
+<!-- Each PR should close an issue -->
 <!-- An example of closing multiple issues: Closes #1, closes #2, etc... -->
 Closes #
 
