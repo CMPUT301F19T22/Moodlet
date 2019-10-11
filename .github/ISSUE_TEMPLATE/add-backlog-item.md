@@ -7,18 +7,12 @@ assignees: ''
 
 ---
 
-<!-- 1. Describe the proposed feature -->
+<!-- 1. Describe the proposed feature (from the partial user story) -->
 **Description:** 
 
-<!-- 2. Specify the rationale (from the partial user story) -->
+<!-- 2. Specify the rationale (why is this feature needed?) -->
 **Rationale:** 
 
-<!-- 3. Specify the size (time it would take) in story points -->
-**Story points:** 
-
-<!-- 4. Record any backlog items it depends on. If there are no other dependencies, specify 'None' -->
-<!-- Note: record the issue numbers (E.g. #XX) -->
-**Dependencies:** 
-
+<!-- 3. Add a label to determine the size (time it would take) in story points -->
 <!-- 5. Add a label to determine the risk level (low, medium, high) -->
 <!-- 6. Add this issue to the Product Backlog project -->
