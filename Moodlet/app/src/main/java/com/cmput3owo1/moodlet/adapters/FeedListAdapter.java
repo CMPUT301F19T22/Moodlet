@@ -26,7 +26,7 @@ public class FeedListAdapter extends ArrayAdapter<MoodEventAssociation> {
         super(context,0, feed);
         this.feed = feed;
         this.context = context;
-        this.simpleDateFormat = new SimpleDateFormat("dd MMMMM, yyyy - h:mm a", Locale.US);
+        this.simpleDateFormat = new SimpleDateFormat("MMMM d, yyyy - h:mm a", Locale.US);
     }
 
     static class ViewHolder {
