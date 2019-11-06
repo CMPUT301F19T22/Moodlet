@@ -1,5 +1,6 @@
 package com.cmput3owo1.moodlet.fragments;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,9 +16,13 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
+
+    private static final String TAG = "Moodlet";
+    private static final LatLng EDMONTON = new LatLng(53.5444,-113.4909);
 
     MapView mapView;
     GoogleMap map;
@@ -95,7 +100,22 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap map) {
         Log.e("MOODLET", "onMapReady called");
         this.map = map;
-
+//        this.map.setMyLocationEnabled(true);
+//        this.map.setOn
         // Set camera to last known/recorded location
+
+        try {
+            // Customise the styling of the base map using a JSON object defined
+            // in a raw resource file.
+            boolean success = this.map.setMapStyle(MapStyleOptions.loadRawResourceStyle(mapView.getContext(), R.raw.map_style_json));
+
+            if (!success) {
+                Log.e(TAG, "Style parsing failed.");
+            }
+        } catch (Resources.NotFoundException e) {
+            Log.e(TAG, "Can't find style. Error: ", e);
+        }
+
+        this.map.moveCamera(CameraUpdateFactory.newLatLngZoom(EDMONTON, 12));
     }
 }
