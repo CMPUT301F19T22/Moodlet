@@ -19,4 +19,11 @@ public enum EmotionalState {
         //TODO - add color and emoticon here once we decide them
     }
 
+    public Bitmap getEmoticon() {
+        return emoticon;
+    }
+
+    public Color getColor() {
+        return color;
+    }
 }
