@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import com.cmput3owo1.moodlet.R;
-import com.cmput3owo1.moodlet.fragments.RegisterFragment;
+import com.cmput3owo1.moodlet.fragments.LoginFragment;
 
 
 public class LoginActvity extends AppCompatActivity {
@@ -27,14 +27,14 @@ public class LoginActvity extends AppCompatActivity {
             }
 
             // Create a new Fragment to be placed in the activity layout
-            RegisterFragment registerFragment = new RegisterFragment();
+            LoginFragment loginFragment = new LoginFragment();
             // In case this activity was started with special instructions from an
             // Intent, pass the Intent's extras to the fragment as arguments
-            registerFragment.setArguments(getIntent().getExtras());
+            loginFragment.setArguments(getIntent().getExtras());
 
             // Add the fragment to the 'fragment_container' FrameLayout
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_container, registerFragment).commit();
+                    .add(R.id.fragment_container, loginFragment).commit();
         }
     }
 

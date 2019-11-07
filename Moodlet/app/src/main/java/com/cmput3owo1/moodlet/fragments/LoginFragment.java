@@ -35,6 +35,18 @@ public class LoginFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        auth = FirebaseAuth.getInstance();
+
+        if(auth.getCurrentUser() != null){
+            Intent intent = new Intent(getActivity(), MainActivity.class);
+            startActivity(intent);
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
@@ -44,8 +56,6 @@ public class LoginFragment extends Fragment {
         email = loginFragmentView.findViewById(R.id.edit_text_email);
         password = loginFragmentView.findViewById(R.id.edit_text_password);
         loginButton = loginFragmentView.findViewById(R.id.btn_login);
-
-        auth = FirebaseAuth.getInstance();
 
         signupText.setOnClickListener(new View.OnClickListener() {
             @Override
