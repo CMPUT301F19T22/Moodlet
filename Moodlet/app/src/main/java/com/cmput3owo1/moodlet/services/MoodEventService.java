@@ -28,23 +28,24 @@ public class MoodEventService {
     }
 
     public void getFeedUpdates(final OnFeedUpdateListener listener) {
-        CollectionReference following = database.collection("users/tbojovic/following");
+        CollectionReference followingRef = database.collection("users/tbojovic/following");
 
-        following.addSnapshotListener(new EventListener<QuerySnapshot>() {
+        followingRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 ArrayList<MoodEventAssociation> newFeed = new ArrayList<>();
+
                 for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                     EmotionalState emotionalState = EmotionalState.valueOf(String.valueOf(doc.getData().get("emotionalState")));
                     String reasoning = String.valueOf(doc.getData().get("reasoning"));
                     SocialSituation socialSituation = SocialSituation.valueOf(String.valueOf(doc.getData().get("socialSituation")));
                     Timestamp timestamp = (Timestamp) doc.getData().get("dateTime");
-                    //photograph
-                    //location
+                    //TODO: photograph
+                    //TODO: location
                     MoodEvent moodEvent = new MoodEvent(emotionalState, timestamp.toDate());
-
                     moodEvent.setReasoning(reasoning);
                     moodEvent.setSocialSituation(socialSituation);
+
                     newFeed.add(new MoodEventAssociation(moodEvent, doc.getId()));
                 }
                 listener.onFeedUpdate(newFeed);
