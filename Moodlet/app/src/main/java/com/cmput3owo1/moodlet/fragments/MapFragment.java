@@ -111,8 +111,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     /**
-     *
-     * @param map
+     * Called when the map is ready to be used after calling getMapAsync().
+     * @param map A non-null instance of a GoogleMap
      */
     @Override
     public void onMapReady(GoogleMap map) {
