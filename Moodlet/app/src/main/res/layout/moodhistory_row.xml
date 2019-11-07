@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:layout_margin="3dp">
+
+    <ImageView
+        android:id="@+id/moodEmoji"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:src="@mipmap/ic_launcher_round"/>
+
+    <LinearLayout
+        android:layout_weight="4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="7dp">
+
+        <TextView
+            android:id="@+id/moodString"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mood"
+            android:textSize="18dp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/moodDateTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15dp"
+            android:text="month day year - time"
+            android:paddingTop="5dp"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/timeDifference"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="time diff"
+        android:textStyle="bold"
+        android:paddingRight="30dp"
+        android:paddingLeft="10dp"/>
+
+</LinearLayout>
