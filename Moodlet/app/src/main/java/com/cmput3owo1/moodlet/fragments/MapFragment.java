@@ -18,6 +18,10 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 
+/**
+ * A fragment that holds a Google API MapView that displays the location of the user's mood event
+ * history and optionally displays the location of the user's followers' mose recent mood event.
+ */
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private static final String TAG = "Moodlet";
