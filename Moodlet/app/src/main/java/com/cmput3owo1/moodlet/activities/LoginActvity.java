@@ -1,21 +1,13 @@
 package com.cmput3owo1.moodlet.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
-import android.net.Uri;
 import android.os.Bundle;
 import com.cmput3owo1.moodlet.R;
-import com.cmput3owo1.moodlet.fragments.LoginFragment;
 import com.cmput3owo1.moodlet.fragments.RegisterFragment;
 
 
 public class LoginActvity extends AppCompatActivity {
-
-    private static final int LOGIN_FRAGMENT = 0;
-    private static final int REGISTER_FRAGMENT = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

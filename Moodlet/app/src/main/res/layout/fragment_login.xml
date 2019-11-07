@@ -72,7 +72,7 @@
             android:clickable="true"
             android:focusable="true"
             android:text=" Sign up"
-            android:textColor="@color/colorLoginBlue"
+            android:textColor="@color/colorAccent"
             android:textSize="12sp" />
 
     </LinearLayout>

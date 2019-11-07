@@ -1,6 +1,5 @@
 package com.cmput3owo1.moodlet.fragments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -66,9 +65,7 @@ public class RegisterFragment extends Fragment {
 
                 FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.fragment_container, new LoginFragment());
-                fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
-
 
             }
         });
