@@ -21,7 +21,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class RegisterFragment extends Fragment {
+public class RegisterFragment extends Fragment implements UserService.RegistrationListener {
 
     EditText fullname, username, email, password, confirmPassword;
     TextView loginText;
@@ -30,26 +30,8 @@ public class RegisterFragment extends Fragment {
     FirebaseAuth auth;
     FirebaseFirestore db;
 
-    /**
-     * Callback function that redirects to login fragment when registration is successful
-     */
-    UserService.CallbackFunction registrationSuccessCallback = new UserService.CallbackFunction() {
-        @Override
-        public void callback() {
-            Intent intent = new Intent(getActivity(), LoginActivity.class);
-            startActivity(intent);
-        }
-    };
+    UserService userService = new UserService();
 
-    /**
-     * Callback function that displays a toast message when login is unsuccessful
-     */
-    UserService.CallbackFunction registrationFailureCallback = new UserService.CallbackFunction() {
-        @Override
-        public void callback() {
-            Toast.makeText(getActivity(), "You can't register with this email or password", Toast.LENGTH_SHORT).show();
-        }
-    };
 
     public RegisterFragment() {
         // Required empty public constructor
@@ -107,12 +89,27 @@ public class RegisterFragment extends Fragment {
                 } else if (!txt_password.equals(txt_confirm_password)) {
                     Toast.makeText(getActivity(), "Passwords do not match", Toast.LENGTH_SHORT).show();
                 } else {
-                    UserService.registerUser(auth, collectionReference, txt_username, txt_email, txt_password, txt_fullname, registrationSuccessCallback, registrationFailureCallback);
+                    userService.registerUser(collectionReference, txt_username, txt_email, txt_password, txt_fullname, RegisterFragment.this);
                 }
             }
         });
 
         return registerFragmentView;
+    }
+
+    @Override
+    public void onRegistrationSuccess() {
+        Intent intent = new Intent(getActivity(), LoginActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onRegistrationFailure() {
+        Toast.makeText(getActivity(), "Account with this email already exists", Toast.LENGTH_SHORT).show();
+    }
+
+    public void onAddToDatabaseFailure() {
+        Toast.makeText(getActivity(), "Something went wrong, please try again later", Toast.LENGTH_SHORT).show();
     }
 }
 

@@ -19,7 +19,7 @@ import com.cmput3owo1.moodlet.activities.MainActivity;
 import com.cmput3owo1.moodlet.services.UserService;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class LoginFragment extends Fragment {
+public class LoginFragment extends Fragment implements UserService.LoginListener {
 
     EditText email, password;
     TextView signupText;
@@ -27,32 +27,12 @@ public class LoginFragment extends Fragment {
 
     FirebaseAuth auth;
 
-
-    /**
-     * Callback function that redirects activity to the main activity when login is successful
-     */
-    UserService.CallbackFunction loginSuccessCallback = new UserService.CallbackFunction() {
-        @Override
-        public void callback() {
-
-            Intent intent = new Intent(getActivity(), MainActivity.class);
-            startActivity(intent);
-        }
-    };
-
-    /**
-     * Callback function that displays a toast message when login is unsuccessful
-     */
-    UserService.CallbackFunction loginFailureCallback = new UserService.CallbackFunction() {
-        @Override
-        public void callback() {
-            Toast.makeText(getActivity(), "Authentication failed", Toast.LENGTH_SHORT).show();
-        }
-    };
+    UserService userService = new UserService();
 
     public LoginFragment() {
         // Required empty public constructor
     }
+
     /**
      * This function is called to do initial creation of a fragment.
      * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state as given here.
@@ -64,10 +44,10 @@ public class LoginFragment extends Fragment {
 
         auth = FirebaseAuth.getInstance();
 
-        if(auth.getCurrentUser() != null){
-            Intent intent = new Intent(getActivity(), MainActivity.class);
-            startActivity(intent);
-        }
+//        if(auth.getCurrentUser() != null){
+//            Intent intent = new Intent(getActivity(), MainActivity.class);
+//            startActivity(intent);
+//        }
     }
     /**
      * This function is called to have the fragment instantiate its user interface view.
@@ -106,12 +86,23 @@ public class LoginFragment extends Fragment {
                 if(txt_email.isEmpty() || txt_password.isEmpty()) {
                     Toast.makeText(getActivity(), "All fields are required", Toast.LENGTH_SHORT).show();
                 } else {
-                    UserService.loginUser(auth, txt_email, txt_password, loginSuccessCallback, loginFailureCallback);
+                    userService.loginUser(txt_email, txt_password, LoginFragment.this);
                 }
             }
         });
 
         // Inflate the layout for this fragment
         return loginFragmentView;
+    }
+
+    @Override
+    public void onLoginSuccess() {
+        Intent intent = new Intent(getActivity(), MainActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onLoginFailure() {
+        Toast.makeText(getActivity(), "Authentication failed", Toast.LENGTH_SHORT).show();
     }
 }

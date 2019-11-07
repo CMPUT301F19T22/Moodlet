@@ -1,9 +1,6 @@
 package com.cmput3owo1.moodlet.services;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
-
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -18,8 +15,21 @@ import java.util.HashMap;
 
 public class UserService {
 
-   public interface CallbackFunction {
-        void callback();
+    FirebaseAuth auth;
+
+    public UserService (){
+        auth = FirebaseAuth.getInstance();
+    }
+
+    public interface RegistrationListener {
+        void onRegistrationSuccess();
+        void onRegistrationFailure();
+        void onAddToDatabaseFailure();
+    }
+
+    public interface LoginListener {
+        void onLoginSuccess();
+        void onLoginFailure();
     }
 
 
@@ -30,11 +40,9 @@ public class UserService {
      * @param email Email to register with.
      * @param password Password of Account to register with.
      * @param fullname Full name of user registering.
-     * @param success Callback function for successful registration and database addition
-     * @param failure Callback function for failed registration and database addition
      * @return none
      */
-    public static void registerUser(final FirebaseAuth auth, final CollectionReference collectionReference, final String username, final String email, String password, final String fullname, final CallbackFunction success, final CallbackFunction failure){
+    public void registerUser(final CollectionReference collectionReference, final String username, final String email, String password, final String fullname, final RegistrationListener listener){
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -43,9 +51,9 @@ public class UserService {
 
                     UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setDisplayName(username).build();
                     user.updateProfile(profileUpdates);
-                    putUserIntoDB(collectionReference, email, fullname, username, success, failure);
+                    putUserIntoDB(collectionReference, email, fullname, username, listener);
                 } else {
-                    Log.e("DB add error", "Failed to add user to db");
+                    listener.onRegistrationFailure();
                 }
             }
         });
@@ -57,11 +65,9 @@ public class UserService {
      * @param username Username to register with.
      * @param email Email to register with.
      * @param fullname Full name of user registering.
-     * @param success Callback function for successful registration and database addition
-     * @param failure Callback function for failed registration and database addition
      * @return none
      */
-    public static void putUserIntoDB(final CollectionReference collectionReference, final String email, final String fullname, final String username, final CallbackFunction success, final CallbackFunction failure){
+    public void putUserIntoDB(final CollectionReference collectionReference, final String email, final String fullname, final String username, final RegistrationListener listener){
         HashMap<String, String> data = new HashMap<>();
         data.put("email", email);
         data.put("fullname", fullname);
@@ -72,9 +78,9 @@ public class UserService {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()) {
-                        success.callback();
+                        listener.onRegistrationSuccess();
                     } else {
-                        failure.callback();
+                        listener.onAddToDatabaseFailure();
                     }
                 }
             });
@@ -86,15 +92,15 @@ public class UserService {
      * @param txt_password Password to login with.
      * @return none
      */
-    public static void loginUser(FirebaseAuth auth, String txt_email, String txt_password, final CallbackFunction success, final CallbackFunction failure){
+    public void loginUser(String txt_email, String txt_password, final LoginListener listener){
         auth.signInWithEmailAndPassword(txt_email, txt_password)
             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                    @Override
                    public void onComplete(@NonNull Task<AuthResult> task) {
                        if(task.isSuccessful()) {
-                           success.callback();
+                           listener.onLoginSuccess();
                        } else {
-                           failure.callback();
+                           listener.onLoginFailure();
                        }
                    }
                }
