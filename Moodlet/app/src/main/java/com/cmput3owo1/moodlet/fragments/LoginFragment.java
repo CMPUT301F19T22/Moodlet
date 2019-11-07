@@ -17,15 +17,12 @@ import android.widget.Toast;
 import com.cmput3owo1.moodlet.R;
 import com.cmput3owo1.moodlet.activities.MainActivity;
 import com.cmput3owo1.moodlet.services.UserService;
-import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginFragment extends Fragment implements UserService.LoginListener {
 
     EditText email, password;
     TextView signupText;
     Button loginButton;
-
-    FirebaseAuth auth;
 
     UserService userService = new UserService();
 
@@ -42,13 +39,13 @@ public class LoginFragment extends Fragment implements UserService.LoginListener
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        auth = FirebaseAuth.getInstance();
 
-//        if(auth.getCurrentUser() != null){
+//        if(userService.hasPreviousLogin()){
 //            Intent intent = new Intent(getActivity(), MainActivity.class);
 //            startActivity(intent);
 //        }
     }
+
     /**
      * This function is called to have the fragment instantiate its user interface view.
      * @param inflater The LayoutInflater object that can be used to inflate any views in the fragment.

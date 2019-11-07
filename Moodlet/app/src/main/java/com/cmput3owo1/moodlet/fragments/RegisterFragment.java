@@ -17,9 +17,6 @@ import android.widget.Toast;
 import com.cmput3owo1.moodlet.R;
 import com.cmput3owo1.moodlet.activities.LoginActivity;
 import com.cmput3owo1.moodlet.services.UserService;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 public class RegisterFragment extends Fragment implements UserService.RegistrationListener {
 
@@ -27,11 +24,7 @@ public class RegisterFragment extends Fragment implements UserService.Registrati
     TextView loginText;
     Button registerButton;
 
-    FirebaseAuth auth;
-    FirebaseFirestore db;
-
     UserService userService = new UserService();
-
 
     public RegisterFragment() {
         // Required empty public constructor
@@ -46,6 +39,7 @@ public class RegisterFragment extends Fragment implements UserService.Registrati
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         View registerFragmentView = inflater.inflate(R.layout.fragment_register, container, false);
 
@@ -56,11 +50,6 @@ public class RegisterFragment extends Fragment implements UserService.Registrati
         confirmPassword = registerFragmentView.findViewById(R.id.confirm_password);
         registerButton = registerFragmentView.findViewById(R.id.btn_register);
         loginText = registerFragmentView.findViewById(R.id.swap_to_login_text_view);
-
-        auth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
-
-        final CollectionReference collectionReference = db.collection("users");
 
         loginText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,7 +78,7 @@ public class RegisterFragment extends Fragment implements UserService.Registrati
                 } else if (!txt_password.equals(txt_confirm_password)) {
                     Toast.makeText(getActivity(), "Passwords do not match", Toast.LENGTH_SHORT).show();
                 } else {
-                    userService.registerUser(collectionReference, txt_username, txt_email, txt_password, txt_fullname, RegisterFragment.this);
+                    userService.registerUser(txt_username, txt_email, txt_password, txt_fullname, RegisterFragment.this);
                 }
             }
         });
