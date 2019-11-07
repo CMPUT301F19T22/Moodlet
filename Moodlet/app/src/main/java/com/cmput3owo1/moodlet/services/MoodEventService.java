@@ -1,16 +1,22 @@
 package com.cmput3owo1.moodlet.services;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.cmput3owo1.moodlet.models.EmotionalState;
 import com.cmput3owo1.moodlet.models.MoodEvent;
 import com.cmput3owo1.moodlet.models.MoodEventAssociation;
 import com.cmput3owo1.moodlet.models.SocialSituation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -18,6 +24,7 @@ import java.util.ArrayList;
 
 public class MoodEventService {
     private FirebaseFirestore database;
+    private FirebaseAuth auth;
 
     public interface OnFeedUpdateListener {
         void onFeedUpdate(ArrayList<MoodEventAssociation> newFeed);
@@ -25,10 +32,15 @@ public class MoodEventService {
 
     public MoodEventService() {
         database = FirebaseFirestore.getInstance();
+        auth = FirebaseAuth.getInstance();
     }
 
     public void getFeedUpdates(final OnFeedUpdateListener listener) {
-        CollectionReference followingRef = database.collection("users/tbojovic/following");
+        // String username = auth.getCurrentUser().getDisplayName();
+        // Hardcoded until login gets merged
+        String username = "tbojovic";
+
+        CollectionReference followingRef = database.collection("users/"+ username + "/following");
 
         followingRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -52,4 +64,30 @@ public class MoodEventService {
             }
         });
     }
+
+    public void addMoodEvent(final MoodEvent moodEvent) {
+        DocumentReference newMoodEventRef = database.collection("moodEvents").document();
+        newMoodEventRef.set(moodEvent);
+        //String username = auth.getCurrentUser().getDisplayName();
+        final String username = "tbojovic";
+        newMoodEventRef.update("username", username);
+
+        Query followersQuery = database.collection(username + "/followers");
+        followersQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        String follower = document.getId();
+                        String path = "users/" + follower + "/following/" + username;
+                        database.document(path).set(moodEvent);
+                        database.document(path).update("username", username);
+                    }
+                } else {
+                    //Log.d(TAG, "Error getting documents: ", task.getException());
+                }
+            }
+        });
+    }
+
 }
