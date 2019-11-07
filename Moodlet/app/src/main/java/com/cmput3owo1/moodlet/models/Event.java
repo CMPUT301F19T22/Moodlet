@@ -12,6 +12,12 @@ public abstract class Event {
         // This sets the current date
         this.date = new Date();
     }
+
+    public Event(Date date) {
+        // This sets the current date
+        this.date = date;
+    }
+
     public Date getDate() {
         return date;
     }

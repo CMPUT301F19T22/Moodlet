@@ -2,6 +2,8 @@ package com.cmput3owo1.moodlet.models;
 
 import android.graphics.Bitmap;
 
+import java.util.Date;
+
 public class MoodEvent extends Event {
     private EmotionalState emotionalState;
     private String reasoning;
@@ -10,6 +12,11 @@ public class MoodEvent extends Event {
 
     public MoodEvent(EmotionalState es) {
         super();
+        emotionalState = es;
+    }
+
+    public MoodEvent(EmotionalState es, Date date) {
+        super(date);
         emotionalState = es;
     }
 
