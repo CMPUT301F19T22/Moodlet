@@ -4,4 +4,13 @@
     <string name="title_friend_activity">Friend Activity</string>
     <string name="title_discover">Discover</string>
     <string name="title_map">Map</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="username">Username</string>
+    <string name="login">Login</string>
+    <string name="full_name">Full Name</string>
+    <string name="register">Register</string>
+
+
 </resources>
