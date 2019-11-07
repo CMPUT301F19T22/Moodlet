@@ -21,6 +21,8 @@ android {
 }
 
 dependencies {
+    def fragment_version = "1.1.0"
+
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'com.google.android.material:material:1.0.0'
@@ -36,6 +38,9 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.google.firebase:firebase-firestore:21.2.1'
     implementation 'com.google.firebase:firebase-auth:19.1.0'
+    debugImplementation "androidx.fragment:fragment-testing:$fragment_version"
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.0.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.0.1'
 }
 
 apply plugin: 'com.google.gms.google-services'

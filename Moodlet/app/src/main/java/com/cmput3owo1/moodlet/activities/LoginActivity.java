@@ -7,7 +7,7 @@ import com.cmput3owo1.moodlet.R;
 import com.cmput3owo1.moodlet.fragments.LoginFragment;
 
 
-public class LoginActvity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

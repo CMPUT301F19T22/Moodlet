@@ -3,11 +3,9 @@ package com.cmput3owo1.moodlet.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,15 +15,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cmput3owo1.moodlet.R;
-import com.cmput3owo1.moodlet.activities.LoginActvity;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
+import com.cmput3owo1.moodlet.activities.LoginActivity;
+import com.cmput3owo1.moodlet.services.UserService;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.HashMap;
 
 public class RegisterFragment extends Fragment {
 
@@ -36,11 +30,38 @@ public class RegisterFragment extends Fragment {
     FirebaseAuth auth;
     FirebaseFirestore db;
 
+    /**
+     * Callback function that redirects to login fragment when registration is successful
+     */
+    UserService.CallbackFunction registrationSuccessCallback = new UserService.CallbackFunction() {
+        @Override
+        public void callback() {
+            Intent intent = new Intent(getActivity(), LoginActivity.class);
+            startActivity(intent);
+        }
+    };
+
+    /**
+     * Callback function that displays a toast message when login is unsuccessful
+     */
+    UserService.CallbackFunction registrationFailureCallback = new UserService.CallbackFunction() {
+        @Override
+        public void callback() {
+            Toast.makeText(getActivity(), "You can't register with this email or password", Toast.LENGTH_SHORT).show();
+        }
+    };
+
     public RegisterFragment() {
         // Required empty public constructor
     }
 
-
+    /**
+     * This function is called to have the fragment instantiate its user interface view.
+     * @param inflater The LayoutInflater object that can be used to inflate any views in the fragment.
+     * @param container  If non-null, this is the parent view that the fragment's UI should be attached to. The fragment should not add the view itself, but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state as given here.
+     * @return Return the View for the fragment's UI, or null.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -77,43 +98,21 @@ public class RegisterFragment extends Fragment {
                 String txt_email = email.getText().toString();
                 String txt_password = password.getText().toString();
                 String txt_fullname = fullname.getText().toString();
+                String txt_confirm_password = confirmPassword.getText().toString();
 
-                if(TextUtils.isEmpty(txt_username) || TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password) ) {
+                if(txt_username.isEmpty()|| txt_email.isEmpty() || txt_password.isEmpty() || txt_confirm_password.isEmpty()) {
                     Toast.makeText(getActivity(), "All fields are required", Toast.LENGTH_SHORT).show();
                 } else if (txt_password.length() < 6) {
                     Toast.makeText(getActivity(), "Password must be at least 6 characters long", Toast.LENGTH_SHORT).show();
+                } else if (!txt_password.equals(txt_confirm_password)) {
+                    Toast.makeText(getActivity(), "Passwords do not match", Toast.LENGTH_SHORT).show();
                 } else {
-                    register(collectionReference, txt_username, txt_email, txt_password, txt_fullname);
+                    UserService.registerUser(auth, collectionReference, txt_username, txt_email, txt_password, txt_fullname, registrationSuccessCallback, registrationFailureCallback);
                 }
             }
         });
 
         return registerFragmentView;
     }
-
-    private void register(final CollectionReference collectionReference, final String username, final String email, final String password, final String fullname) {
-        auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                HashMap<String, String> data = new HashMap<>();
-                data.put("email", email);
-                data.put("fullname", fullname);
-                data.put("username", username);
-
-                collectionReference.document(username).set(data)
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                Intent intent = new Intent(getActivity(), LoginActvity.class);
-                                startActivity(intent);
-                            } else {
-                                Toast.makeText(getActivity(), "You can't register with this email or password", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                });
-            }
-        });
-
-    }
 }
+
