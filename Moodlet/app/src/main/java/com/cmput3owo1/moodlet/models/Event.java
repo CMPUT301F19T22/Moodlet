@@ -1,6 +1,6 @@
 package com.cmput3owo1.moodlet.models;
 
-import android.location.Location;
+import com.google.firebase.firestore.GeoPoint;
 
 import java.util.Date;
 
@@ -10,7 +10,7 @@ import java.util.Date;
  */
 public class Event {
     private Date date;
-    private Location location;
+    private GeoPoint location;
 
     /**
      * Constructor for the event class. Sets the date to the current date
@@ -40,7 +40,7 @@ public class Event {
      * This returns the location of the event
      * @return Return the event location
      */
-    public Location getLocation() {
+    public GeoPoint getLocation() {
         return location;
     }
 
@@ -48,7 +48,7 @@ public class Event {
      * This sets the event location
      * @param location The event location
      */
-    public void setLocation(Location location) {
+    public void setLocation(GeoPoint location) {
         this.location = location;
     }
 }

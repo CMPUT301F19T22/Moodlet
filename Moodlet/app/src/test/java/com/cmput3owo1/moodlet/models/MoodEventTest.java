@@ -1,16 +1,12 @@
 package com.cmput3owo1.moodlet.models;
 
-import android.graphics.Bitmap;
-
 import org.junit.Test;
-import org.mockito.Mock;
 
 import static org.junit.Assert.*;
 
 public class MoodEventTest {
 
-    @Mock
-    String photographPath;
+    String photographPath = "pathToPhoto";
 
     @Test
     public void testConstructor() {
