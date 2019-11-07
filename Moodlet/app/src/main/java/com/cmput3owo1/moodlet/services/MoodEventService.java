@@ -40,9 +40,9 @@ public class MoodEventService {
         // Hardcoded until login gets merged
         String username = "tbojovic";
 
-        CollectionReference followingRef = database.collection("users/"+ username + "/following");
+        Query followingQuery = database.collection("users/"+ username + "/following");
 
-        followingRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+        followingQuery.orderBy("dateTime", Query.Direction.DESCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 ArrayList<MoodEventAssociation> newFeed = new ArrayList<>();
