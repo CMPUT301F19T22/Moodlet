@@ -22,7 +22,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 
 public class MoodEventService {
-    private FirebaseFirestore database;
+    private FirebaseFirestore db;
     private FirebaseAuth auth;
 
     public interface OnFeedUpdateListener {
@@ -30,33 +30,22 @@ public class MoodEventService {
     }
 
     public MoodEventService() {
-        database = FirebaseFirestore.getInstance();
+        db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
     }
 
     public void getFeedUpdates(final OnFeedUpdateListener listener) {
-        // String username = auth.getCurrentUser().getDisplayName();
-        // Hardcoded until login gets merged
-        String username = "tbojovic";
+        String username = auth.getCurrentUser().getDisplayName();
 
-        Query followingQuery = database.collection("users/"+ username + "/following");
+        Query followingQuery = db.collection("users/"+ username + "/following");
 
-        followingQuery.orderBy("dateTime", Query.Direction.DESCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
+        followingQuery.orderBy("date", Query.Direction.DESCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 ArrayList<MoodEventAssociation> newFeed = new ArrayList<>();
 
                 for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                    EmotionalState emotionalState = EmotionalState.valueOf(String.valueOf(doc.getData().get("emotionalState")));
-                    String reasoning = String.valueOf(doc.getData().get("reasoning"));
-                    SocialSituation socialSituation = SocialSituation.valueOf(String.valueOf(doc.getData().get("socialSituation")));
-                    Timestamp timestamp = (Timestamp) doc.getData().get("dateTime");
-                    //TODO: photograph
-                    //TODO: location
-                    MoodEvent moodEvent = new MoodEvent(emotionalState, timestamp.toDate());
-                    moodEvent.setReasoning(reasoning);
-                    moodEvent.setSocialSituation(socialSituation);
-
+                    MoodEvent moodEvent = doc.toObject(MoodEvent.class);
                     newFeed.add(new MoodEventAssociation(moodEvent, doc.getId()));
                 }
                 listener.onFeedUpdate(newFeed);
@@ -65,13 +54,13 @@ public class MoodEventService {
     }
 
     public void addMoodEvent(final MoodEvent moodEvent) {
-        DocumentReference newMoodEventRef = database.collection("moodEvents").document();
+        DocumentReference newMoodEventRef = db.collection("moodEvents").document();
         newMoodEventRef.set(moodEvent);
-        //String username = auth.getCurrentUser().getDisplayName();
-        final String username = "tbojovic";
+
+        final String username = auth.getCurrentUser().getDisplayName();
         newMoodEventRef.update("username", username);
 
-        Query followersQuery = database.collection(username + "/followers");
+        Query followersQuery = db.collection(username + "/followers");
         followersQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -79,8 +68,8 @@ public class MoodEventService {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         String follower = document.getId();
                         String path = "users/" + follower + "/following/" + username;
-                        database.document(path).set(moodEvent);
-                        database.document(path).update("username", username);
+                        db.document(path).set(moodEvent);
+                        db.document(path).update("username", username);
                     }
                 } else {
                     //Log.d(TAG, "Error getting documents: ", task.getException());

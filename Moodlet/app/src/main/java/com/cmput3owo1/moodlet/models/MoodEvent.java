@@ -10,7 +10,7 @@ public class MoodEvent extends Event {
     private EmotionalState emotionalState;
     private String reasoning;
     private SocialSituation socialSituation;
-    private String photograph;
+    private String photographPath;
 
     /**
      * Default constructor for the MoodEvent.
@@ -82,7 +82,7 @@ public class MoodEvent extends Event {
      * @return The photograph path
      */
     public String getPhotographPath() {
-        return photograph;
+        return photographPath;
     }
 
     /**
@@ -90,6 +90,6 @@ public class MoodEvent extends Event {
      * @param photographPath The photograph path
      */
     public void setPhotographPath(String photographPath) {
-        this.photograph = photograph;
+        this.photographPath = photographPath;
     }
 }
