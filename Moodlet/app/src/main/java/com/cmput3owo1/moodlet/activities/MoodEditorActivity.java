@@ -1,12 +1,15 @@
 package com.cmput3owo1.moodlet.activities;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.LightingColorFilter;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -22,12 +25,14 @@ import com.cmput3owo1.moodlet.models.SocialSituation;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -57,10 +62,16 @@ public class MoodEditorActivity extends AppCompatActivity {
     String moodDisplayName;
     String socialDisplayName;
 
+    //Image
+    ImageView imageUpload;
+    Uri selectedImage;
+    private static final int image_loaded = 1;
 
     Button addMood;
     Button toggleEdit;
     Button confirmEdit;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +89,7 @@ public class MoodEditorActivity extends AppCompatActivity {
         reasonEdit = findViewById(R.id.reasonEdit);
         date = findViewById(R.id.date);
         bg = findViewById(R.id.bg_vector);
+        imageUpload = findViewById(R.id.imageToUpload);
 
         String pattern = "MMMM d, yyyy \nh:mm a";
         SimpleDateFormat sdf = new SimpleDateFormat(pattern);
@@ -114,7 +126,35 @@ public class MoodEditorActivity extends AppCompatActivity {
             }
         });
 
+        imageUpload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(gallery,image_loaded);
+
+            }
+        });
+
+
+
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK && data != null) {
+            selectedImage = data.getData();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
+                imageUpload.setImageBitmap(bitmap);
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
     public void addMode(){
         addMood.setVisibility(View.VISIBLE);
@@ -168,6 +208,10 @@ public class MoodEditorActivity extends AppCompatActivity {
                 data.put("socialSituation", selectedSocial.name());
                 if(reasonEdit.getText().toString() != null){
                     data.put("reasoning",reasonEdit.getText().toString());
+                }
+
+                if(selectedImage.toString() != null){
+                    data.put("photo",selectedImage.getPath());
                 }
                 //data.put("username",)
                 db.collection("moodEvents").add(data);
