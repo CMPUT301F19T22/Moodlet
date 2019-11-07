@@ -29,6 +29,14 @@ public class Event {
     }
 
     /**
+     * This sets the date that the event occurred
+     * @param date The date the event occurred
+     */
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    /**
      * This returns the location of the event
      * @return Return the event location
      */
