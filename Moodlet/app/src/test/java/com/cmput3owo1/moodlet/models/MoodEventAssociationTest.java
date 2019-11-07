@@ -15,8 +15,10 @@ public class MoodEventAssociationTest {
 
     @Test
     public void testConstructor() {
-        MoodEventAssociation moodEventAssociation = new MoodEventAssociation(new MoodEvent(EmotionalState.CONFUSED), "Test");
+        MoodEventAssociation moodEventAssociation = new MoodEventAssociation(moodEvent, username);
         assertNotNull(moodEventAssociation);
+        assertEquals(moodEvent, moodEventAssociation.getMoodEvent());
+        assertEquals(username, moodEventAssociation.getUsername());
     }
 
     @Test

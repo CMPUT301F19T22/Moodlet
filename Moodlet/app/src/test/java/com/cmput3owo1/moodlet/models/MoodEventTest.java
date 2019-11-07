@@ -16,6 +16,7 @@ public class MoodEventTest {
     public void testConstructor() {
         MoodEvent newMoodEvent = new MoodEvent(EmotionalState.EXCITED);
         assertNotNull(newMoodEvent);
+        assertEquals(EmotionalState.EXCITED, newMoodEvent.getEmotionalState());
     }
 
     @Test

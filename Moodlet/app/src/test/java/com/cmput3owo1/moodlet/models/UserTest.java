@@ -16,6 +16,7 @@ public class UserTest {
     public void testConstructor() {
         User user = new User(username);
         assertNotNull(user);
+        assertEquals(username, user.getUsername());
     }
 
     @Test
