@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<<<<<<< HEAD
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+=======
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+>>>>>>> 70602093bfb36bb70e3c098f877d1be36f4526fa
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,6 +12,7 @@
 
     <LinearLayout
         android:id="@+id/login_layout"
+<<<<<<< HEAD
         android:layout_width="280dp"
         android:layout_height="400dp"
         android:layout_alignParentLeft="true"
@@ -18,6 +23,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+=======
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="64dp"
+        android:layout_marginTop="248dp"
+        android:layout_marginRight="64dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+>>>>>>> 70602093bfb36bb70e3c098f877d1be36f4526fa
 
 
         <TextView
@@ -78,11 +94,16 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+<<<<<<< HEAD
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_layout">
+=======
+        android:layout_marginBottom="48dp"
+        android:orientation="horizontal">
+>>>>>>> 70602093bfb36bb70e3c098f877d1be36f4526fa
 
         <TextView
             android:layout_width="wrap_content"
@@ -102,4 +123,8 @@
 
     </LinearLayout>
 
+<<<<<<< HEAD
 </androidx.constraintlayout.widget.ConstraintLayout>
+=======
+</RelativeLayout>
+>>>>>>> 70602093bfb36bb70e3c098f877d1be36f4526fa
