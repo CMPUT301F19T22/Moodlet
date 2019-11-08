@@ -1,16 +1,12 @@
 package com.cmput3owo1.moodlet.models;
 
-import android.graphics.Bitmap;
-
 import org.junit.Test;
-import org.mockito.Mock;
 
 import static org.junit.Assert.*;
 
 public class MoodEventTest {
 
-    @Mock
-    Bitmap bitmap;
+    String photographPath = "pathToPhoto";
 
     @Test
     public void testConstructor() {
@@ -43,9 +39,9 @@ public class MoodEventTest {
     }
 
     @Test
-    public void testPhotograph() {
+    public void testPhotographPath() {
         MoodEvent testEvent = new MoodEvent(EmotionalState.JEALOUS);
-        testEvent.setPhotograph(bitmap);
-        assertEquals(bitmap, testEvent.getPhotograph());
+        testEvent.setPhotographPath(photographPath);
+        assertEquals(photographPath, testEvent.getPhotographPath());
     }
 }
