@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.cmput3owo1.moodlet.R;
 import com.cmput3owo1.moodlet.activities.LoginActivity;
+import com.cmput3owo1.moodlet.services.IUserServiceProvider;
 import com.cmput3owo1.moodlet.services.UserService;
 
 
@@ -27,17 +28,13 @@ import com.cmput3owo1.moodlet.services.UserService;
  * The fragment also contains a clickable TextView that changes from a register
  * fragment to a login fragment
  */
-public class RegisterFragment extends Fragment implements UserService.RegistrationListener {
+public class RegisterFragment extends Fragment implements IUserServiceProvider.RegistrationListener {
 
     private EditText fullname, username, email, password, confirmPassword;
     private TextView loginText;
     private Button registerButton;
 
     private UserService userService = new UserService();
-
-    public RegisterFragment() {
-        // Required empty public constructor
-    }
 
     /**
      * This function is called to have the fragment instantiate its user interface view.
@@ -100,7 +97,6 @@ public class RegisterFragment extends Fragment implements UserService.Registrati
 
     /**
      * Interface function to switch to Login activity upon successful user registration.
-     * @Return Returns none.
      */
     @Override
     public void onRegistrationSuccess() {
@@ -110,7 +106,6 @@ public class RegisterFragment extends Fragment implements UserService.Registrati
 
     /**
      *   Interface function to show toast message for an existing account
-     *   @Return Returns none.
      */
     @Override
     public void onRegistrationFailure() {
@@ -119,7 +114,6 @@ public class RegisterFragment extends Fragment implements UserService.Registrati
 
     /**
      *   Interface function to show toast message when there is a problem accessing database
-     *   @Return Returns none.
      */
     public void onDatabaseAccessFailure() {
         Toast.makeText(getActivity(), R.string.please_try_again_later, Toast.LENGTH_SHORT).show();
@@ -127,7 +121,6 @@ public class RegisterFragment extends Fragment implements UserService.Registrati
 
     /**
      *  Interface function to show toast message when username is already taken
-     *  @Returns Returns none.
      */
     @Override
     public void onUsernameIsTaken() {
