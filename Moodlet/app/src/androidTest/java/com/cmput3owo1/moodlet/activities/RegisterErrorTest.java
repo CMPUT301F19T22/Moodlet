@@ -29,7 +29,7 @@ import static org.hamcrest.Matchers.not;
  */
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class RegisterErrorTests {
+public class RegisterErrorTest {
 
     @Rule
     public ActivityTestRule<LoginActivity> mActivityTestRule = new ActivityTestRule<>(LoginActivity.class);
