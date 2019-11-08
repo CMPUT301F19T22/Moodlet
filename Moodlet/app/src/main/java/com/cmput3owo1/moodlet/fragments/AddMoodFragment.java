@@ -39,33 +39,33 @@ import java.util.Date;
  */
 public class AddMoodFragment extends Fragment implements MoodEventService.OnImageUploadListener, MoodEventService.OnMoodUpdateListener {
 
-    boolean editMode;
-    Spinner moodSpinner;
-    Spinner socialSpinner;
-    ImageView bg;
-    TextView date;
-    String dateText;
-    EditText reasonEdit;
-    ArrayAdapter<EmotionalState> moodAdapter;
-    ArrayAdapter<SocialSituation> socialAdapter;
+    private boolean editMode;
+    private Spinner moodSpinner;
+    private Spinner socialSpinner;
+    private ImageView bg;
+    private TextView date;
+    private String dateText;
+    private EditText reasonEdit;
+    private ArrayAdapter<EmotionalState> moodAdapter;
+    private ArrayAdapter<SocialSituation> socialAdapter;
 
-    EmotionalState selectedMood;
-    SocialSituation selectedSocial;
+    private EmotionalState selectedMood;
+    private SocialSituation selectedSocial;
 
     //Add
-    String moodDisplayName;
-    String socialDisplayName;
-    MoodEvent mood;
-    MoodEventService mes;
+    private String moodDisplayName;
+    private String socialDisplayName;
+    private MoodEvent mood;
+    private MoodEventService mes;
 
     //Image
-    ImageView imageUpload;
-    Uri selectedImage;
+    private ImageView imageUpload;
+    private Uri selectedImage;
     private static final int image_loaded = 1;
-    ProgressDialog progressDialog;
+    private ProgressDialog progressDialog;
 
-    Button addMood;
-    Button confirmEdit;
+    private Button addMood;
+    private Button confirmEdit;
 
     public AddMoodFragment(){
     }
