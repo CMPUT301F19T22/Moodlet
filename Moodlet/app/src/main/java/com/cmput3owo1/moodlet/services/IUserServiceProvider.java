@@ -1,5 +1,12 @@
 package com.cmput3owo1.moodlet.services;
 
+/**
+ * Interface that abstracts user service functions. It contains functions for
+ * user registration and login. User registration functions includes validating
+ * usernames, creating the account and putting their information into the database.
+ * Login functions include login and making checking if there was a previous instance
+ * of a logged in account
+ */
 public interface IUserServiceProvider {
     /**
      * Interface that creates a listener for the register fragment. It contains
