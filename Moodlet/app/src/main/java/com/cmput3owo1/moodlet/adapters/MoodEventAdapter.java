@@ -40,6 +40,7 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
             tvMood = itemView.findViewById(R.id.mood_textview);
             tvDateTime = itemView.findViewById(R.id.date_time_textview);
 //            tvTimeDiff = itemView.findViewById(R.id.time_difference);
+            itemView.setOnClickListener(this);
         }
 
         @Override
