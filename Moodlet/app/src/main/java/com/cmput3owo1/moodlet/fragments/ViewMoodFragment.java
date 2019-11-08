@@ -57,25 +57,33 @@ public class ViewMoodFragment extends Fragment {
         confirmEdit = view.findViewById(R.id.confirm_edit);
 
         Bundle args = getArguments();
-        MoodEvent moodObj = (MoodEvent) args.getSerializable("MoodEvent");
-        String argDate = args.getString("date");
+        final MoodEvent moodObj = (MoodEvent) args.getSerializable("MoodEvent");
+        final Date argDate = (Date) args.getSerializable("date");
 
-        try{
-            Date dateObj = sdf.parse(argDate);
-            date.setText(sdf.format(dateObj));
-        }catch(ParseException e){
-            e.printStackTrace();
-        }
+//        try{
+//            Date dateObj = sdf.parse(argDate);
+//            date.setText(sdf.format(dateObj));
+//        }catch(ParseException e){
+//            e.printStackTrace();
+//        }
         moodDisplay.setText(moodObj.getEmotionalState().getDisplayName());
         socialDisplay.setText(moodObj.getSocialSituation().getDisplayName());
         reasonDisplay.setText(moodObj.getReasoning());
+        date.setText(sdf.format(argDate));
         bg.setColorFilter(moodObj.getEmotionalState().getColor());
 
         toggleEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                AddMoodFragment fragment = new AddMoodFragment ();
+                Bundle args = new Bundle();
+                args.putSerializable("MoodEvent",moodObj);
+                args.putSerializable("date",argDate);
+                fragment.setArguments(args);
+
                 FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.fragment_container, new AddMoodFragment());
+                fragmentTransaction.replace(R.id.fragment_container, fragment);
                 fragmentTransaction.commit();
             }
         });

@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,8 +39,6 @@ public class AddMoodFragment extends Fragment implements MoodEventService.OnImag
     Spinner moodSpinner;
     Spinner socialSpinner;
     ImageView bg;
-    TextView moodDisplay;
-    TextView socialDisplay;
     TextView date;
     String dateText;
     EditText reasonEdit;
@@ -96,6 +95,19 @@ public class AddMoodFragment extends Fragment implements MoodEventService.OnImag
         socialAdapter = new ArrayAdapter<SocialSituation>(getActivity(), android.R.layout.simple_spinner_item, SocialSituation.values());
         socialAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         socialSpinner.setAdapter(socialAdapter);
+
+
+        Bundle args = getArguments();
+        final MoodEvent moodObj = (MoodEvent) args.getSerializable("MoodEvent");
+        final Date argDate = (Date) args.getSerializable("date");
+
+        moodSpinner.setSelection(moodAdapter.getPosition(moodObj.getEmotionalState()));
+        socialSpinner.setSelection(socialAdapter.getPosition(moodObj.getSocialSituation()));
+        reasonEdit.setText(moodObj.getReasoning());
+
+        date.setText(sdf.format(argDate));
+        bg.setColorFilter(moodObj.getEmotionalState().getColor());
+
 
         imageUpload.setOnClickListener(new View.OnClickListener() {
             @Override

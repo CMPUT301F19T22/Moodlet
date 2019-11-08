@@ -67,7 +67,7 @@ public class MoodHistoryFragment extends Fragment
         MoodEvent selected = moodEventList.get(pos);
         Intent intent = new Intent(getActivity(), MoodEditorActivity.class);
         intent.putExtra("MoodEvent",selected);
-        intent.putExtra("date",selected.getDate().toString());
+        intent.putExtra("date",selected.getDate());
         intent.putExtra("view",true);
         startActivity(intent);
     }
