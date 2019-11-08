@@ -18,11 +18,4 @@
     <string name="account_already_exists">Account with this email already exists</string>
     <string name="username_taken">Username is already taken</string>
     <string name="please_try_again_later">Something went wrong, please try again later</string>
-
-
-
-
-
-
-
 </resources>

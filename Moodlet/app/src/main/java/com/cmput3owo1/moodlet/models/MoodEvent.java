@@ -1,12 +1,15 @@
 package com.cmput3owo1.moodlet.models;
 
+import java.io.Serializable;
+
 /**
  * A class that extends from {@link Event} and keeps track of mood events. A mood event is an event
  * that triggered a particular mood in the form of an {@link EmotionalState}. A mood event can
  * also keep track of other details such as a textual reasoning for the event, the
  * {@link SocialSituation} the event occurred in, and a photograph explaining the event.
  */
-public class MoodEvent extends Event {
+public class MoodEvent extends Event implements Serializable {
+    private String id;
     private EmotionalState emotionalState;
     private String reasoning;
     private SocialSituation socialSituation;
@@ -27,6 +30,22 @@ public class MoodEvent extends Event {
     public MoodEvent(EmotionalState emotionalState) {
         super();
         this.emotionalState = emotionalState;
+    }
+
+    /**
+     * This gets the emotional state of the MoodEvent
+     * @return The emotional state
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * This sets the emotional state of the MoodEvent
+     * @param emotionalState The emotional state
+     */
+    public void setId (String id) {
+        this.id = id;
     }
 
     /**
