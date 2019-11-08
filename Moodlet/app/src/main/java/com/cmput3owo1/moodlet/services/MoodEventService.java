@@ -1,12 +1,20 @@
 package com.cmput3owo1.moodlet.services;
 
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.net.Uri;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.cmput3owo1.moodlet.activities.MoodEditorActivity;
 import com.cmput3owo1.moodlet.models.EmotionalState;
 import com.cmput3owo1.moodlet.models.MoodEvent;
 import com.cmput3owo1.moodlet.models.MoodEventAssociation;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -16,6 +24,9 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 
@@ -27,6 +38,9 @@ import java.util.ArrayList;
 public class MoodEventService implements IMoodEventServiceProvider {
     private FirebaseFirestore db;
     private FirebaseAuth auth;
+    private StorageReference storageRef;
+    private FirebaseStorage storage;
+    private StorageReference filepathRef;
 
     /**
      * Default constructor for MoodEventService.
@@ -34,6 +48,8 @@ public class MoodEventService implements IMoodEventServiceProvider {
     public MoodEventService() {
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
+        storage = FirebaseStorage.getInstance();
+        storageRef = storage.getReference();
     }
 
     /**
@@ -63,17 +79,19 @@ public class MoodEventService implements IMoodEventServiceProvider {
 
     /**
      * Add a Mood Event to the database.
-     * @param moodEvent The mood event to add
+     * @param listener The listener to notify upon completion of add.
+     * @param moodEvent The {@link MoodEvent} to add to the database.
      */
     @Override
-    public void addMoodEvent(final MoodEvent moodEvent) {
+    public String addMoodEvent(final MoodEvent moodEvent, final OnMoodUpdateListener listener) {
         DocumentReference newMoodEventRef = db.collection("moodEvents").document();
         newMoodEventRef.set(moodEvent);
 
         final String username = auth.getCurrentUser().getDisplayName();
         newMoodEventRef.update("username", username);
+        newMoodEventRef.update("id", newMoodEventRef.getId());
 
-        Query followersQuery = db.collection(username + "/followers");
+        Query followersQuery = db.collection("users/" + username + "/followers");
         followersQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -89,6 +107,24 @@ public class MoodEventService implements IMoodEventServiceProvider {
                 }
             }
         });
+        listener.onMoodUpdateSuccess();
+        return newMoodEventRef.getId();
+    }
+
+    /**
+     * Edit an existing MoodEvent on the database.
+     * @param listener The listener to notify upon completion of edit.
+     * @param moodEvent The {@link MoodEvent} to edit.
+     */
+    public void editMoodEvent(final MoodEvent moodEvent, final OnMoodUpdateListener listener){
+        DocumentReference newMoodEventRef = db.collection("moodEvents").document(moodEvent.getId());
+        newMoodEventRef.set(moodEvent);
+
+        final String username = auth.getCurrentUser().getDisplayName();
+        newMoodEventRef.update("username", username);
+
+        listener.onMoodUpdateSuccess();
+
     }
 
     /**
@@ -138,5 +174,38 @@ public class MoodEventService implements IMoodEventServiceProvider {
             }
         });
     }
+    /**
+     * Listen to mood history updates of the current user. Calls the listener's onMoodHistoryUpdate
+     * method with the new mood history list when a change occurs.
+     * @param listener The listener to pass the new mood history list to
+     * @param imageToUpload The Uri to upload to FireBase.
+     */
+    public void uploadImage(final OnImageUploadListener listener, final Uri imageToUpload){
+
+        final String username = auth.getCurrentUser().getDisplayName();
+        final String filepath = "images/" + username + "/" + imageToUpload.getLastPathSegment();
+        boolean uploaded = false;
+
+
+        filepathRef = storageRef.child(filepath);
+
+        filepathRef.putFile(imageToUpload).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                listener.onImageUploadFailure();
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                // ...
+
+                listener.onImageUploadSuccess(filepath);
+
+            }
+        });
+
+    }
 
 }
+

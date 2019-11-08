@@ -5,4 +5,11 @@
     <color name="colorAccent">#2699FB</color>
     <color name="appBarTitle">#8B8B8B</color>
     <color name="appBarBackground">#E9E9E9</color>
+    <color name="happy">#fffbab</color>
+    <color name="sad">#b5fff4</color>
+    <color name="angry">#e89292</color>
+    <color name="excited">#ff8000</color>
+    <color name="confused">#e1c4ff</color>
+    <color name="scared">#a3a9ff</color>
+    <color name="jealous">#adffd6</color>
 </resources>
