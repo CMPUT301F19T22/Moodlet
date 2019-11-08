@@ -21,7 +21,9 @@ import android.widget.TextView;
 
 import com.cmput3owo1.moodlet.R;
 import com.cmput3owo1.moodlet.models.EmotionalState;
+import com.cmput3owo1.moodlet.models.MoodEvent;
 import com.cmput3owo1.moodlet.models.SocialSituation;
+import com.cmput3owo1.moodlet.services.MoodEventService;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -58,9 +60,10 @@ public class MoodEditorActivity extends AppCompatActivity {
     SocialSituation selectedSocial;
 
     //Add
-    HashMap<String, String> data;
     String moodDisplayName;
     String socialDisplayName;
+    MoodEvent mood;
+    MoodEventService mes;
 
     //Image
     ImageView imageUpload;
@@ -77,9 +80,6 @@ public class MoodEditorActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor_add);
-        //Firebase
-        db = FirebaseFirestore.getInstance();
-        data = new HashMap<>();
 
         editMode = false;
         moodSpinner = findViewById(R.id.moodSelected);
@@ -90,6 +90,9 @@ public class MoodEditorActivity extends AppCompatActivity {
         date = findViewById(R.id.date);
         bg = findViewById(R.id.bg_vector);
         imageUpload = findViewById(R.id.imageToUpload);
+        mes = new MoodEventService();
+        mood = new MoodEvent();
+
 
         String pattern = "MMMM d, yyyy \nh:mm a";
         SimpleDateFormat sdf = new SimpleDateFormat(pattern);
@@ -177,6 +180,8 @@ public class MoodEditorActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 selectedMood = EmotionalState.values()[i];
+                mood.setEmotionalState(selectedMood);
+
                 moodDisplayName = selectedMood.getDisplayName();
                 int color = selectedMood.getColor();
                 bg.setColorFilter(color);
@@ -191,6 +196,7 @@ public class MoodEditorActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 selectedSocial = SocialSituation.values()[i];
+                mood.setSocialSituation(selectedSocial);
                 socialDisplayName = selectedSocial.getDisplayName();
             }
 
@@ -202,19 +208,10 @@ public class MoodEditorActivity extends AppCompatActivity {
         addMood.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //should this update the time on submit time?
-                data.put("dataTime", dateText);
-                data.put("emotionalState",selectedMood.name());
-                data.put("socialSituation", selectedSocial.name());
                 if(reasonEdit.getText().toString() != null){
-                    data.put("reasoning",reasonEdit.getText().toString());
+                    mood.setReasoning(reasonEdit.getText().toString());
                 }
-
-                if(selectedImage.toString() != null){
-                    data.put("photo",selectedImage.getPath());
-                }
-                //data.put("username",)
-                db.collection("moodEvents").add(data);
+                mes.addMoodEvent(mood);
 
             }
         });

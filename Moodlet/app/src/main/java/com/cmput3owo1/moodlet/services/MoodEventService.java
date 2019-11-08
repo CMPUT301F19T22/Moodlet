@@ -62,7 +62,7 @@ public class MoodEventService {
         final String username = auth.getCurrentUser().getDisplayName();
         newMoodEventRef.update("username", username);
 
-        Query followersQuery = db.collection(username + "/followers");
+        Query followersQuery = db.collection("users/" + username + "/followers");
         followersQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
