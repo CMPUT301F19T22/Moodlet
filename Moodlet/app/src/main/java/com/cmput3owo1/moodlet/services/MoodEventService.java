@@ -24,23 +24,9 @@ import java.util.ArrayList;
  * It handles everything to do with MoodEvents and their interaction with the database. This
  * includes adding, deleting, editing, and querying.
  */
-public class MoodEventService {
+public class MoodEventService implements IMoodEventServiceProvider {
     private FirebaseFirestore db;
     private FirebaseAuth auth;
-
-    /**
-     * Listener interface to get the new feed (MoodEvents of users you are following) upon an update
-     */
-    public interface OnFeedUpdateListener {
-        void onFeedUpdate(ArrayList<MoodEventAssociation> newFeed);
-    }
-
-    /**
-     * Listener interface to get the new mood history upon an update
-     */
-    public interface OnMoodHistoryUpdateListener {
-        void onMoodHistoryUpdate(ArrayList<MoodEvent> newHistory);
-    }
 
     /**
      * Default constructor for MoodEventService.
@@ -55,6 +41,7 @@ public class MoodEventService {
      * feed when a change occurs.
      * @param listener The listener to pass the new feed to
      */
+    @Override
     public void getFeedUpdates(final OnFeedUpdateListener listener) {
         String username = auth.getCurrentUser().getDisplayName();
 
@@ -78,6 +65,7 @@ public class MoodEventService {
      * Add a Mood Event to the database.
      * @param moodEvent The mood event to add
      */
+    @Override
     public void addMoodEvent(final MoodEvent moodEvent) {
         DocumentReference newMoodEventRef = db.collection("moodEvents").document();
         newMoodEventRef.set(moodEvent);
@@ -108,6 +96,7 @@ public class MoodEventService {
      * method with the new mood history list when a change occurs.
      * @param listener The listener to pass the new mood history list to
      */
+    @Override
     public void getMoodHistoryUpdates(OnMoodHistoryUpdateListener listener) {
         String username = auth.getCurrentUser().getDisplayName();
 
@@ -124,6 +113,7 @@ public class MoodEventService {
      * @param listener The listener to pass the new mood history list to
      * @param filterBy The {@link EmotionalState} to filter the list by.
      */
+    @Override
     public void getMoodHistoryUpdates(OnMoodHistoryUpdateListener listener, EmotionalState filterBy) {
         String username = auth.getCurrentUser().getDisplayName();
 
