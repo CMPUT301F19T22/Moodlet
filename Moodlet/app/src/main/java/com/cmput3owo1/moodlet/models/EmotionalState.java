@@ -43,6 +43,7 @@ public enum EmotionalState {
 
     /**
      * Makes the default return of toString the display name of the emotional state when called.
+     * @return The display name
      */
     @Override
     public String toString(){
@@ -51,6 +52,7 @@ public enum EmotionalState {
 
     /**
      * Returns the display name of the emotional state when called.
+     * @return The display name
      */
     public String getDisplayName(){
         return this.display_name;
@@ -58,8 +60,8 @@ public enum EmotionalState {
 
     /**
      * Returns the color of the emotional state when called.
+     * @return The color
      */
-    public int getColor(){return this.color;
-    }
+    public int getColor(){return this.color; }
 
 }

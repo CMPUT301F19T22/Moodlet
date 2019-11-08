@@ -59,7 +59,7 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
 
         /**
          * Get adapter position when it is clicked on
-         * @param view
+         * @param view The view that was clicked
          */
         @Override
         public void onClick(View view) {

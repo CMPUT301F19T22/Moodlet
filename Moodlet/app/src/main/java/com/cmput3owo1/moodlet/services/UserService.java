@@ -19,8 +19,8 @@ import static android.content.ContentValues.TAG;
 
 /**
  * User Service that handles all database access and authentication that
- * is required by a user. This service is to abstract the firestore and
- * firebase auth away from the rest of the fragments
+ * is required by a user. This service is to abstract the Firestore and
+ * Firebase auth away from the rest of the fragments
  */
 public class UserService implements IUserServiceProvider{
 
@@ -34,7 +34,6 @@ public class UserService implements IUserServiceProvider{
 
     /**
      * This function is called to check if there is an existing instance of the logged in user.
-     * @return none
      */
     @Override
     public boolean hasPreviousLogin(){
@@ -49,7 +48,6 @@ public class UserService implements IUserServiceProvider{
      * @param password Password of Account to register with.
      * @param fullname Full name of user registering.
      * @param listener Registration listener passed from fragment
-     * @return none
      */
     @Override
     public void validateUsernameAndCreateUser(final String username, final String email, final String password, final String fullname, final RegistrationListener listener){
@@ -79,7 +77,6 @@ public class UserService implements IUserServiceProvider{
      * @param password Password of Account to register with.
      * @param fullname Full name of user registering.
      * @param listener Registration listener passed from fragment
-     * @return none
      */
     @Override
     public void createUser(final String username, final String email, String password, final String fullname, final RegistrationListener listener){
@@ -106,7 +103,6 @@ public class UserService implements IUserServiceProvider{
      * @param email Email to register with.
      * @param fullname Full name of user registering.
      * @param listener Registration listener passed from fragment
-     * @return none
      */
     @Override
     public void putUserIntoDB(final String email, final String fullname, final String username, final RegistrationListener listener){
@@ -133,7 +129,6 @@ public class UserService implements IUserServiceProvider{
      * @param txt_email Email to login with.
      * @param txt_password Password to login with.
      * @param listener Login listener passed from fragment
-     * @return none
      */
     @Override
     public void loginUser(String txt_email, String txt_password, final LoginListener listener){

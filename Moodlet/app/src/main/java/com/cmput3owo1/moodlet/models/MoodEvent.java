@@ -33,16 +33,16 @@ public class MoodEvent extends Event implements Serializable {
     }
 
     /**
-     * This gets the emotional state of the MoodEvent
-     * @return The emotional state
+     * This sets the unique ID of the MoodEvent
+     * @return The unique ID
      */
     public String getId() {
         return id;
     }
 
     /**
-     * This sets the emotional state of the MoodEvent
-     * @param emotionalState The emotional state
+     * This sets the unique ID of the MoodEvent
+     * @param id The emotional state
      */
     public void setId (String id) {
         this.id = id;

@@ -36,7 +36,6 @@ public class LoginFragment extends Fragment implements IUserServiceProvider.Logi
     /**
      * This function is called to do initial creation of a fragment.
      * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state as given here.
-     * @return Return none.
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
