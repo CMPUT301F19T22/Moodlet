@@ -1,12 +1,20 @@
 package com.cmput3owo1.moodlet.services;
 
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.net.Uri;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.cmput3owo1.moodlet.activities.MoodEditorActivity;
 import com.cmput3owo1.moodlet.models.EmotionalState;
 import com.cmput3owo1.moodlet.models.MoodEvent;
 import com.cmput3owo1.moodlet.models.MoodEventAssociation;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -16,12 +24,19 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 
 public class MoodEventService {
     private FirebaseFirestore db;
     private FirebaseAuth auth;
+    private StorageReference storageRef;
+    private FirebaseStorage storage;
+    private StorageReference filepathRef;
+
 
     public interface OnFeedUpdateListener {
         void onFeedUpdate(ArrayList<MoodEventAssociation> newFeed);
@@ -34,6 +49,8 @@ public class MoodEventService {
     public MoodEventService() {
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
+        storage = FirebaseStorage.getInstance();
+        storageRef = storage.getReference();
     }
 
     public void getFeedUpdates(final OnFeedUpdateListener listener) {
@@ -105,4 +122,46 @@ public class MoodEventService {
 
     }
 
+    public void uploadImage(final Context context, final Uri imageToUpload){
+
+        final ProgressDialog progressDialog = new ProgressDialog(context);
+        final String username = auth.getCurrentUser().getDisplayName();
+        final String filepath = "images/" + username + "/" + imageToUpload.getLastPathSegment();
+        boolean uploaded = false;
+        progressDialog.setTitle("Uploading...");
+        progressDialog.show();
+
+        filepathRef = storageRef.child(filepath);
+
+        filepathRef.putFile(imageToUpload).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                progressDialog.dismiss();
+                Toast.makeText(context, "Failed "+exception.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                // ...
+                double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot
+                        .getTotalByteCount());
+                progressDialog.setMessage("Uploaded "+(int)progress+"%");
+                progressDialog.dismiss();
+
+            }
+        });
+//
+//        filepathRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>()
+//        {
+//            @Override
+//            public void onSuccess(Uri downloadUrl)
+//            {
+//                //do something with downloadurl
+//            }
+//        });
+
+    }
+
 }
+

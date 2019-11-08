@@ -1,5 +1,6 @@
 package com.cmput3owo1.moodlet.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -18,15 +19,19 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cmput3owo1.moodlet.R;
 import com.cmput3owo1.moodlet.models.EmotionalState;
 import com.cmput3owo1.moodlet.models.MoodEvent;
 import com.cmput3owo1.moodlet.models.SocialSituation;
 import com.cmput3owo1.moodlet.services.MoodEventService;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.firestore.FirebaseFirestore;
 
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -40,9 +45,6 @@ import java.util.Date;
 import java.util.HashMap;
 
 public class MoodEditorActivity extends AppCompatActivity {
-
-    //Firebase stuff
-    FirebaseFirestore db;
 
     boolean editMode;
     Spinner moodSpinner;
@@ -69,6 +71,7 @@ public class MoodEditorActivity extends AppCompatActivity {
     ImageView imageUpload;
     Uri selectedImage;
     private static final int image_loaded = 1;
+
 
     Button addMood;
     Button toggleEdit;
@@ -99,7 +102,6 @@ public class MoodEditorActivity extends AppCompatActivity {
         dateText = sdf.format(new Date());
 
         date.setText(dateText);
-
 
         //temp buttons
         addMood = findViewById(R.id.add_mood);
@@ -211,7 +213,15 @@ public class MoodEditorActivity extends AppCompatActivity {
                 if(reasonEdit.getText().toString() != null){
                     mood.setReasoning(reasonEdit.getText().toString());
                 }
-                mes.addMoodEvent(mood);
+
+                if(selectedImage.toString() != null){
+                    mes.uploadImage(MoodEditorActivity.this,selectedImage);
+
+                    //mood.setPhotographPath(filepath);  ? ? ? 
+
+                }
+
+                //mes.addMoodEvent(mood);
 
             }
         });
