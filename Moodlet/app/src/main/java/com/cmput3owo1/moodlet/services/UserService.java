@@ -22,7 +22,7 @@ import static android.content.ContentValues.TAG;
  * is required by a user. This service is to abstract the firestore and
  * firebase auth away from the rest of the fragments
  */
-public class UserService {
+public class UserService implements IUserServiceProvider{
 
     FirebaseAuth auth;
     FirebaseFirestore db;
@@ -33,35 +33,12 @@ public class UserService {
     }
 
     /**
-     * Interface that creates a listener for the register fragment. It contains
-     * functions that are defined in the register fragment. These functions help
-     * with the flow of the registration process.
-     */
-    public interface RegistrationListener {
-        void onRegistrationSuccess();
-        void onRegistrationFailure();
-        void onDatabaseAccessFailure();
-        void onUsernameIsTaken();
-    }
-
-    /**
-     * Interface that creates a listener for the login fragment. It contains
-     * functions that are defined in the login fragment. These functions help
-     * with the flow of the login process
-     */
-    public interface LoginListener {
-        void onLoginSuccess();
-        void onLoginFailure();
-    }
-
-    /**
      * This function is called to check if there is an existing instance of the logged in user.
      * @return none
      */
     public boolean hasPreviousLogin(){
         return auth.getCurrentUser() != null;
     }
-
 
     /**
      * This function first checks if the username is taken. If the username is not taken,
