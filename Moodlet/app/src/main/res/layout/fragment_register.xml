@@ -9,7 +9,7 @@
     <LinearLayout
         android:id="@+id/login_layout"
         android:layout_width="280dp"
-        android:layout_height="400dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:gravity="center_horizontal"
@@ -20,12 +20,10 @@
         app:layout_constraintTop_toTopOf="parent">
 
 
-        <TextView
-            android:layout_width="wrap_content"
+        <ImageView
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Placeholder Register Text"
-            android:textSize="20sp"
-            android:textStyle="bold"></TextView>
+            android:src="@drawable/ic_moodlet_icon" />
 
         <EditText
             android:id="@+id/full_name"
