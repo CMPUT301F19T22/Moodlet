@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cmput3owo1.moodlet.R;
@@ -16,12 +15,22 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 
-
+/**
+ * This class is the adapter class to a ListView containing {@link MoodEventAssociation} objects.
+ * The purpose is to connect the MoodEventAssociation data with the ListView and to create the
+ * {@link ViewHolder} objects that will display the data. It converts a MoodEventAssociation
+ * object at a position to the view in the list.
+ */
 public class FeedListAdapter extends ArrayAdapter<MoodEventAssociation> {
     private ArrayList<MoodEventAssociation> feed;
     private Context context;
     private SimpleDateFormat simpleDateFormat;
 
+    /**
+     * Constructor that takes the context and the ArrayList of {@link MoodEventAssociation} objects
+     * @param context The app context
+     * @param feed The list of MoodEventAssociation objects
+     */
     public FeedListAdapter(Context context, ArrayList<MoodEventAssociation> feed) {
         super(context,0, feed);
         this.feed = feed;
@@ -29,13 +38,23 @@ public class FeedListAdapter extends ArrayAdapter<MoodEventAssociation> {
         this.simpleDateFormat = new SimpleDateFormat("MMMM d, yyyy - h:mm a", Locale.US);
     }
 
+    /**
+     * ViewHolder class that holds the views inside of a feed in the list
+     */
     static class ViewHolder {
         TextView usernameTextView;
         TextView emotionalStateTextView;
         TextView dateTextView;
-        ImageView emoticonImageView;
+        //ImageView emoticonImageView;
     }
 
+    /**
+     * Get a view that displays the data at the specified position in the data set
+     * @param position The position of the item within the adapter's data set
+     * @param convertView The old view to reuse, if possible
+     * @param parent The parent that this view will eventually be attached to
+     * @return The view that displays the data
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
