@@ -13,17 +13,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cmput3owo1.moodlet.R;
 import com.cmput3owo1.moodlet.adapters.MoodEventAdapter;
 import com.cmput3owo1.moodlet.models.MoodEvent;
+import com.cmput3owo1.moodlet.services.IMoodEventServiceProvider;
 import com.cmput3owo1.moodlet.services.MoodEventService;
 
 import java.util.ArrayList;
 
 public class MoodHistoryFragment extends Fragment
-        implements MoodEventAdapter.OnItemClickListener, MoodEventService.OnMoodHistoryUpdateListener {
+        implements MoodEventAdapter.OnItemClickListener, IMoodEventServiceProvider.OnMoodHistoryUpdateListener {
 
     private RecyclerView recyclerView;
     private MoodEventAdapter recyclerAdapter;
     private ArrayList<MoodEvent> moodEventList;
-    private MoodEventService moodEventService;
+    private IMoodEventServiceProvider moodEventService;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,

@@ -20,11 +20,11 @@ import com.cmput3owo1.moodlet.services.UserService;
 
 public class RegisterFragment extends Fragment implements UserService.RegistrationListener {
 
-    EditText fullname, username, email, password, confirmPassword;
-    TextView loginText;
-    Button registerButton;
+    private EditText fullname, username, email, password, confirmPassword;
+    private TextView loginText;
+    private Button registerButton;
 
-    UserService userService = new UserService();
+    private UserService userService = new UserService();
 
     public RegisterFragment() {
         // Required empty public constructor

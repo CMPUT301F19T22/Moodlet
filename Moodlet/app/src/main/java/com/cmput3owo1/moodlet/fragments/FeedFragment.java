@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import com.cmput3owo1.moodlet.R;
 import com.cmput3owo1.moodlet.adapters.FeedListAdapter;
 import com.cmput3owo1.moodlet.models.MoodEventAssociation;
+import com.cmput3owo1.moodlet.services.IMoodEventServiceProvider;
 import com.cmput3owo1.moodlet.services.MoodEventService;
 
 import java.util.ArrayList;
@@ -21,11 +22,11 @@ import java.util.ArrayList;
  * users that the current user follows. They are sorted in reverse chronological order by time, and
  * display the username, the emotional state, and the date of the mood event.
  */
-public class FeedFragment extends Fragment implements MoodEventService.OnFeedUpdateListener {
+public class FeedFragment extends Fragment implements IMoodEventServiceProvider.OnFeedUpdateListener {
     private ListView feedListView;
     private FeedListAdapter feedAdapter;
     private ArrayList<MoodEventAssociation> feedDataList;
-    private MoodEventService service;
+    private IMoodEventServiceProvider service;
 
     /**
      * This function is called to have the fragment instantiate its user interface view.
