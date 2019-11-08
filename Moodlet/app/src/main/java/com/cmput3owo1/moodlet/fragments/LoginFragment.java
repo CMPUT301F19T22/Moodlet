@@ -16,15 +16,16 @@ import android.widget.Toast;
 
 import com.cmput3owo1.moodlet.R;
 import com.cmput3owo1.moodlet.activities.MainActivity;
+import com.cmput3owo1.moodlet.services.IUserServiceProvider;
 import com.cmput3owo1.moodlet.services.UserService;
 
 /**
  * A fragment that handles user login. It takes in email and password in EditTexts
  * and makes sure that the inputs are valid. Once the inputs have been verified,
- * the login button atttemps to log the user in. The fragment also contains a clickable
+ * the login button attempts to log the user in. The fragment also contains a clickable
  * TextView that changes from a login fragment to a register fragment
  */
-public class LoginFragment extends Fragment implements UserService.LoginListener {
+public class LoginFragment extends Fragment implements IUserServiceProvider.LoginListener {
 
     EditText email, password;
     TextView signupText;
@@ -32,19 +33,13 @@ public class LoginFragment extends Fragment implements UserService.LoginListener
 
     UserService userService = new UserService();
 
-    public LoginFragment() {
-        // Required empty public constructor
-    }
-
     /**
      * This function is called to do initial creation of a fragment.
      * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state as given here.
-     * @return Return none.
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
 //         if(userService.hasPreviousLogin()){
 //             Intent intent = new Intent(getActivity(), MainActivity.class);
@@ -97,13 +92,18 @@ public class LoginFragment extends Fragment implements UserService.LoginListener
         // Inflate the layout for this fragment
         return loginFragmentView;
     }
-
+    /**
+     * Interface function to switch to main activity upon successful login
+     */
     @Override
     public void onLoginSuccess() {
         Intent intent = new Intent(getActivity(), MainActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * Interface function to show a toast message for unsuccessful login
+     */
     @Override
     public void onLoginFailure() {
         Toast.makeText(getActivity(), R.string.authentication_failed, Toast.LENGTH_SHORT).show();

@@ -12,6 +12,10 @@ import com.cmput3owo1.moodlet.fragments.LoginFragment;
  */
 public class LoginActivity extends AppCompatActivity {
 
+    /**
+     * Called when the activity is starting.
+     * @param savedInstanceState Used to restore an activity's previous state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

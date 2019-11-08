@@ -30,7 +30,7 @@ public interface IMoodEventServiceProvider {
     /**
      * Listener interface to get the filepath of the newly uploaded image
      */
-    public interface OnImageUploadListener {
+    interface OnImageUploadListener {
         void onImageUploadSuccess(String filepath);
         void onImageUploadFailure();
     }
@@ -38,7 +38,7 @@ public interface IMoodEventServiceProvider {
     /**
      * Listener interface to notify when mood is added/updated.
      */
-    public interface OnMoodUpdateListener {
+    interface OnMoodUpdateListener {
         void onMoodUpdateSuccess();
     }
 

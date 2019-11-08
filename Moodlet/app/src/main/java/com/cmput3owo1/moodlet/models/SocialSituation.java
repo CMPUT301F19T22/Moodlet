@@ -12,15 +12,27 @@ public enum SocialSituation {
 
     String display_name;
 
+    /**
+     * Constructor for the social situation that takes the display name
+     * @param name The display name
+     */
     SocialSituation(String name){
         this.display_name = name;
     }
 
+    /**
+     * Makes the default return of toString the display name of the social situation when called.
+     * @return The display name
+     */
     @Override
     public String toString(){
         return this.display_name;
     }
 
+    /**
+     * Returns the display name of the social situation when called
+     * @return The display name
+     */
     public String getDisplayName(){
         return this.display_name;
     }

@@ -38,7 +38,9 @@ public class ViewMoodFragment extends Fragment {
     private ImageView imageUpload;
     private Button toggleEdit;
 
-
+    /**
+     * Default constructor for the Fragment
+     */
     public ViewMoodFragment(){
 
     }

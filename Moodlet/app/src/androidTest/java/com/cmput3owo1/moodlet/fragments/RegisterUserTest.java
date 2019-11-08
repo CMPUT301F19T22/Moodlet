@@ -28,7 +28,7 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.not;
 
 
-/*
+/**
  * This tests for proper user registration and registration for
  * already created accounts
  */
