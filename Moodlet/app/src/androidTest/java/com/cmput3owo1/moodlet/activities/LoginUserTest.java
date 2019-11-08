@@ -23,6 +23,10 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.not;
 
+/*
+ * This tests for proper user login and failed user login with wrong
+ * credentials and missing fields
+ */
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 public class LoginUserTest {

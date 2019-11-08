@@ -1,6 +1,7 @@
 package com.cmput3owo1.moodlet.activities;
 
 import androidx.test.espresso.ViewInteraction;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
 
@@ -8,6 +9,7 @@ import com.cmput3owo1.moodlet.R;
 
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -21,7 +23,12 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.not;
 
+/*
+ * This tests for errors in user registration. Empty field errors,
+ * password too short error and password not matching error
+ */
 @LargeTest
+@RunWith(AndroidJUnit4.class)
 public class RegisterErrorTests {
 
     @Rule
