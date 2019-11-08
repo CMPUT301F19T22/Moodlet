@@ -62,6 +62,10 @@ public class MoodEventService {
         void onImageUploadFailure();
     }
 
+    public interface OnMoodUpdateListener {
+        void onMoodUpdateSuccess();
+    }
+
     /**
      * Default constructor for MoodEventService.
      */
@@ -100,12 +104,13 @@ public class MoodEventService {
      * Add a Mood Event to the database.
      * @param moodEvent The mood event to add
      */
-    public void addMoodEvent(final MoodEvent moodEvent) {
+    public String addMoodEvent(final MoodEvent moodEvent, final OnMoodUpdateListener listener) {
         DocumentReference newMoodEventRef = db.collection("moodEvents").document();
         newMoodEventRef.set(moodEvent);
 
         final String username = auth.getCurrentUser().getDisplayName();
         newMoodEventRef.update("username", username);
+        newMoodEventRef.update("id", newMoodEventRef.getId());
 
         Query followersQuery = db.collection("users/" + username + "/followers");
         followersQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -123,6 +128,19 @@ public class MoodEventService {
                 }
             }
         });
+        listener.onMoodUpdateSuccess();
+        return newMoodEventRef.getId();
+    }
+
+    public void editMoodEvent(final MoodEvent moodEvent, final OnMoodUpdateListener listener){
+        DocumentReference newMoodEventRef = db.collection("moodEvents").document(moodEvent.getId());
+        newMoodEventRef.set(moodEvent);
+
+        final String username = auth.getCurrentUser().getDisplayName();
+        newMoodEventRef.update("username", username);
+
+        listener.onMoodUpdateSuccess();
+
     }
 
     /**

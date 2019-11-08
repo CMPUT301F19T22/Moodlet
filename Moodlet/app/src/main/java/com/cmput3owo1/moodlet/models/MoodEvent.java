@@ -9,6 +9,7 @@ import java.io.Serializable;
  * {@link SocialSituation} the event occurred in, and a photograph explaining the event.
  */
 public class MoodEvent extends Event implements Serializable {
+    private String id;
     private EmotionalState emotionalState;
     private String reasoning;
     private SocialSituation socialSituation;
@@ -29,6 +30,22 @@ public class MoodEvent extends Event implements Serializable {
     public MoodEvent(EmotionalState emotionalState) {
         super();
         this.emotionalState = emotionalState;
+    }
+
+    /**
+     * This gets the emotional state of the MoodEvent
+     * @return The emotional state
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * This sets the emotional state of the MoodEvent
+     * @param emotionalState The emotional state
+     */
+    public void setId (String id) {
+        this.id = id;
     }
 
     /**

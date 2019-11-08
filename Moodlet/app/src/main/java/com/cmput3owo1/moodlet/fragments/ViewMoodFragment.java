@@ -54,7 +54,6 @@ public class ViewMoodFragment extends Fragment {
         socialDisplay = view.findViewById(R.id.socialDisplay);
         reasonDisplay = view.findViewById(R.id.reasonDisplay);
         toggleEdit = view.findViewById(R.id.toggle_edit);
-        confirmEdit = view.findViewById(R.id.confirm_edit);
 
         Bundle args = getArguments();
         final MoodEvent moodObj = (MoodEvent) args.getSerializable("MoodEvent");
@@ -80,6 +79,7 @@ public class ViewMoodFragment extends Fragment {
                 Bundle args = new Bundle();
                 args.putSerializable("MoodEvent",moodObj);
                 args.putSerializable("date",argDate);
+                args.putBoolean("edit",true);
                 fragment.setArguments(args);
 
                 FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();

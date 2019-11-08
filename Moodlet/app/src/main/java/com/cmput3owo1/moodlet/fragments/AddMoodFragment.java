@@ -33,7 +33,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class AddMoodFragment extends Fragment implements MoodEventService.OnImageUploadListener {
+public class AddMoodFragment extends Fragment implements MoodEventService.OnImageUploadListener, MoodEventService.OnMoodUpdateListener {
 
     boolean editMode;
     Spinner moodSpinner;
@@ -61,6 +61,7 @@ public class AddMoodFragment extends Fragment implements MoodEventService.OnImag
     ProgressDialog progressDialog;
 
     Button addMood;
+    Button confirmEdit;
 
     public AddMoodFragment(){
     }
@@ -85,28 +86,64 @@ public class AddMoodFragment extends Fragment implements MoodEventService.OnImag
         //set time when press fab, fix
         mood = new MoodEvent();
 
+        //Temporary debug buttons
         addMood = view.findViewById(R.id.add_mood);
+        confirmEdit = view.findViewById(R.id.confirm_edit);
+
 
 
         moodAdapter = new ArrayAdapter<EmotionalState>(getActivity(), R.layout.mood_spinner_style, EmotionalState.values());
         moodAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         moodSpinner.setAdapter(moodAdapter);
-
         socialAdapter = new ArrayAdapter<SocialSituation>(getActivity(), android.R.layout.simple_spinner_item, SocialSituation.values());
         socialAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         socialSpinner.setAdapter(socialAdapter);
 
 
-        Bundle args = getArguments();
-        final MoodEvent moodObj = (MoodEvent) args.getSerializable("MoodEvent");
-        final Date argDate = (Date) args.getSerializable("date");
+        //fix logic up later
+        try {
+            Bundle args = getArguments();
+            if(!args.isEmpty()){
+                editMode = true;
+                mood = (MoodEvent) args.getSerializable("MoodEvent");
+                final Date argDate = (Date) args.getSerializable("date");
+                moodSpinner.setSelection(moodAdapter.getPosition(mood.getEmotionalState()));
+                socialSpinner.setSelection(socialAdapter.getPosition(mood.getSocialSituation()));
+                reasonEdit.setText(mood.getReasoning());
+                date.setText(sdf.format(argDate));
+                mood.setDate(argDate);
 
-        moodSpinner.setSelection(moodAdapter.getPosition(moodObj.getEmotionalState()));
-        socialSpinner.setSelection(socialAdapter.getPosition(moodObj.getSocialSituation()));
-        reasonEdit.setText(moodObj.getReasoning());
+                bg.setColorFilter(mood.getEmotionalState().getColor());
 
-        date.setText(sdf.format(argDate));
-        bg.setColorFilter(moodObj.getEmotionalState().getColor());
+                //REMOVE LATER, debugging Proof of Concept
+                if(args.getBoolean("edit")){
+                    addMood.setVisibility(View.INVISIBLE);
+                    confirmEdit.setVisibility(View.VISIBLE);
+
+                    confirmEdit.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if(reasonEdit.getText().toString() != null){
+                                mood.setReasoning(reasonEdit.getText().toString());
+                            }
+
+                            if(selectedImage != null) {
+                                progressDialog = new ProgressDialog(getActivity());
+                                progressDialog.setTitle("Uploading...");
+                                progressDialog.show();
+                                mes.uploadImage(AddMoodFragment.this, selectedImage);
+                            }else{
+                                mes.editMoodEvent(mood,AddMoodFragment.this);
+                            }
+                        }
+                    });
+
+                }
+            }
+        }
+        catch(Exception e){
+
+        }
 
 
         imageUpload.setOnClickListener(new View.OnClickListener() {
@@ -119,12 +156,13 @@ public class AddMoodFragment extends Fragment implements MoodEventService.OnImag
         });
 
 
+
+
         moodSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 selectedMood = EmotionalState.values()[i];
                 mood.setEmotionalState(selectedMood);
-
                 moodDisplayName = selectedMood.getDisplayName();
                 int color = selectedMood.getColor();
                 bg.setColorFilter(color);
@@ -161,7 +199,7 @@ public class AddMoodFragment extends Fragment implements MoodEventService.OnImag
                     progressDialog.show();
                     mes.uploadImage(AddMoodFragment.this, selectedImage);
                 }else{
-                    mes.addMoodEvent(mood);
+                    mes.addMoodEvent(mood,AddMoodFragment.this);
                 }
 
             }
@@ -188,9 +226,13 @@ public class AddMoodFragment extends Fragment implements MoodEventService.OnImag
 
     @Override
     public void onImageUploadSuccess(String filepath) {
-        progressDialog.dismiss();
+        //progressDialog.dismiss();
         mood.setPhotographPath(filepath);
-        mes.addMoodEvent(mood);
+        if(!editMode){
+            mes.addMoodEvent(mood,AddMoodFragment.this);
+        }else{
+            mes.editMoodEvent(mood,AddMoodFragment.this);
+        }
     }
 
     @Override
@@ -199,5 +241,9 @@ public class AddMoodFragment extends Fragment implements MoodEventService.OnImag
         Toast.makeText(getActivity(), "Upload Failed.", Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void onMoodUpdateSuccess(){
+        getActivity().finish();
+    }
 
 }

@@ -41,7 +41,6 @@ public class MoodEditorActivity extends AppCompatActivity {
             Intent intent = getIntent();
             if(intent.hasExtra("add")){
                 AddMoodFragment addMoodFragment = new AddMoodFragment();
-                addMoodFragment.setArguments(getIntent().getExtras());
 
                 getSupportFragmentManager().beginTransaction()
                         .add(R.id.fragment_container, addMoodFragment).commit();
