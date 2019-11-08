@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.cmput3owo1.moodlet.R;
 import com.cmput3owo1.moodlet.activities.MainActivity;
+import com.cmput3owo1.moodlet.services.IUserServiceProvider;
 import com.cmput3owo1.moodlet.services.UserService;
 
 /**
@@ -24,7 +25,7 @@ import com.cmput3owo1.moodlet.services.UserService;
  * the login button atttemps to log the user in. The fragment also contains a clickable
  * TextView that changes from a login fragment to a register fragment
  */
-public class LoginFragment extends Fragment implements UserService.LoginListener {
+public class LoginFragment extends Fragment implements IUserServiceProvider.LoginListener {
 
     EditText email, password;
     TextView signupText;
