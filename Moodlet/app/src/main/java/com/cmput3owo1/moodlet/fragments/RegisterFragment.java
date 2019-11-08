@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,13 +19,21 @@ import com.cmput3owo1.moodlet.R;
 import com.cmput3owo1.moodlet.activities.LoginActivity;
 import com.cmput3owo1.moodlet.services.UserService;
 
+
+/**
+ * A fragment that handles user registration. It takes in all the necessary data
+ * and performs checks to make sure that the inputs are valid. Once the inputs
+ * have been verified, the register button starts the user creation process.
+ * The fragment also contains a clickable TextView that changes from a register
+ * fragment to a login fragment
+ */
 public class RegisterFragment extends Fragment implements UserService.RegistrationListener {
 
-    EditText fullname, username, email, password, confirmPassword;
-    TextView loginText;
-    Button registerButton;
+    private EditText fullname, username, email, password, confirmPassword;
+    private TextView loginText;
+    private Button registerButton;
 
-    UserService userService = new UserService();
+    private UserService userService = new UserService();
 
     public RegisterFragment() {
         // Required empty public constructor
@@ -51,6 +60,7 @@ public class RegisterFragment extends Fragment implements UserService.Registrati
         registerButton = registerFragmentView.findViewById(R.id.btn_register);
         loginText = registerFragmentView.findViewById(R.id.swap_to_login_text_view);
 
+        //  Click listener to change to login fragment
         loginText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -62,6 +72,8 @@ public class RegisterFragment extends Fragment implements UserService.Registrati
             }
         });
 
+
+        //  Click listener to start user registration
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -78,7 +90,7 @@ public class RegisterFragment extends Fragment implements UserService.Registrati
                 } else if (!txt_password.equals(txt_confirm_password)) {
                     Toast.makeText(getActivity(), R.string.password_does_not_match, Toast.LENGTH_SHORT).show();
                 } else {
-                    userService.registerUser(txt_username, txt_email, txt_password, txt_fullname, RegisterFragment.this);
+                    userService.validateUsernameAndCreateUser(txt_username, txt_email, txt_password, txt_fullname, RegisterFragment.this);
                 }
             }
         });
@@ -86,19 +98,40 @@ public class RegisterFragment extends Fragment implements UserService.Registrati
         return registerFragmentView;
     }
 
+    /**
+     * Interface function to switch to Login activity upon successful user registration.
+     * @Return Returns none.
+     */
     @Override
     public void onRegistrationSuccess() {
         Intent intent = new Intent(getActivity(), LoginActivity.class);
         startActivity(intent);
     }
 
+    /**
+     *   Interface function to show toast message for an existing account
+     *   @Return Returns none.
+     */
     @Override
     public void onRegistrationFailure() {
         Toast.makeText(getActivity(), R.string.account_already_exists, Toast.LENGTH_SHORT).show();
     }
 
-    public void onAddToDatabaseFailure() {
-        Toast.makeText(getActivity(), "Something went wrong, please try again later", Toast.LENGTH_SHORT).show();
+    /**
+     *   Interface function to show toast message when there is a problem accessing database
+     *   @Return Returns none.
+     */
+    public void onDatabaseAccessFailure() {
+        Toast.makeText(getActivity(), R.string.please_try_again_later, Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     *  Interface function to show toast message when username is already taken
+     *  @Returns Returns none.
+     */
+    @Override
+    public void onUsernameIsTaken() {
+        Toast.makeText(getActivity(), R.string.username_taken, Toast.LENGTH_SHORT).show();
     }
 }
 
