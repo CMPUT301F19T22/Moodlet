@@ -16,6 +16,9 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
 
         // Check that the activity is using the layout version with
         // the fragment_container FrameLayout
