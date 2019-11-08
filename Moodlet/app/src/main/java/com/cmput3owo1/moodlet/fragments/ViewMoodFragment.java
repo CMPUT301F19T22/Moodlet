@@ -28,17 +28,17 @@ import java.util.Date;
  */
 public class ViewMoodFragment extends Fragment {
 
-    boolean editMode;
+    private boolean editMode;
 
-    ImageView bg;
-    TextView moodDisplay;
-    TextView socialDisplay;
-    TextView date;
-    TextView reasonDisplay;
-    ImageView imageUpload;
-    String dateText;
-    Button toggleEdit;
-    Button confirmEdit;
+    private ImageView bg;
+    private TextView moodDisplay;
+    private TextView socialDisplay;
+    private TextView date;
+    private TextView reasonDisplay;
+    private ImageView imageUpload;
+    private String dateText;
+    private Button toggleEdit;
+    private Button confirmEdit;
 
     public ViewMoodFragment(){
 
