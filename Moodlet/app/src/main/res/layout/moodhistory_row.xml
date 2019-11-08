@@ -7,7 +7,7 @@
     android:layout_margin="3dp">
 
     <ImageView
-        android:id="@+id/moodEmoji"
+        android:id="@+id/mood_emoji"
         android:layout_width="55dp"
         android:layout_height="55dp"
         android:src="@mipmap/ic_launcher_round"/>
@@ -20,7 +20,7 @@
         android:paddingLeft="7dp">
 
         <TextView
-            android:id="@+id/moodString"
+            android:id="@+id/mood_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Mood"
@@ -28,7 +28,7 @@
             android:textStyle="bold"/>
 
         <TextView
-            android:id="@+id/moodDateTime"
+            android:id="@+id/date_time_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="15dp"
@@ -37,7 +37,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/timeDifference"
+        android:id="@+id/time_difference"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="time diff"
