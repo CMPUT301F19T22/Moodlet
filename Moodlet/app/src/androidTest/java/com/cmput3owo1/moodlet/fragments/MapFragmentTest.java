@@ -20,6 +20,9 @@ import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 
+/**
+ * This tests to see if the Google Map is loaded when navigating to the Map section
+ */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class MapFragmentTest {
