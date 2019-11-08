@@ -83,6 +83,7 @@ public class AddMoodFragment extends Fragment implements MoodEventService.OnImag
         reasonEdit = view.findViewById(R.id.reasonEdit);
         imageUpload = view.findViewById(R.id.imageToUpload);
         mes = new MoodEventService();
+        //set time when press fab, fix
         mood = new MoodEvent();
 
         addMood = view.findViewById(R.id.add_mood);

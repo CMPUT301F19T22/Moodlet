@@ -40,10 +40,10 @@ public class LoginFragment extends Fragment implements UserService.LoginListener
         super.onCreate(savedInstanceState);
 
 
-//        if(userService.hasPreviousLogin()){
-//            Intent intent = new Intent(getActivity(), MainActivity.class);
-//            startActivity(intent);
-//        }
+        if(userService.hasPreviousLogin()){
+            Intent intent = new Intent(getActivity(), MainActivity.class);
+            startActivity(intent);
+        }
     }
 
     /**

@@ -10,6 +10,9 @@ import com.cmput3owo1.moodlet.R;
 import com.cmput3owo1.moodlet.fragments.AddMoodFragment;
 import com.cmput3owo1.moodlet.fragments.LoginFragment;
 import com.cmput3owo1.moodlet.fragments.ViewMoodFragment;
+import com.cmput3owo1.moodlet.models.MoodEvent;
+
+import java.io.Serializable;
 
 
 public class MoodEditorActivity extends AppCompatActivity {

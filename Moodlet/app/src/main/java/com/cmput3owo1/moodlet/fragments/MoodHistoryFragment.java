@@ -2,6 +2,7 @@ package com.cmput3owo1.moodlet.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,7 +64,10 @@ public class MoodHistoryFragment extends Fragment
     @Override
     public void onItemClick(int pos) {
         // Implement for editing a mood event
+        MoodEvent selected = moodEventList.get(pos);
         Intent intent = new Intent(getActivity(), MoodEditorActivity.class);
+        intent.putExtra("MoodEvent",selected);
+        intent.putExtra("date",selected.getDate().toString());
         intent.putExtra("view",true);
         startActivity(intent);
     }
