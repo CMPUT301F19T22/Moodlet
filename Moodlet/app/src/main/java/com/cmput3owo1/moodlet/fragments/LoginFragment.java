@@ -81,7 +81,7 @@ public class LoginFragment extends Fragment implements UserService.LoginListener
                 String txt_email = email.getText().toString();
                 String txt_password = password.getText().toString();
                 if(txt_email.isEmpty() || txt_password.isEmpty()) {
-                    Toast.makeText(getActivity(), "All fields are required", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.all_fields_required, Toast.LENGTH_SHORT).show();
                 } else {
                     userService.loginUser(txt_email, txt_password, LoginFragment.this);
                 }
@@ -100,6 +100,6 @@ public class LoginFragment extends Fragment implements UserService.LoginListener
 
     @Override
     public void onLoginFailure() {
-        Toast.makeText(getActivity(), "Authentication failed", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), R.string.authentication_failed, Toast.LENGTH_SHORT).show();
     }
 }

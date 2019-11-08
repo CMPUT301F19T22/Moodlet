@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:layout_margin="7dp"
+    android:paddingLeft="3dp"
+    android:paddingTop="10dp">
+
+    <ImageView
+        android:id="@+id/mood_emoji"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@mipmap/ic_launcher_round"/>
+
+    <LinearLayout
+        android:layout_weight="4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="15dp">
+
+        <TextView
+            android:id="@+id/mood_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mood"
+            android:textSize="18dp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/date_time_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="13dp"
+            android:text="month day year - time"
+            android:paddingTop="5dp"/>
+    </LinearLayout>
+
+<!-- Will implement time difference later -->
+<!--    <TextView-->
+<!--        android:id="@+id/time_difference"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="time diff"-->
+<!--        android:textStyle="bold"-->
+<!--        android:paddingRight="30dp"-->
+<!--        android:paddingLeft="10dp"/>-->
+
+</LinearLayout>

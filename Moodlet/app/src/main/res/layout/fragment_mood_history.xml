@@ -1,34 +1,82 @@
+  
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <TextView
-        android:id="@+id/text_history"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:text="This is the mood history place holder. Remove this textview"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/add_fab"
+        android:id="@+id/add_mood_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="70dp"
-        android:onClick="onAddMoodClick"
-        android:src="@drawable/ic_add_circle_outline_black_24dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginBottom="12dp"
+        android:backgroundTint="@color/colorAccent"
+        android:src="@android:drawable/ic_input_add"
+        app:backgroundTint="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/mood_event_rv"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbars="vertical"
+        app:layout_constraintTop_toTopOf="parent">
+    </androidx.recyclerview.widget.RecyclerView>
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <!-- Commented out Custom Toolbar for later use? -->
+    <!--    <androidx.appcompat.widget.Toolbar-->
+    <!--        android:id="@+id/toolbar"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:background="?attr/colorPrimary"-->
+    <!--        android:minHeight="?attr/actionBarSize"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent"-->
+    <!--        app:contentInsetStart="0dp"-->
+    <!--        app:contentInsetEnd="0dp"-->
+    <!--        app:contentInsetLeft="0dp"-->
+    <!--        app:contentInsetRight="0dp"-->
+    <!--        android:clipToPadding="false">-->
+
+    <!--        <LinearLayout-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:gravity="center_horizontal"-->
+    <!--            android:orientation="horizontal">-->
+
+    <!--            <ImageView-->
+    <!--                android:id="@+id/follow_requests"-->
+    <!--                android:layout_width="wrap_content"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:layout_weight="1"-->
+    <!--                android:src="@drawable/ic_people_black_24dp" />-->
+
+    <!--            <TextView-->
+    <!--                android:id="@+id/history_title"-->
+    <!--                android:layout_weight="5"-->
+    <!--                android:layout_width="wrap_content"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:text="History"-->
+    <!--                android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"-->
+    <!--                android:textColor="#A9A9A9"-->
+    <!--                android:gravity="center"/>-->
+
+    <!--            <ImageView-->
+    <!--                android:id="@+id/gear_icon"-->
+    <!--                android:layout_width="wrap_content"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:layout_weight="1"-->
+    <!--                android:src="@drawable/ic_dashboard_black_24dp" />-->
+    <!--        </LinearLayout>-->
+    <!--    </androidx.appcompat.widget.Toolbar>-->

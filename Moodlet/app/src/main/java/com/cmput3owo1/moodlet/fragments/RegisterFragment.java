@@ -71,12 +71,12 @@ public class RegisterFragment extends Fragment implements UserService.Registrati
                 String txt_fullname = fullname.getText().toString();
                 String txt_confirm_password = confirmPassword.getText().toString();
 
-                if(txt_username.isEmpty()|| txt_email.isEmpty() || txt_password.isEmpty() || txt_confirm_password.isEmpty()) {
-                    Toast.makeText(getActivity(), "All fields are required", Toast.LENGTH_SHORT).show();
+                if(txt_username.isEmpty()|| txt_fullname.isEmpty() || txt_email.isEmpty() || txt_password.isEmpty() || txt_confirm_password.isEmpty()) {
+                    Toast.makeText(getActivity(), R.string.all_fields_required, Toast.LENGTH_SHORT).show();
                 } else if (txt_password.length() < 6) {
-                    Toast.makeText(getActivity(), "Password must be at least 6 characters long", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.password_too_short, Toast.LENGTH_SHORT).show();
                 } else if (!txt_password.equals(txt_confirm_password)) {
-                    Toast.makeText(getActivity(), "Passwords do not match", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.password_does_not_match, Toast.LENGTH_SHORT).show();
                 } else {
                     userService.registerUser(txt_username, txt_email, txt_password, txt_fullname, RegisterFragment.this);
                 }
@@ -94,7 +94,7 @@ public class RegisterFragment extends Fragment implements UserService.Registrati
 
     @Override
     public void onRegistrationFailure() {
-        Toast.makeText(getActivity(), "Account with this email already exists", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), R.string.account_already_exists, Toast.LENGTH_SHORT).show();
     }
 
     public void onAddToDatabaseFailure() {

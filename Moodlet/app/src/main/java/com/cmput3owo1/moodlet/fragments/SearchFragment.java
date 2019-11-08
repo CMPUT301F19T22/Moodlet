@@ -10,6 +10,9 @@ import androidx.fragment.app.Fragment;
 
 import com.cmput3owo1.moodlet.R;
 
+/**
+ * Placeholder for the user search. Not implemented.
+ */
 public class SearchFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,

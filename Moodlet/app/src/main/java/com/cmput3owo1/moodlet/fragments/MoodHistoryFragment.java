@@ -1,56 +1,56 @@
 package com.cmput3owo1.moodlet.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
+import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.cmput3owo1.moodlet.R;
-import com.cmput3owo1.moodlet.activities.MoodEditorActivity;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.cmput3owo1.moodlet.adapters.MoodEventAdapter;
+import com.cmput3owo1.moodlet.models.EmotionalState;
+import com.cmput3owo1.moodlet.models.MoodEvent;
 
-import org.w3c.dom.Text;
+import java.util.ArrayList;
 
-public class MoodHistoryFragment extends Fragment {
+public class MoodHistoryFragment extends Fragment implements MoodEventAdapter.OnItemClickListener {
 
-    private FloatingActionButton addMood;
+    private RecyclerView recyclerView;
+    private MoodEventAdapter recyclerAdapter;
+    private ArrayList<MoodEvent> moodEventList;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.fragment_mood_history, container, false);
-        addMood = rootView.findViewById(R.id.add_fab);
-        TextView moodHistory = rootView.findViewById(R.id.text_history);
+        View view = inflater.inflate(R.layout.fragment_mood_history, container, false);
 
+        recyclerView = view.findViewById(R.id.mood_event_rv);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        addMood.setOnClickListener(new Button.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                //onAddMoodClick
-                Intent intent = new Intent(rootView.getContext(), MoodEditorActivity.class);
-                intent.putExtra("add", true);
-                startActivity(intent);
-            }
-        });
+        moodEventList = new ArrayList<>();
 
-        moodHistory.setOnClickListener(new TextView.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                //onAddMoodClick
-                Intent intent = new Intent(rootView.getContext(), MoodEditorActivity.class);
-                intent.putExtra("view", true);
-                startActivity(intent);
-            }
-        });
+        EmotionalState[] emotions = {EmotionalState.HAPPY, EmotionalState.ANGRY, EmotionalState.SCARED, EmotionalState.SAD};
 
+        for (int i = 0; i < emotions.length; ++i) {
+            moodEventList.add((new MoodEvent(emotions[i])));
+        }
 
-        return rootView;
+        recyclerAdapter = new MoodEventAdapter(moodEventList, this);
+        recyclerView.setAdapter(recyclerAdapter);
 
+        return view;
     }
 
+    @Override
+    public void onItemClick(int pos) {
+        // Implement for editing a mood event
+    }
 }
