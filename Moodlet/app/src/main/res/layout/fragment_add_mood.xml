@@ -19,33 +19,9 @@
             android:layout_marginLeft="16dp"
             android:layout_marginTop="8dp"
             android:text="add"
-            android:visibility="invisible"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"></Button>
 
-        <Button
-            android:id="@+id/toggle_edit"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="8dp"
-            android:text="toggle edit"
-            android:visibility="invisible"
-            app:layout_constraintStart_toEndOf="@+id/add_mood"
-            app:layout_constraintTop_toTopOf="parent"></Button>
-
-        <Button
-            android:id="@+id/confirm_edit"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="8dp"
-            android:text="confirm"
-            android:visibility="invisible"
-            app:layout_constraintStart_toEndOf="@id/toggle_edit"
-            app:layout_constraintTop_toTopOf="parent"></Button>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -108,23 +84,10 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="4dp"
                 android:textSize="36sp"
-                android:visibility="invisible"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/moodLabel"></Spinner>
 
             <!-- View Details -->
-            <TextView
-                android:id="@+id/moodDisplay"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="8dp"
-                android:text="Mood"
-                android:textSize="32pt"
-                android:visibility="invisible"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/moodLabel"></TextView>
 
             <!-- separator -->
 
@@ -165,23 +128,10 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="8dp"
-                android:visibility="invisible"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/socialLabel"></Spinner>
 
             <!-- View Details -->
-            <TextView
-                android:id="@+id/socialDisplay"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="8dp"
-                android:text="Social Situation"
-                android:textSize="18sp"
-                android:visibility="invisible"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/socialLabel"></TextView>
 
             <!-- separator -->
 
