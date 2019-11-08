@@ -4,16 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 
 import com.cmput3owo1.moodlet.R;
 import com.cmput3owo1.moodlet.fragments.AddMoodFragment;
-import com.cmput3owo1.moodlet.fragments.LoginFragment;
 import com.cmput3owo1.moodlet.fragments.ViewMoodFragment;
-import com.cmput3owo1.moodlet.models.MoodEvent;
-
-import java.io.Serializable;
-
 /**
  * An activity used to handle fragments for adding, viewing and editing MoodEvents
  * depending on where the activity is invoked.
