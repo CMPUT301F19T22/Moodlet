@@ -36,7 +36,6 @@ public class MoodEventService implements IMoodEventServiceProvider {
     private FirebaseAuth auth;
     private StorageReference storageRef;
     private FirebaseStorage storage;
-    private StorageReference filepathRef;
 
     /**
      * Default constructor for MoodEventService.
@@ -183,7 +182,7 @@ public class MoodEventService implements IMoodEventServiceProvider {
         final String username = auth.getCurrentUser().getDisplayName();
         final String filepath = "images/" + username + "/" + imageToUpload.getLastPathSegment();
 
-        filepathRef = storageRef.child(filepath);
+        StorageReference filepathRef = storageRef.child(filepath);
 
         filepathRef.putFile(imageToUpload).addOnFailureListener(new OnFailureListener() {
             @Override
