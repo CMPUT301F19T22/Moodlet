@@ -22,7 +22,7 @@ import com.cmput3owo1.moodlet.services.UserService;
 /**
  * A fragment that handles user login. It takes in email and password in EditTexts
  * and makes sure that the inputs are valid. Once the inputs have been verified,
- * the login button atttemps to log the user in. The fragment also contains a clickable
+ * the login button attempts to log the user in. The fragment also contains a clickable
  * TextView that changes from a login fragment to a register fragment
  */
 public class LoginFragment extends Fragment implements IUserServiceProvider.LoginListener {
@@ -32,10 +32,6 @@ public class LoginFragment extends Fragment implements IUserServiceProvider.Logi
     Button loginButton;
 
     UserService userService = new UserService();
-
-    public LoginFragment() {
-        // Required empty public constructor
-    }
 
     /**
      * This function is called to do initial creation of a fragment.
@@ -97,13 +93,18 @@ public class LoginFragment extends Fragment implements IUserServiceProvider.Logi
         // Inflate the layout for this fragment
         return loginFragmentView;
     }
-
+    /**
+     * Interface function to switch to main activity upon successful login
+     */
     @Override
     public void onLoginSuccess() {
         Intent intent = new Intent(getActivity(), MainActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * Interface function to show a toast message for unsuccessful login
+     */
     @Override
     public void onLoginFailure() {
         Toast.makeText(getActivity(), R.string.authentication_failed, Toast.LENGTH_SHORT).show();

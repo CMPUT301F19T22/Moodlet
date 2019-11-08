@@ -36,10 +36,6 @@ public class RegisterFragment extends Fragment implements IUserServiceProvider.R
 
     private UserService userService = new UserService();
 
-    public RegisterFragment() {
-        // Required empty public constructor
-    }
-
     /**
      * This function is called to have the fragment instantiate its user interface view.
      * @param inflater The LayoutInflater object that can be used to inflate any views in the fragment.
@@ -101,7 +97,6 @@ public class RegisterFragment extends Fragment implements IUserServiceProvider.R
 
     /**
      * Interface function to switch to Login activity upon successful user registration.
-     * @Return Returns none.
      */
     @Override
     public void onRegistrationSuccess() {
@@ -111,7 +106,6 @@ public class RegisterFragment extends Fragment implements IUserServiceProvider.R
 
     /**
      *   Interface function to show toast message for an existing account
-     *   @Return Returns none.
      */
     @Override
     public void onRegistrationFailure() {
@@ -120,7 +114,6 @@ public class RegisterFragment extends Fragment implements IUserServiceProvider.R
 
     /**
      *   Interface function to show toast message when there is a problem accessing database
-     *   @Return Returns none.
      */
     public void onDatabaseAccessFailure() {
         Toast.makeText(getActivity(), R.string.please_try_again_later, Toast.LENGTH_SHORT).show();
@@ -128,7 +121,6 @@ public class RegisterFragment extends Fragment implements IUserServiceProvider.R
 
     /**
      *  Interface function to show toast message when username is already taken
-     *  @Returns Returns none.
      */
     @Override
     public void onUsernameIsTaken() {

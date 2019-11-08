@@ -36,6 +36,7 @@ public class UserService implements IUserServiceProvider{
      * This function is called to check if there is an existing instance of the logged in user.
      * @return none
      */
+    @Override
     public boolean hasPreviousLogin(){
         return auth.getCurrentUser() != null;
     }
@@ -50,6 +51,7 @@ public class UserService implements IUserServiceProvider{
      * @param listener Registration listener passed from fragment
      * @return none
      */
+    @Override
     public void validateUsernameAndCreateUser(final String username, final String email, final String password, final String fullname, final RegistrationListener listener){
 
         db.collection("users").document(username).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -79,6 +81,7 @@ public class UserService implements IUserServiceProvider{
      * @param listener Registration listener passed from fragment
      * @return none
      */
+    @Override
     public void createUser(final String username, final String email, String password, final String fullname, final RegistrationListener listener){
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -105,6 +108,7 @@ public class UserService implements IUserServiceProvider{
      * @param listener Registration listener passed from fragment
      * @return none
      */
+    @Override
     public void putUserIntoDB(final String email, final String fullname, final String username, final RegistrationListener listener){
         HashMap<String, String> data = new HashMap<>();
         data.put("email", email);
@@ -131,6 +135,7 @@ public class UserService implements IUserServiceProvider{
      * @param listener Login listener passed from fragment
      * @return none
      */
+    @Override
     public void loginUser(String txt_email, String txt_password, final LoginListener listener){
         auth.signInWithEmailAndPassword(txt_email, txt_password)
             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
