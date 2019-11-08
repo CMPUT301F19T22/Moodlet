@@ -5,6 +5,10 @@ import android.graphics.Color;
 
 import com.cmput3owo1.moodlet.R;
 
+/**
+ * Enum for the emotional states that a {@link MoodEvent} can have as descriptors of mood.
+ * Includes HAPPY, SAD, ANGRY, EXCITED, CONFUSED, SCARED and JEALOUS.
+ */
 public enum EmotionalState {
     HAPPY("Happy",Color.YELLOW),
     SAD("Sad",Color.CYAN),
@@ -26,21 +30,35 @@ public enum EmotionalState {
     private int color;
     private Bitmap emoticon;
 
+    /**
+     * Constructor for the MoodEvent
+     * @param name The display name for the given emotional state
+     * @param color The color associated with the given emotional state
+     */
     EmotionalState(String name, int color) {
         //TODO - add color and emoticon here once we decide them
         this.display_name = name;
         this.color = color;
     }
 
+    /**
+     * Makes the default return of toString the display name of the emotional state when called.
+     */
     @Override
     public String toString(){
         return this.display_name;
     }
 
+    /**
+     * Returns the display name of the emotional state when called.
+     */
     public String getDisplayName(){
         return this.display_name;
     }
 
+    /**
+     * Returns the color of the emotional state when called.
+     */
     public int getColor(){return this.color;
     }
 

@@ -14,9 +14,16 @@ import com.cmput3owo1.moodlet.models.MoodEvent;
 
 import java.io.Serializable;
 
-
+/**
+ * An activity used to handle fragments for adding, viewing and editing MoodEvents
+ * depending on where the activity is invoked.
+ */
 public class MoodEditorActivity extends AppCompatActivity {
 
+    /**
+     * Called when the activity is started and sets up the corresponding fragment to display.
+     * @param savedInstanceState Used to restore an activity's previous state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

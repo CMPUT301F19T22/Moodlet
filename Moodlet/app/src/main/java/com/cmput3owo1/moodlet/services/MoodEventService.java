@@ -57,11 +57,17 @@ public class MoodEventService {
         void onMoodHistoryUpdate(ArrayList<MoodEvent> newHistory);
     }
 
+    /**
+     * Listener interface to get the filepath of the newly uploaded image
+     */
     public interface OnImageUploadListener {
         void onImageUploadSuccess(String filepath);
         void onImageUploadFailure();
     }
 
+    /**
+     * Listener interface to notify when mood is added/updated.
+     */
     public interface OnMoodUpdateListener {
         void onMoodUpdateSuccess();
     }
@@ -102,7 +108,8 @@ public class MoodEventService {
 
     /**
      * Add a Mood Event to the database.
-     * @param moodEvent The mood event to add
+     * @param listener The listener to notify upon completion of add.
+     * @param moodEvent The {@link MoodEvent} to add to the database.
      */
     public String addMoodEvent(final MoodEvent moodEvent, final OnMoodUpdateListener listener) {
         DocumentReference newMoodEventRef = db.collection("moodEvents").document();
@@ -132,6 +139,11 @@ public class MoodEventService {
         return newMoodEventRef.getId();
     }
 
+    /**
+     * Edit an existing MoodEvent on the database.
+     * @param listener The listener to notify upon completion of edit.
+     * @param moodEvent The {@link MoodEvent} to edit.
+     */
     public void editMoodEvent(final MoodEvent moodEvent, final OnMoodUpdateListener listener){
         DocumentReference newMoodEventRef = db.collection("moodEvents").document(moodEvent.getId());
         newMoodEventRef.set(moodEvent);
@@ -188,9 +200,13 @@ public class MoodEventService {
             }
         });
     }
-
+    /**
+     * Listen to mood history updates of the current user. Calls the listener's onMoodHistoryUpdate
+     * method with the new mood history list when a change occurs.
+     * @param listener The listener to pass the new mood history list to
+     * @param imageToUpload The Uri to upload to FireBase.
+     */
     public void uploadImage(final OnImageUploadListener listener, final Uri imageToUpload){
-
 
         final String username = auth.getCurrentUser().getDisplayName();
         final String filepath = "images/" + username + "/" + imageToUpload.getLastPathSegment();

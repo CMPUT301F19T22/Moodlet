@@ -33,6 +33,10 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * A fragment that has editable fields that allow for a user to fill in and add a MoodEvent to
+ * a database or edit an existing MoodEvent in a database.
+ */
 public class AddMoodFragment extends Fragment implements MoodEventService.OnImageUploadListener, MoodEventService.OnMoodUpdateListener {
 
     boolean editMode;
@@ -66,6 +70,13 @@ public class AddMoodFragment extends Fragment implements MoodEventService.OnImag
     public AddMoodFragment(){
     }
 
+    /**
+     * This function is called to have the fragment instantiate its user interface view.
+     * @param inflater The LayoutInflater object that can be used to inflate any views in the fragment.
+     * @param container  If non-null, this is the parent view that the fragment's UI should be attached to. The fragment should not add the view itself, but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state as given here.
+     * @return Return the View for the fragment's UI, or null.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -89,8 +100,6 @@ public class AddMoodFragment extends Fragment implements MoodEventService.OnImag
         //Temporary debug buttons
         addMood = view.findViewById(R.id.add_mood);
         confirmEdit = view.findViewById(R.id.confirm_edit);
-
-
 
         moodAdapter = new ArrayAdapter<EmotionalState>(getActivity(), R.layout.mood_spinner_style, EmotionalState.values());
         moodAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -142,9 +151,7 @@ public class AddMoodFragment extends Fragment implements MoodEventService.OnImag
             }
         }
         catch(Exception e){
-
         }
-
 
         imageUpload.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -154,9 +161,6 @@ public class AddMoodFragment extends Fragment implements MoodEventService.OnImag
 
             }
         });
-
-
-
 
         moodSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -208,6 +212,14 @@ public class AddMoodFragment extends Fragment implements MoodEventService.OnImag
         return view;
     }
 
+    /**
+     * Callback for when an image is imported into the Fragment. This function verifies if data is returned
+     * from the call and updates the user's currently selected image, and displays the imported
+     * image.
+     * @param requestCode The request code initially supplied to identify where the result is obtained from
+     * @param resultCode The result code from the calling activity
+     * @param data The intent to return if additional data exists
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -223,7 +235,11 @@ public class AddMoodFragment extends Fragment implements MoodEventService.OnImag
             }
         }
     }
-
+    /**
+     * Callback function that is triggered upon image upload success to give the user the corresponding filepath
+     * where it is located in the database and to then execute the appropriate following action.
+     * @param filepath A string value of the location in which the image was uploaded to in FireBase.
+     */
     @Override
     public void onImageUploadSuccess(String filepath) {
         //progressDialog.dismiss();
@@ -235,12 +251,19 @@ public class AddMoodFragment extends Fragment implements MoodEventService.OnImag
         }
     }
 
+    /**
+     * Callback function that is triggered upon image upload failure to inform the user of the exception.
+     */
     @Override
     public void onImageUploadFailure() {
         progressDialog.dismiss();
         Toast.makeText(getActivity(), "Upload Failed.", Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Callback function that is triggered upon editing or adding a mood to return the fragment back to
+     * to the previous location.
+     */
     @Override
     public void onMoodUpdateSuccess(){
         getActivity().finish();

@@ -22,6 +22,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * A fragment that displays the details of a specific MoodEvent and optionally
+ * allows for users to swap between an editable mode.
+ */
 public class ViewMoodFragment extends Fragment {
 
     boolean editMode;
@@ -40,7 +44,13 @@ public class ViewMoodFragment extends Fragment {
 
     }
 
-
+    /**
+     * This function is called to have the fragment instantiate its user interface view.
+     * @param inflater The LayoutInflater object that can be used to inflate any views in the fragment.
+     * @param container  If non-null, this is the parent view that the fragment's UI should be attached to. The fragment should not add the view itself, but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state as given here.
+     * @return Return the View for the fragment's UI, or null.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_view_mood, container, false);
@@ -59,12 +69,6 @@ public class ViewMoodFragment extends Fragment {
         final MoodEvent moodObj = (MoodEvent) args.getSerializable("MoodEvent");
         final Date argDate = (Date) args.getSerializable("date");
 
-//        try{
-//            Date dateObj = sdf.parse(argDate);
-//            date.setText(sdf.format(dateObj));
-//        }catch(ParseException e){
-//            e.printStackTrace();
-//        }
         moodDisplay.setText(moodObj.getEmotionalState().getDisplayName());
         socialDisplay.setText(moodObj.getSocialSituation().getDisplayName());
         reasonDisplay.setText(moodObj.getReasoning());
