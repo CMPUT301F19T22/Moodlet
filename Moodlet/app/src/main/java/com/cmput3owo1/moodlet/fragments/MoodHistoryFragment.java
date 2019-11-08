@@ -17,6 +17,10 @@ import com.cmput3owo1.moodlet.services.MoodEventService;
 
 import java.util.ArrayList;
 
+/**
+ * A fragment that hold the list of user's mood events while displaying the emotion, date,
+ * and time sorted in reverse chronological order of each mood event.
+ */
 public class MoodHistoryFragment extends Fragment
         implements MoodEventAdapter.OnItemClickListener, MoodEventService.OnMoodHistoryUpdateListener {
 
@@ -26,6 +30,13 @@ public class MoodHistoryFragment extends Fragment
     private MoodEventService moodEventService;
 
 
+    /**
+     * This function is called to have the fragment instantiate its user interface view.
+     * @param inflater The LayoutInflater object that can be used to inflate any views in the fragment.
+     * @param container If non-null, this is the parent view that the fragment's UI should be attached to.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state as given here.
+     * @return Return the View for the fragment's UI, or null.
+     */
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_mood_history, container, false);
@@ -45,11 +56,19 @@ public class MoodHistoryFragment extends Fragment
         return view;
     }
 
+    /**
+     * Called when the user is clicking on a mood event to edit
+     * @param pos
+     */
     @Override
     public void onItemClick(int pos) {
         // Implement for editing a mood event
     }
 
+    /**
+     * Gets called when there is an update to the user's Mood Event History
+     * @param newHistory The updated Mood Event History
+     */
     @Override
     public void onMoodHistoryUpdate(ArrayList<MoodEvent> newHistory) {
         moodEventList.clear();
