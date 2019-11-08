@@ -36,9 +36,8 @@ public class ViewMoodFragment extends Fragment {
     private TextView date;
     private TextView reasonDisplay;
     private ImageView imageUpload;
-    private String dateText;
     private Button toggleEdit;
-    private Button confirmEdit;
+
 
     public ViewMoodFragment(){
 
@@ -91,10 +90,6 @@ public class ViewMoodFragment extends Fragment {
                 fragmentTransaction.commit();
             }
         });
-
-
-
-
         return view;
     }
 
