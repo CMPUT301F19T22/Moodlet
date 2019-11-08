@@ -107,7 +107,7 @@ public class MoodEventService {
      * Listen to mood history updates of the current user. Calls the listener's onMoodHistoryUpdate
      * method with the new mood history list when a change occurs.
      * @param listener The listener to pass the new mood history list to
-     * @param filterBy The optional {@link EmotionalState} to filter the list by
+     * @param filterBy The optional {@link EmotionalState} to filter the list by.
      */
     public void getMoodHistoryUpdates(final OnMoodHistoryUpdateListener listener, @Nullable EmotionalState filterBy) {
         String username = auth.getCurrentUser().getDisplayName();
