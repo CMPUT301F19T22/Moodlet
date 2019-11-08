@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
+import androidx.test.espresso.DataInteraction;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
@@ -12,6 +13,8 @@ import androidx.test.runner.AndroidJUnit4;
 
 import com.cmput3owo1.moodlet.R;
 import com.cmput3owo1.moodlet.activities.LoginActivity;
+import com.cmput3owo1.moodlet.activities.MainActivity;
+import com.cmput3owo1.moodlet.models.EmotionalState;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -20,87 +23,66 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.Espresso.pressBack;
+import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isSelected;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 public class MoodHistoryFragmentTest {
 
+    // Start with MainActivity (JUnit Rules: https://developer.android.com/training/testing/junit-rules)
+    private String testEmail = "test@test.com";
+    private String testPassword = "Password123!";
+
     @Rule
-    public ActivityTestRule<LoginActivity> mActivityTestRule = new ActivityTestRule<>(LoginActivity.class);
+    public ActivityTestRule<LoginActivity> activityTestRule = new ActivityTestRule(LoginActivity.class, false, true);
+
+    private void loginWithTestAccount() throws InterruptedException {
+        onView(withId(R.id.edit_text_email)).perform(typeText(testEmail));
+        pressBack();
+        onView(withId(R.id.edit_text_password)).perform(typeText(testPassword));
+        pressBack();
+        onView(withId(R.id.btn_login)).perform(click());
+
+        //Inelegant way to wait for network calls. Fix if there's time
+        Thread.sleep(5000);
+    }
+    
 
     @Test
-    public void moodHistoryFragmentTest() {
-        ViewInteraction appCompatEditText = onView(
-                allOf(withId(R.id.edit_text_email),
-                        childAtPosition(
-                                allOf(withId(R.id.login_layout),
-                                        childAtPosition(
-                                                withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
-                                                0)),
-                                1),
-                        isDisplayed()));
-        appCompatEditText.perform(replaceText("gaga@gag.com"), closeSoftKeyboard());
+    public void testAddMoodEvent() throws InterruptedException {
+        loginWithTestAccount();
 
-        ViewInteraction appCompatEditText2 = onView(
-                allOf(withId(R.id.edit_text_password),
-                        childAtPosition(
-                                allOf(withId(R.id.login_layout),
-                                        childAtPosition(
-                                                withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
-                                                0)),
-                                2),
-                        isDisplayed()));
-        appCompatEditText2.perform(replaceText("123123"), closeSoftKeyboard());
+        // Navigate to the History Fragment
+        onView(withId(R.id.navigation_mood_history)).perform(click());
 
-        ViewInteraction textView = onView(
-                allOf(withText("History"),
-                        childAtPosition(
-                                allOf(withId(R.id.action_bar),
-                                        childAtPosition(
-                                                withId(R.id.action_bar_container),
-                                                0)),
-                                0),
-                        isDisplayed()));
-        textView.check(matches(withText("History")));
+        // Click on the floating action button to go to add mood page
+        onView(withId(R.id.add_mood_fab)).perform(click());
 
-        ViewInteraction textView2 = onView(
-                allOf(withText("History"),
-                        childAtPosition(
-                                allOf(withId(R.id.action_bar),
-                                        childAtPosition(
-                                                withId(R.id.action_bar_container),
-                                                0)),
-                                0),
-                        isDisplayed()));
-        textView2.check(matches(withText("History")));
-    }
+        // Click on mood drop down and select a mood
+        onView(withId(R.id.moodSelected)).perform(click());
 
-    private static Matcher<View> childAtPosition(
-            final Matcher<View> parentMatcher, final int position) {
+        // Select confused from drop down
+//        onView(allOf(withId(R.id.standard_spinner_format), withText("Confused"))).perform(click());
+        onData(allOf(is(instanceOf(EmotionalState.class)), is(EmotionalState.CONFUSED))).perform(click());
 
-        return new TypeSafeMatcher<View>() {
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("Child at position " + position + " in parent ");
-                parentMatcher.describeTo(description);
-            }
+        // add mood event
+        onView(withId(R.id.add_mood)).perform(click());
 
-            @Override
-            public boolean matchesSafely(View view) {
-                ViewParent parent = view.getParent();
-                return parent instanceof ViewGroup && parentMatcher.matches(parent)
-                        && view.equals(((ViewGroup) parent).getChildAt(position));
-            }
-        };
     }
 }
