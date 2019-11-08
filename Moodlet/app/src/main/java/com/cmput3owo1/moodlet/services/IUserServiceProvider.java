@@ -25,7 +25,6 @@ public interface IUserServiceProvider {
 
     /**
      * This function is called to check if there is an existing instance of the logged in user.
-     * @return none
      */
     boolean hasPreviousLogin();
 
@@ -38,7 +37,6 @@ public interface IUserServiceProvider {
      * @param password Password of Account to register with.
      * @param fullname Full name of user registering.
      * @param listener Registration listener passed from fragment
-     * @return none
      */
     void validateUsernameAndCreateUser(final String username, final String email, final String password,
                                               final String fullname, final RegistrationListener listener);
@@ -50,7 +48,6 @@ public interface IUserServiceProvider {
      * @param password Password of Account to register with.
      * @param fullname Full name of user registering.
      * @param listener Registration listener passed from fragment
-     * @return none
      */
     void createUser(final String username, final String email, String password, final String fullname, final RegistrationListener listener);
 
@@ -69,7 +66,6 @@ public interface IUserServiceProvider {
      * @param txt_email Email to login with.
      * @param txt_password Password to login with.
      * @param listener Login listener passed from fragment
-     * @return none
      */
     void loginUser(String txt_email, String txt_password, final LoginListener listener);
 
