@@ -90,7 +90,7 @@ public class RegisterFragment extends Fragment implements UserService.Registrati
                 } else if (!txt_password.equals(txt_confirm_password)) {
                     Toast.makeText(getActivity(), R.string.password_does_not_match, Toast.LENGTH_SHORT).show();
                 } else {
-                    userService.registerUser(txt_username, txt_email, txt_password, txt_fullname, RegisterFragment.this);
+                    userService.validateUsernameAndCreateUser(txt_username, txt_email, txt_password, txt_fullname, RegisterFragment.this);
                 }
             }
         });
@@ -98,25 +98,37 @@ public class RegisterFragment extends Fragment implements UserService.Registrati
         return registerFragmentView;
     }
 
-    //  Interface function to switch to Login activity upon successful user registration
+    /**
+     * Interface function to switch to Login activity upon successful user registration.
+     * @Return Returns none.
+     */
     @Override
     public void onRegistrationSuccess() {
         Intent intent = new Intent(getActivity(), LoginActivity.class);
         startActivity(intent);
     }
 
-    //  Interface function to show toast message for an existing account
+    /**
+     *   Interface function to show toast message for an existing account
+     *   @Return Returns none.
+     */
     @Override
     public void onRegistrationFailure() {
         Toast.makeText(getActivity(), R.string.account_already_exists, Toast.LENGTH_SHORT).show();
     }
 
-    //  Interface function to show toast message when there is a problem accessing database
+    /**
+     *   Interface function to show toast message when there is a problem accessing database
+     *   @Return Returns none.
+     */
     public void onDatabaseAccessFailure() {
         Toast.makeText(getActivity(), R.string.please_try_again_later, Toast.LENGTH_SHORT).show();
     }
 
-    //  Interface function to show toast message when username is already taken
+    /**
+     *  Interface function to show toast message when username is already taken
+     *  @Returns Returns none.
+     */
     @Override
     public void onUsernameIsTaken() {
         Toast.makeText(getActivity(), R.string.username_taken, Toast.LENGTH_SHORT).show();

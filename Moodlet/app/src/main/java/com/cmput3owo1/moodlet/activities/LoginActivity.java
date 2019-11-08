@@ -7,7 +7,9 @@ import android.os.Bundle;
 import com.cmput3owo1.moodlet.R;
 import com.cmput3owo1.moodlet.fragments.LoginFragment;
 
-//  Activity that holds the login and registration fragments
+/**
+ *  Activity that holds the login and registration fragments
+ */
 public class LoginActivity extends AppCompatActivity {
 
     @Override

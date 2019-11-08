@@ -32,6 +32,11 @@ public class UserService {
         db = FirebaseFirestore.getInstance();
     }
 
+    /**
+     * Interface that creates a listener for the register fragment. It contains
+     * functions that are defined in the register fragment. These functions help
+     * with the flow of the registration process.
+     */
     public interface RegistrationListener {
         void onRegistrationSuccess();
         void onRegistrationFailure();
@@ -39,6 +44,11 @@ public class UserService {
         void onUsernameIsTaken();
     }
 
+    /**
+     * Interface that creates a listener for the login fragment. It contains
+     * functions that are defined in the login fragment. These functions help
+     * with the flow of the login process
+     */
     public interface LoginListener {
         void onLoginSuccess();
         void onLoginFailure();
@@ -63,7 +73,7 @@ public class UserService {
      * @param listener Registration listener passed from fragment
      * @return none
      */
-    public void registerUser(final String username, final String email, final String password, final String fullname, final RegistrationListener listener){
+    public void validateUsernameAndCreateUser(final String username, final String email, final String password, final String fullname, final RegistrationListener listener){
 
         db.collection("users").document(username).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
