@@ -18,6 +18,12 @@ import com.cmput3owo1.moodlet.R;
 import com.cmput3owo1.moodlet.activities.MainActivity;
 import com.cmput3owo1.moodlet.services.UserService;
 
+/**
+ * A fragment that handles user login. It takes in email and password in EditTexts
+ * and makes sure that the inputs are valid. Once the inputs have been verified,
+ * the login button atttemps to log the user in. The fragment also contains a clickable
+ * TextView that changes from a login fragment to a register fragment
+ */
 public class LoginFragment extends Fragment implements UserService.LoginListener {
 
     EditText email, password;
