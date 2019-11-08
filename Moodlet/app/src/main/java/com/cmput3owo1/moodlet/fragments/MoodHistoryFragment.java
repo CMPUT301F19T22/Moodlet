@@ -4,27 +4,26 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cmput3owo1.moodlet.R;
 import com.cmput3owo1.moodlet.adapters.MoodEventAdapter;
-import com.cmput3owo1.moodlet.models.EmotionalState;
 import com.cmput3owo1.moodlet.models.MoodEvent;
+import com.cmput3owo1.moodlet.services.MoodEventService;
 
 import java.util.ArrayList;
 
-public class MoodHistoryFragment extends Fragment implements MoodEventAdapter.OnItemClickListener {
+public class MoodHistoryFragment extends Fragment
+        implements MoodEventAdapter.OnItemClickListener, MoodEventService.OnMoodHistoryUpdateListener {
 
     private RecyclerView recyclerView;
     private MoodEventAdapter recyclerAdapter;
     private ArrayList<MoodEvent> moodEventList;
+    private MoodEventService moodEventService;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -37,14 +36,11 @@ public class MoodHistoryFragment extends Fragment implements MoodEventAdapter.On
 
         moodEventList = new ArrayList<>();
 
-        EmotionalState[] emotions = {EmotionalState.HAPPY, EmotionalState.ANGRY, EmotionalState.SCARED, EmotionalState.SAD};
-
-        for (int i = 0; i < emotions.length; ++i) {
-            moodEventList.add((new MoodEvent(emotions[i])));
-        }
-
         recyclerAdapter = new MoodEventAdapter(moodEventList, this);
         recyclerView.setAdapter(recyclerAdapter);
+
+        moodEventService = new MoodEventService();
+        moodEventService.getMoodHistoryUpdates(this);
 
         return view;
     }
@@ -53,4 +49,12 @@ public class MoodHistoryFragment extends Fragment implements MoodEventAdapter.On
     public void onItemClick(int pos) {
         // Implement for editing a mood event
     }
+
+    @Override
+    public void onMoodHistoryUpdate(ArrayList<MoodEvent> newHistory) {
+        moodEventList.clear();
+        moodEventList.addAll(newHistory);
+        recyclerAdapter.notifyDataSetChanged();
+    }
 }
+

@@ -223,8 +223,6 @@ public class MoodEditorActivity extends AppCompatActivity implements MoodEventSe
                     mes.addMoodEvent(mood);
                 }
 
-
-
             }
         });
 

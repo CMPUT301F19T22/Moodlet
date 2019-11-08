@@ -129,19 +129,35 @@ public class MoodEventService {
      * Listen to mood history updates of the current user. Calls the listener's onMoodHistoryUpdate
      * method with the new mood history list when a change occurs.
      * @param listener The listener to pass the new mood history list to
-     * @param filterBy The optional {@link EmotionalState} to filter the list by.
      */
-    public void getMoodHistoryUpdates(final OnMoodHistoryUpdateListener listener, @Nullable EmotionalState filterBy) {
+    public void getMoodHistoryUpdates(OnMoodHistoryUpdateListener listener) {
         String username = auth.getCurrentUser().getDisplayName();
 
         Query moodHistoryQuery = db.collection("moodEvents")
                 .whereEqualTo("username", username)
-                .orderBy("dateTime", Query.Direction.DESCENDING);
+                .orderBy("date", Query.Direction.DESCENDING);
 
-        if (filterBy != null) {
-            moodHistoryQuery.whereEqualTo("emotionalState", filterBy);
-        }
+        runMoodHistoryQuery(moodHistoryQuery, listener);
+    }
 
+    /**
+     * Listen to mood history updates of the current user. Calls the listener's onMoodHistoryUpdate
+     * method with the new mood history list when a change occurs.
+     * @param listener The listener to pass the new mood history list to
+     * @param filterBy The {@link EmotionalState} to filter the list by.
+     */
+    public void getMoodHistoryUpdates(OnMoodHistoryUpdateListener listener, EmotionalState filterBy) {
+        String username = auth.getCurrentUser().getDisplayName();
+
+        Query moodHistoryQuery = db.collection("moodEvents")
+                .whereEqualTo("username", username)
+                .whereEqualTo("emotionalState", filterBy)
+                .orderBy("date", Query.Direction.DESCENDING);
+
+        runMoodHistoryQuery(moodHistoryQuery, listener);
+    }
+    
+    private void runMoodHistoryQuery(Query moodHistoryQuery, final OnMoodHistoryUpdateListener listener) {
         moodHistoryQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
@@ -153,7 +169,6 @@ public class MoodEventService {
                 listener.onMoodHistoryUpdate(newHistory);
             }
         });
-
     }
 
     public void uploadImage(final OnImageUploadListener listener, final Uri imageToUpload){
