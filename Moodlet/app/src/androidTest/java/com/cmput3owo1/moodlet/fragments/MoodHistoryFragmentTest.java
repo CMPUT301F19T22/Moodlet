@@ -1,4 +1,4 @@
-package com.cmput3owo1.moodlet.activities;
+package com.cmput3owo1.moodlet.fragments;
 
 
 import android.view.View;
@@ -11,6 +11,7 @@ import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
 
 import com.cmput3owo1.moodlet.R;
+import com.cmput3owo1.moodlet.activities.LoginActivity;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
