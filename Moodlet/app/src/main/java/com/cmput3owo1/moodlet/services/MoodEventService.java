@@ -6,10 +6,8 @@ import androidx.annotation.Nullable;
 import com.cmput3owo1.moodlet.models.EmotionalState;
 import com.cmput3owo1.moodlet.models.MoodEvent;
 import com.cmput3owo1.moodlet.models.MoodEventAssociation;
-import com.cmput3owo1.moodlet.models.SocialSituation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
@@ -27,6 +25,10 @@ public class MoodEventService {
 
     public interface OnFeedUpdateListener {
         void onFeedUpdate(ArrayList<MoodEventAssociation> newFeed);
+    }
+
+    public interface OnMoodHistoryUpdateListener {
+        void onMoodHistoryUpdate(ArrayList<MoodEvent> newHistory);
     }
 
     public MoodEventService() {
@@ -76,6 +78,31 @@ public class MoodEventService {
                 }
             }
         });
+    }
+
+    public void getMoodHistoryUpdates(final OnMoodHistoryUpdateListener listener, @Nullable EmotionalState filterBy) {
+        String username = auth.getCurrentUser().getDisplayName();
+
+        Query moodHistoryQuery = db.collection("moodEvents")
+                .whereEqualTo("username", username)
+                .orderBy("dateTime", Query.Direction.DESCENDING);
+
+        if (filterBy != null) {
+            moodHistoryQuery.whereEqualTo("emotionalState", filterBy);
+        }
+
+        moodHistoryQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                ArrayList<MoodEvent> newHistory = new ArrayList<>();
+                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                    MoodEvent moodEvent = doc.toObject(MoodEvent.class);
+                    newHistory.add(moodEvent);
+                }
+                listener.onMoodHistoryUpdate(newHistory);
+            }
+        });
+
     }
 
 }
