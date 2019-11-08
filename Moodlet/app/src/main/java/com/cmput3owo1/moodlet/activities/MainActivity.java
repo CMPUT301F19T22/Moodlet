@@ -11,8 +11,16 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+/**
+ * The main activity. Sets up the navbar and the navigation to the MoodHistoryFragment, the
+ * FeedFragment, the SearchFragment, and the MapFragment.
+ */
 public class MainActivity extends AppCompatActivity {
 
+    /**
+     * Called when the activity is starting. Sets up the navigation.
+     * @param savedInstanceState Used to restore an activity's previous state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
