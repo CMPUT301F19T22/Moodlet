@@ -46,6 +46,11 @@ public class MoodEventService {
         void onMoodHistoryUpdate(ArrayList<MoodEvent> newHistory);
     }
 
+    public interface OnImageUploadListener {
+        void onImageUploadSuccess(String filepath);
+        void onImageUploadFailure();
+    }
+
     public MoodEventService() {
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
@@ -122,44 +127,31 @@ public class MoodEventService {
 
     }
 
-    public void uploadImage(final Context context, final Uri imageToUpload){
+    public void uploadImage(final OnImageUploadListener listener, final Uri imageToUpload){
 
-        final ProgressDialog progressDialog = new ProgressDialog(context);
+
         final String username = auth.getCurrentUser().getDisplayName();
         final String filepath = "images/" + username + "/" + imageToUpload.getLastPathSegment();
         boolean uploaded = false;
-        progressDialog.setTitle("Uploading...");
-        progressDialog.show();
+
 
         filepathRef = storageRef.child(filepath);
 
         filepathRef.putFile(imageToUpload).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                progressDialog.dismiss();
-                Toast.makeText(context, "Failed "+exception.getMessage(), Toast.LENGTH_SHORT).show();
+                listener.onImageUploadFailure();
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
                 // ...
-                double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot
-                        .getTotalByteCount());
-                progressDialog.setMessage("Uploaded "+(int)progress+"%");
-                progressDialog.dismiss();
+
+                listener.onImageUploadSuccess(filepath);
 
             }
         });
-//
-//        filepathRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>()
-//        {
-//            @Override
-//            public void onSuccess(Uri downloadUrl)
-//            {
-//                //do something with downloadurl
-//            }
-//        });
 
     }
 

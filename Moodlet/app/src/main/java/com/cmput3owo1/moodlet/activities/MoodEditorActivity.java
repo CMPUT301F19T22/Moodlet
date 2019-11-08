@@ -44,7 +44,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
-public class MoodEditorActivity extends AppCompatActivity {
+public class MoodEditorActivity extends AppCompatActivity implements MoodEventService.OnImageUploadListener {
 
     boolean editMode;
     Spinner moodSpinner;
@@ -71,7 +71,7 @@ public class MoodEditorActivity extends AppCompatActivity {
     ImageView imageUpload;
     Uri selectedImage;
     private static final int image_loaded = 1;
-
+    ProgressDialog progressDialog;
 
     Button addMood;
     Button toggleEdit;
@@ -214,19 +214,35 @@ public class MoodEditorActivity extends AppCompatActivity {
                     mood.setReasoning(reasonEdit.getText().toString());
                 }
 
-                if(selectedImage.toString() != null){
-                    mes.uploadImage(MoodEditorActivity.this,selectedImage);
-
-                    //mood.setPhotographPath(filepath);  ? ? ? 
-
+                if(selectedImage != null) {
+                    progressDialog = new ProgressDialog(MoodEditorActivity.this);
+                    progressDialog.setTitle("Uploading...");
+                    progressDialog.show();
+                    mes.uploadImage(MoodEditorActivity.this, selectedImage);
+                }else{
+                    mes.addMoodEvent(mood);
                 }
 
-                //mes.addMoodEvent(mood);
+
 
             }
         });
 
     }
+
+    @Override
+    public void onImageUploadSuccess(String filepath) {
+        progressDialog.dismiss();
+        mood.setPhotographPath(filepath);
+        mes.addMoodEvent(mood);
+    }
+
+    @Override
+    public void onImageUploadFailure() {
+        progressDialog.dismiss();
+        Toast.makeText(this, "Upload Failed.", Toast.LENGTH_SHORT).show();
+    }
+
 
     public void editMode(){
         toggleEdit.setVisibility(View.INVISIBLE);
