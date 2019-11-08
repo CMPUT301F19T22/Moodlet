@@ -80,17 +80,28 @@ public class MoodEventService {
         });
     }
 
-    public void getMoodHistoryUpdates(final OnMoodHistoryUpdateListener listener, @Nullable EmotionalState filterBy) {
+    public void getMoodHistoryUpdates(OnMoodHistoryUpdateListener listener) {
         String username = auth.getCurrentUser().getDisplayName();
 
         Query moodHistoryQuery = db.collection("moodEvents")
                 .whereEqualTo("username", username)
-                .orderBy("dateTime", Query.Direction.DESCENDING);
+                .orderBy("date", Query.Direction.DESCENDING);
 
-        if (filterBy != null) {
-            moodHistoryQuery.whereEqualTo("emotionalState", filterBy);
-        }
+        runMoodHistoryQuery(moodHistoryQuery, listener);
+    }
 
+    public void getMoodHistoryUpdates(OnMoodHistoryUpdateListener listener, EmotionalState filterBy) {
+        String username = auth.getCurrentUser().getDisplayName();
+
+        Query moodHistoryQuery = db.collection("moodEvents")
+                .whereEqualTo("username", username)
+                .whereEqualTo("emotionalState", filterBy)
+                .orderBy("date", Query.Direction.DESCENDING);
+
+        runMoodHistoryQuery(moodHistoryQuery, listener);
+    }
+
+    private void runMoodHistoryQuery(Query moodHistoryQuery, final OnMoodHistoryUpdateListener listener) {
         moodHistoryQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
@@ -102,7 +113,6 @@ public class MoodEventService {
                 listener.onMoodHistoryUpdate(newHistory);
             }
         });
-
     }
 
 }
