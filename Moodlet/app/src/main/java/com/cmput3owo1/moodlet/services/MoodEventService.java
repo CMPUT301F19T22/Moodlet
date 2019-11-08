@@ -35,42 +35,12 @@ import java.util.ArrayList;
  * It handles everything to do with MoodEvents and their interaction with the database. This
  * includes adding, deleting, editing, and querying.
  */
-public class MoodEventService {
+public class MoodEventService implements IMoodEventServiceProvider {
     private FirebaseFirestore db;
     private FirebaseAuth auth;
     private StorageReference storageRef;
     private FirebaseStorage storage;
     private StorageReference filepathRef;
-
-
-    /**
-     * Listener interface to get the new feed (MoodEvents of users you are following) upon an update
-     */
-    public interface OnFeedUpdateListener {
-        void onFeedUpdate(ArrayList<MoodEventAssociation> newFeed);
-    }
-
-    /**
-     * Listener interface to get the new mood history upon an update
-     */
-    public interface OnMoodHistoryUpdateListener {
-        void onMoodHistoryUpdate(ArrayList<MoodEvent> newHistory);
-    }
-
-    /**
-     * Listener interface to get the filepath of the newly uploaded image
-     */
-    public interface OnImageUploadListener {
-        void onImageUploadSuccess(String filepath);
-        void onImageUploadFailure();
-    }
-
-    /**
-     * Listener interface to notify when mood is added/updated.
-     */
-    public interface OnMoodUpdateListener {
-        void onMoodUpdateSuccess();
-    }
 
     /**
      * Default constructor for MoodEventService.
@@ -87,6 +57,7 @@ public class MoodEventService {
      * feed when a change occurs.
      * @param listener The listener to pass the new feed to
      */
+    @Override
     public void getFeedUpdates(final OnFeedUpdateListener listener) {
         String username = auth.getCurrentUser().getDisplayName();
 
@@ -111,6 +82,7 @@ public class MoodEventService {
      * @param listener The listener to notify upon completion of add.
      * @param moodEvent The {@link MoodEvent} to add to the database.
      */
+    @Override
     public String addMoodEvent(final MoodEvent moodEvent, final OnMoodUpdateListener listener) {
         DocumentReference newMoodEventRef = db.collection("moodEvents").document();
         newMoodEventRef.set(moodEvent);
@@ -160,6 +132,7 @@ public class MoodEventService {
      * method with the new mood history list when a change occurs.
      * @param listener The listener to pass the new mood history list to
      */
+    @Override
     public void getMoodHistoryUpdates(OnMoodHistoryUpdateListener listener) {
         String username = auth.getCurrentUser().getDisplayName();
 
@@ -176,6 +149,7 @@ public class MoodEventService {
      * @param listener The listener to pass the new mood history list to
      * @param filterBy The {@link EmotionalState} to filter the list by.
      */
+    @Override
     public void getMoodHistoryUpdates(OnMoodHistoryUpdateListener listener, EmotionalState filterBy) {
         String username = auth.getCurrentUser().getDisplayName();
 
