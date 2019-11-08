@@ -19,23 +19,42 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
+/**
+ * A class that provides Firebase database services for the {@link MoodEvent} class.
+ * It handles everything to do with MoodEvents and their interaction with the database. This
+ * includes adding, deleting, editing, and querying.
+ */
 public class MoodEventService {
     private FirebaseFirestore db;
     private FirebaseAuth auth;
 
+    /**
+     * Listener interface to get the new feed (MoodEvents of users you are following) upon an update
+     */
     public interface OnFeedUpdateListener {
         void onFeedUpdate(ArrayList<MoodEventAssociation> newFeed);
     }
 
+    /**
+     * Listener interface to get the new mood history upon an update
+     */
     public interface OnMoodHistoryUpdateListener {
         void onMoodHistoryUpdate(ArrayList<MoodEvent> newHistory);
     }
 
+    /**
+     * Default constructor for MoodEventService.
+     */
     public MoodEventService() {
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
     }
 
+    /**
+     * Listen to feed updates of the current user. Calls the listener onFeedUpdate with the new
+     * feed when a change occurs.
+     * @param listener The listener to pass the new feed to
+     */
     public void getFeedUpdates(final OnFeedUpdateListener listener) {
         String username = auth.getCurrentUser().getDisplayName();
 
@@ -55,6 +74,10 @@ public class MoodEventService {
         });
     }
 
+    /**
+     * Add a Mood Event to the database.
+     * @param moodEvent The mood event to add
+     */
     public void addMoodEvent(final MoodEvent moodEvent) {
         DocumentReference newMoodEventRef = db.collection("moodEvents").document();
         newMoodEventRef.set(moodEvent);
@@ -80,6 +103,11 @@ public class MoodEventService {
         });
     }
 
+    /**
+     * Listen to mood history updates of the current user. Calls the listener's onMoodHistoryUpdate
+     * method with the new mood history list when a change occurs.
+     * @param listener The listener to pass the new mood history list to
+     */
     public void getMoodHistoryUpdates(OnMoodHistoryUpdateListener listener) {
         String username = auth.getCurrentUser().getDisplayName();
 
@@ -90,6 +118,12 @@ public class MoodEventService {
         runMoodHistoryQuery(moodHistoryQuery, listener);
     }
 
+    /**
+     * Listen to mood history updates of the current user. Calls the listener's onMoodHistoryUpdate
+     * method with the new mood history list when a change occurs.
+     * @param listener The listener to pass the new mood history list to
+     * @param filterBy The {@link EmotionalState} to filter the list by.
+     */
     public void getMoodHistoryUpdates(OnMoodHistoryUpdateListener listener, EmotionalState filterBy) {
         String username = auth.getCurrentUser().getDisplayName();
 
@@ -100,7 +134,7 @@ public class MoodEventService {
 
         runMoodHistoryQuery(moodHistoryQuery, listener);
     }
-
+    
     private void runMoodHistoryQuery(Query moodHistoryQuery, final OnMoodHistoryUpdateListener listener) {
         moodHistoryQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
