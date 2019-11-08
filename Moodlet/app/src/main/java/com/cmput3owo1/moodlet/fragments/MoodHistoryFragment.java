@@ -58,7 +58,7 @@ public class MoodHistoryFragment extends Fragment
 
     /**
      * Called when the user is clicking on a mood event to edit
-     * @param pos
+     * @param pos Gets position of the item clicked in the RecyclerView
      */
     @Override
     public void onItemClick(int pos) {
