@@ -1,14 +1,10 @@
 package com.cmput3owo1.moodlet.services;
 
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.net.Uri;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.cmput3owo1.moodlet.activities.MoodEditorActivity;
 import com.cmput3owo1.moodlet.models.EmotionalState;
 import com.cmput3owo1.moodlet.models.MoodEvent;
 import com.cmput3owo1.moodlet.models.MoodEventAssociation;
@@ -79,11 +75,11 @@ public class MoodEventService implements IMoodEventServiceProvider {
 
     /**
      * Add a Mood Event to the database.
-     * @param listener The listener to notify upon completion of add.
      * @param moodEvent The {@link MoodEvent} to add to the database.
+     * @param listener The listener to notify upon completion of add.
      */
     @Override
-    public String addMoodEvent(final MoodEvent moodEvent, final OnMoodUpdateListener listener) {
+    public String addMoodEvent(final MoodEvent moodEvent, OnMoodUpdateListener listener) {
         DocumentReference newMoodEventRef = db.collection("moodEvents").document();
         newMoodEventRef.set(moodEvent);
 
@@ -113,10 +109,11 @@ public class MoodEventService implements IMoodEventServiceProvider {
 
     /**
      * Edit an existing MoodEvent on the database.
-     * @param listener The listener to notify upon completion of edit.
      * @param moodEvent The {@link MoodEvent} to edit.
+     * @param listener The listener to notify upon completion of edit.
      */
-    public void editMoodEvent(final MoodEvent moodEvent, final OnMoodUpdateListener listener){
+    @Override
+    public void editMoodEvent(MoodEvent moodEvent, OnMoodUpdateListener listener){
         DocumentReference newMoodEventRef = db.collection("moodEvents").document(moodEvent.getId());
         newMoodEventRef.set(moodEvent);
 
@@ -180,12 +177,11 @@ public class MoodEventService implements IMoodEventServiceProvider {
      * @param listener The listener to pass the new mood history list to
      * @param imageToUpload The Uri to upload to FireBase.
      */
+    @Override
     public void uploadImage(final OnImageUploadListener listener, final Uri imageToUpload){
 
         final String username = auth.getCurrentUser().getDisplayName();
         final String filepath = "images/" + username + "/" + imageToUpload.getLastPathSegment();
-        boolean uploaded = false;
-
 
         filepathRef = storageRef.child(filepath);
 
@@ -197,9 +193,6 @@ public class MoodEventService implements IMoodEventServiceProvider {
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-                // ...
-
                 listener.onImageUploadSuccess(filepath);
 
             }

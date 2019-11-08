@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,10 +22,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.cmput3owo1.moodlet.R;
-import com.cmput3owo1.moodlet.activities.MoodEditorActivity;
 import com.cmput3owo1.moodlet.models.EmotionalState;
 import com.cmput3owo1.moodlet.models.MoodEvent;
 import com.cmput3owo1.moodlet.models.SocialSituation;
+import com.cmput3owo1.moodlet.services.IMoodEventServiceProvider;
 import com.cmput3owo1.moodlet.services.MoodEventService;
 
 import java.io.IOException;
@@ -37,7 +36,8 @@ import java.util.Date;
  * A fragment that has editable fields that allow for a user to fill in and add a MoodEvent to
  * a database or edit an existing MoodEvent in a database.
  */
-public class AddMoodFragment extends Fragment implements MoodEventService.OnImageUploadListener, MoodEventService.OnMoodUpdateListener {
+public class AddMoodFragment extends Fragment
+        implements IMoodEventServiceProvider.OnImageUploadListener, IMoodEventServiceProvider.OnMoodUpdateListener {
 
     private boolean editMode;
     private Spinner moodSpinner;
@@ -56,7 +56,7 @@ public class AddMoodFragment extends Fragment implements MoodEventService.OnImag
     private String moodDisplayName;
     private String socialDisplayName;
     private MoodEvent mood;
-    private MoodEventService mes;
+    private IMoodEventServiceProvider mes;
 
     //Image
     private ImageView imageUpload;
