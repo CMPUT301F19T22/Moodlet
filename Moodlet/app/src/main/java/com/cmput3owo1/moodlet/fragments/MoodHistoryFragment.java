@@ -35,9 +35,13 @@ public class MoodHistoryFragment extends Fragment implements MoodEventAdapter.On
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-//        MoodEvent mood = new MoodEvent();
-//        mood.setEmotionalState(EmotionalState.ANGRY);
-//        moodEventList.add(mood);
+        moodEventList = new ArrayList<>();
+
+        EmotionalState[] emotions = {EmotionalState.HAPPY, EmotionalState.ANGRY, EmotionalState.SCARED, EmotionalState.SAD};
+
+        for (int i = 0; i < emotions.length; ++i) {
+            moodEventList.add((new MoodEvent(emotions[i])));
+        }
 
         recyclerAdapter = new MoodEventAdapter(moodEventList, this);
         recyclerView.setAdapter(recyclerAdapter);

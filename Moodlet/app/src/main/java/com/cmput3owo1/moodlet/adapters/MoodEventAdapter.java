@@ -32,13 +32,14 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
 
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView tvMood, tvDateTime, tvTimeDiff;
+        TextView tvMood, tvDateTime;
+//        TextView tvTimeDiff;
 
         ViewHolder(View itemView) {
             super(itemView);
             tvMood = itemView.findViewById(R.id.mood_textview);
             tvDateTime = itemView.findViewById(R.id.date_time_textview);
-            tvTimeDiff = itemView.findViewById(R.id.time_difference);
+//            tvTimeDiff = itemView.findViewById(R.id.time_difference);
         }
 
         @Override
@@ -64,7 +65,7 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
         // set TextViews in RecyclerView
         holder.tvMood.setText(mood.getEmotionalState().name());
         holder.tvDateTime.setText(new SimpleDateFormat("MMMM dd, yyyy - HH:mm").format(new Date()));
-        holder.tvTimeDiff.setText("1s");
+//        holder.tvTimeDiff.setText("1s");
 
     }
 
