@@ -5,8 +5,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.espresso.DataInteraction;
 import androidx.test.espresso.ViewInteraction;
+import androidx.test.espresso.contrib.RecyclerViewActions;
+import androidx.test.espresso.matcher.BoundedMatcher;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
@@ -31,6 +34,7 @@ import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isSelected;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
@@ -44,6 +48,26 @@ import static org.hamcrest.Matchers.is;
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 public class MoodHistoryFragmentTest {
+
+    public static Matcher<View> atPosition(final int position, final Matcher<View> itemMatcher) {
+        return new BoundedMatcher<View, RecyclerView>(RecyclerView.class) {
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("has item at position " + position + ": ");
+                itemMatcher.describeTo(description);
+            }
+
+            @Override
+            protected boolean matchesSafely(final RecyclerView view) {
+                RecyclerView.ViewHolder viewHolder = view.findViewHolderForAdapterPosition(position);
+                if (viewHolder == null) {
+                    // has no item on such position
+                    return false;
+                }
+                return itemMatcher.matches(viewHolder.itemView);
+            }
+        };
+    }
 
     // Start with MainActivity (JUnit Rules: https://developer.android.com/training/testing/junit-rules)
     private String testEmail = "test@test.com";
@@ -84,5 +108,34 @@ public class MoodHistoryFragmentTest {
         // add mood event
         onView(withId(R.id.add_mood)).perform(click());
 
+        Thread.sleep(3000);
+        onView(withId(R.id.mood_event_rv)).check(matches(atPosition(0, hasDescendant(withText("CONFUSED")))));
+    }
+
+    @Test
+    public void testEditingMoodEvent() throws InterruptedException {
+        loginWithTestAccount();
+
+        // Navigate to the History Fragment
+        onView(withId(R.id.navigation_mood_history)).perform(click());
+
+
+        onView(withId(R.id.mood_event_rv)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+
+        onView(withId(R.id.toggle_edit)).perform((click()));
+
+        onView(withId(R.id.moodSelected)).perform(click());
+        onData(allOf(is(instanceOf(EmotionalState.class)), is(EmotionalState.HAPPY))).perform(click());
+
+        onView(withId(R.id.confirm_edit)).perform(click());
+
+        // Sleep for async call to Firebase
+        Thread.sleep(3000);
+
+        onView(withId(R.id.mood_event_rv)).check(matches(atPosition(0, hasDescendant(withText("HAPPY")))));
+
+        onView(withId(R.id.mood_event_rv)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+
+        onView(withId(R.id.moodDisplay)).check(matches(withText("Happy")));
     }
 }
