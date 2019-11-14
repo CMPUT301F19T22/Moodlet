@@ -1,5 +1,7 @@
 package com.cmput3owo1.moodlet.services;
 
+import android.widget.ProgressBar;
+
 /**
  * Interface that abstracts user service functions. It contains functions for
  * user registration and login. User registration functions includes validating
@@ -46,7 +48,7 @@ public interface IUserServiceProvider {
      * @param listener Registration listener passed from fragment
      */
     void validateUsernameAndCreateUser(final String username, final String email, final String password,
-                                              final String fullname, final RegistrationListener listener);
+                                       final String fullname, final ProgressBar progressBar, final RegistrationListener listener);
 
     /**
      * This a wrapper function that is called to create a user account with their email and password.
@@ -56,7 +58,7 @@ public interface IUserServiceProvider {
      * @param fullname Full name of user registering.
      * @param listener Registration listener passed from fragment
      */
-    void createUser(final String username, final String email, String password, final String fullname, final RegistrationListener listener);
+    void createUser(final String username, final String email, String password, final String fullname, final ProgressBar progressBar, final RegistrationListener listener);
 
     /**
      * This function is called to put the registered user into the database.
@@ -74,6 +76,6 @@ public interface IUserServiceProvider {
      * @param txt_password Password to login with.
      * @param listener Login listener passed from fragment
      */
-    void loginUser(String txt_email, String txt_password, final LoginListener listener);
+    void loginUser(String txt_email, String txt_password, final ProgressBar progressBar, final LoginListener listener);
 
     }

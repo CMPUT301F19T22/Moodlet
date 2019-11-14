@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +31,7 @@ public class LoginFragment extends Fragment implements IUserServiceProvider.Logi
     EditText email, password;
     TextView signupText;
     Button loginButton;
+    ProgressBar progressBar;
 
     UserService userService = new UserService();
 
@@ -64,6 +66,7 @@ public class LoginFragment extends Fragment implements IUserServiceProvider.Logi
         email = loginFragmentView.findViewById(R.id.edit_text_email);
         password = loginFragmentView.findViewById(R.id.edit_text_password);
         loginButton = loginFragmentView.findViewById(R.id.btn_login);
+        progressBar = loginFragmentView.findViewById(R.id.login_progress_bar);
 
         signupText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,7 +87,7 @@ public class LoginFragment extends Fragment implements IUserServiceProvider.Logi
                 if(txt_email.isEmpty() || txt_password.isEmpty()) {
                     Toast.makeText(getActivity(), R.string.all_fields_required, Toast.LENGTH_SHORT).show();
                 } else {
-                    userService.loginUser(txt_email, txt_password, LoginFragment.this);
+                    userService.loginUser(txt_email, txt_password, progressBar,LoginFragment.this);
                 }
             }
         });
@@ -97,6 +100,7 @@ public class LoginFragment extends Fragment implements IUserServiceProvider.Logi
      */
     @Override
     public void onLoginSuccess() {
+        progressBar.setVisibility(View.INVISIBLE);
         Intent intent = new Intent(getActivity(), MainActivity.class);
         startActivity(intent);
     }
@@ -106,6 +110,7 @@ public class LoginFragment extends Fragment implements IUserServiceProvider.Logi
      */
     @Override
     public void onLoginFailure() {
+        progressBar.setVisibility(View.INVISIBLE);
         Toast.makeText(getActivity(), R.string.authentication_failed, Toast.LENGTH_SHORT).show();
     }
 }

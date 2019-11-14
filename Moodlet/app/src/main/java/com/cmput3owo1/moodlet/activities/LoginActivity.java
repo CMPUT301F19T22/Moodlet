@@ -1,8 +1,10 @@
 package com.cmput3owo1.moodlet.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.transition.Scene;
 
 import android.os.Bundle;
+import android.view.ViewGroup;
 
 import com.cmput3owo1.moodlet.R;
 import com.cmput3owo1.moodlet.fragments.LoginFragment;
@@ -12,6 +14,10 @@ import com.cmput3owo1.moodlet.fragments.LoginFragment;
  */
 public class LoginActivity extends AppCompatActivity {
 
+    Scene aScene;
+    Scene anotherScene;
+
+
     /**
      * Called when the activity is starting.
      * @param savedInstanceState Used to restore an activity's previous state
@@ -20,6 +26,15 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+
+        // Create the scene root for the scenes in this app
+        ViewGroup sceneRoot = findViewById(R.id.fragment_container);
+
+        // Create the scenes
+        aScene = Scene.getSceneForLayout(sceneRoot, R.layout.fragment_login, this);
+        anotherScene =
+                Scene.getSceneForLayout(sceneRoot, R.layout.fragment_register, this);
 
         if(getSupportActionBar() != null) {
             getSupportActionBar().hide();

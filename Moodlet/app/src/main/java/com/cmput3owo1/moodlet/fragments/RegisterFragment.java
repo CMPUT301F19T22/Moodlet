@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +34,7 @@ public class RegisterFragment extends Fragment implements IUserServiceProvider.R
     private EditText fullname, username, email, password, confirmPassword;
     private TextView loginText;
     private Button registerButton;
+    private ProgressBar progressBar;
 
     private UserService userService = new UserService();
 
@@ -56,6 +58,7 @@ public class RegisterFragment extends Fragment implements IUserServiceProvider.R
         confirmPassword = registerFragmentView.findViewById(R.id.confirm_password);
         registerButton = registerFragmentView.findViewById(R.id.btn_register);
         loginText = registerFragmentView.findViewById(R.id.swap_to_login_text_view);
+        progressBar = registerFragmentView.findViewById(R.id.register_progress_bar);
 
         //  Click listener to change to login fragment
         loginText.setOnClickListener(new View.OnClickListener() {
@@ -87,7 +90,7 @@ public class RegisterFragment extends Fragment implements IUserServiceProvider.R
                 } else if (!txt_password.equals(txt_confirm_password)) {
                     Toast.makeText(getActivity(), R.string.password_does_not_match, Toast.LENGTH_SHORT).show();
                 } else {
-                    userService.validateUsernameAndCreateUser(txt_username, txt_email, txt_password, txt_fullname, RegisterFragment.this);
+                    userService.validateUsernameAndCreateUser(txt_username, txt_email, txt_password, txt_fullname, progressBar, RegisterFragment.this);
                 }
             }
         });
@@ -100,6 +103,7 @@ public class RegisterFragment extends Fragment implements IUserServiceProvider.R
      */
     @Override
     public void onRegistrationSuccess() {
+        progressBar.setVisibility(View.INVISIBLE);
         Intent intent = new Intent(getActivity(), LoginActivity.class);
         startActivity(intent);
     }
@@ -109,6 +113,7 @@ public class RegisterFragment extends Fragment implements IUserServiceProvider.R
      */
     @Override
     public void onRegistrationFailure() {
+        progressBar.setVisibility(View.INVISIBLE);
         Toast.makeText(getActivity(), R.string.account_already_exists, Toast.LENGTH_SHORT).show();
     }
 
@@ -116,6 +121,7 @@ public class RegisterFragment extends Fragment implements IUserServiceProvider.R
      *   Interface function to show toast message when there is a problem accessing database
      */
     public void onDatabaseAccessFailure() {
+        progressBar.setVisibility(View.INVISIBLE);
         Toast.makeText(getActivity(), R.string.please_try_again_later, Toast.LENGTH_SHORT).show();
     }
 
@@ -124,6 +130,7 @@ public class RegisterFragment extends Fragment implements IUserServiceProvider.R
      */
     @Override
     public void onUsernameIsTaken() {
+        progressBar.setVisibility(View.INVISIBLE);
         Toast.makeText(getActivity(), R.string.username_taken, Toast.LENGTH_SHORT).show();
     }
 }

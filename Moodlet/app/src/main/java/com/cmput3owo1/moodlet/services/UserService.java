@@ -1,6 +1,8 @@
 package com.cmput3owo1.moodlet.services;
 
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 
@@ -50,16 +52,17 @@ public class UserService implements IUserServiceProvider{
      * @param listener Registration listener passed from fragment
      */
     @Override
-    public void validateUsernameAndCreateUser(final String username, final String email, final String password, final String fullname, final RegistrationListener listener){
+    public void validateUsernameAndCreateUser(final String username, final String email, final String password, final String fullname, final ProgressBar progressBar, final RegistrationListener listener){
+        progressBar.bringToFront();
+        progressBar.setVisibility(View.VISIBLE);
 
         db.collection("users").document(username).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if(task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
-                    Log.v("data","Cached document data: " + document.getData());
                     if(document.getData() == null) {
-                        createUser(username, email, password, fullname, listener);
+                        createUser(username, email, password, fullname, progressBar, listener);
                     } else {
                         listener.onUsernameIsTaken();
                     }
@@ -79,7 +82,8 @@ public class UserService implements IUserServiceProvider{
      * @param listener Registration listener passed from fragment
      */
     @Override
-    public void createUser(final String username, final String email, String password, final String fullname, final RegistrationListener listener){
+    public void createUser(final String username, final String email, String password, final String fullname, final ProgressBar progressBar, final RegistrationListener listener){
+
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -131,7 +135,10 @@ public class UserService implements IUserServiceProvider{
      * @param listener Login listener passed from fragment
      */
     @Override
-    public void loginUser(String txt_email, String txt_password, final LoginListener listener){
+    public void loginUser(String txt_email, String txt_password, final ProgressBar progressBar, final LoginListener listener){
+
+        progressBar.bringToFront();
+        progressBar.setVisibility(View.VISIBLE);
         auth.signInWithEmailAndPassword(txt_email, txt_password)
             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                    @Override
