@@ -4,6 +4,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.cmput3owo1.moodlet.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -12,7 +13,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import static android.content.ContentValues.TAG;
@@ -145,6 +150,31 @@ public class UserService implements IUserServiceProvider{
                }
             );
     }
+
+    @Override
+    public void getUsers(String searchText, final OnUserSearchListener listener) {
+        Query usersQuery = db.collection("users")
+                .orderBy("username")
+                .whereGreaterThanOrEqualTo("username", searchText)
+                .whereLessThanOrEqualTo("username", searchText + '\uf8ff');
+
+        usersQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    ArrayList<User> searchList = new ArrayList<>();
+                    for (QueryDocumentSnapshot doc : task.getResult()) {
+                        User user = doc.toObject(User.class);
+                        searchList.add(user);
+                    }
+                    listener.OnSearchResult(searchList);
+                } else {
+                    //Log.d(TAG, "Error getting documents: ", task.getException());
+                }
+            }
+        });
+    }
+
 }
 
 

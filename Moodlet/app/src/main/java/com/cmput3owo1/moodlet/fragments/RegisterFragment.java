@@ -74,7 +74,7 @@ public class RegisterFragment extends Fragment implements IUserServiceProvider.R
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String txt_username = username.getText().toString();
+                String txt_username = username.getText().toString().toLowerCase();
                 String txt_email = email.getText().toString();
                 String txt_password = password.getText().toString();
                 String txt_fullname = fullname.getText().toString();

@@ -21,7 +21,8 @@ import java.util.ArrayList;
 /**
  * Placeholder for the user search. Not implemented.
          */
-public class SearchFragment extends Fragment implements SearchView.OnQueryTextListener {
+public class SearchFragment extends Fragment implements
+        SearchView.OnQueryTextListener, IUserServiceProvider.OnUserSearchListener {
     private SearchView userSearchView;
     private ListView userListView;
     private ArrayList<User> userDataList;
@@ -53,6 +54,19 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
 
     @Override
     public boolean onQueryTextChange(String newString) {
-        return false;
+        if (newString.isEmpty()) {
+            userDataList.clear();
+            userAdapter.notifyDataSetChanged();
+        } else {
+            service.getUsers(newString, this);
+        }
+        return true;
+    }
+
+    @Override
+    public void OnSearchResult(ArrayList<User> searchResult) {
+        userDataList.clear();
+        userDataList.addAll(searchResult);
+        userAdapter.notifyDataSetChanged();
     }
 }

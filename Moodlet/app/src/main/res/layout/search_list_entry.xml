@@ -1,20 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingHorizontal="30dp"
+    android:paddingVertical="14dp">
 
     <TextView
         android:id="@+id/search_username"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Username"/>
-
-    <Button
-        android:id="@+id/search_request_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Button" />
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:text="Username"/>
+
+    <com.google.android.material.button.MaterialButton
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:id="@+id/search_request_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorAccent"
+        android:text="FOLLOW"
+        android:textSize="12sp"
+        app:backgroundTint="@color/transparent"
+        app:cornerRadius="8dp"
+        app:strokeColor="@color/colorAccent"
+        app:strokeWidth="2dp"/>
 
 </LinearLayout>

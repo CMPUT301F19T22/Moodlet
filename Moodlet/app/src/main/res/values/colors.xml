@@ -5,6 +5,7 @@
     <color name="colorAccent">#2699FB</color>
     <color name="appBarTitle">#8B8B8B</color>
     <color name="appBarBackground">#E9E9E9</color>
+    <color name="transparent">#00E9E9E9</color>
     <color name="happy">#fffbab</color>
     <color name="sad">#b5fff4</color>
     <color name="angry">#e89292</color>
