@@ -13,6 +13,7 @@ import com.cmput3owo1.moodlet.models.MoodEvent;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * This class is the adapter class to a RecyclerView containing {@link MoodEventAdapter.ViewHolder} objects
@@ -23,6 +24,7 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
 
     private ArrayList<MoodEvent> moodEventList;
     private OnItemClickListener listener;
+    private SimpleDateFormat simpleDateFormat;
 
     /**
      * Listener interface to get the position of a mood event upon a click on the RecyclerView
@@ -39,6 +41,7 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
     public MoodEventAdapter(ArrayList<MoodEvent> moodEventList, OnItemClickListener listener) {
         this.moodEventList = moodEventList;
         this.listener = listener;
+        this.simpleDateFormat = new SimpleDateFormat("MMMM d, yyyy - h:mm a", Locale.US);
     }
 
 
@@ -95,7 +98,7 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
 
         // set TextViews in RecyclerView
         holder.tvMood.setText(mood.getEmotionalState().name());
-        holder.tvDateTime.setText(new SimpleDateFormat("MMMM dd, yyyy - HH:mm").format(mood.getDate()));
+        holder.tvDateTime.setText(simpleDateFormat.format(mood.getDate()));
 //        holder.tvTimeDiff.setText("1s");
 
     }
