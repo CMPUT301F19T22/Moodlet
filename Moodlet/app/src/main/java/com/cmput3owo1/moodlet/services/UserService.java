@@ -11,6 +11,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -166,13 +167,59 @@ public class UserService implements IUserServiceProvider{
                     for (QueryDocumentSnapshot doc : task.getResult()) {
                         User user = doc.toObject(User.class);
                         searchList.add(user);
+                        getFollowStatusForUser(user, listener);
                     }
-                    listener.OnSearchResult(searchList);
+                    listener.onSearchResult(searchList);
+
                 } else {
                     //Log.d(TAG, "Error getting documents: ", task.getException());
                 }
             }
         });
+    }
+
+    private void getFollowStatusForUser(final User user, final OnUserSearchListener listener) {
+        String currentUser = auth.getCurrentUser().getDisplayName();
+
+        DocumentReference followingDoc;
+        final Query requestedQuery;
+
+        followingDoc = db.document("users/" + currentUser + "/following/" + user.getUsername());
+        requestedQuery = db.collection("requests")
+                .whereEqualTo("requestFrom", currentUser)
+                .whereEqualTo("requestTo", user.getUsername())
+                .limit(1);
+
+        followingDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        user.setFollowing(true);
+                        listener.onUserUpdate();
+                    }
+                } else {
+                    //Log.d(TAG, "Failed with: ", task.getException());
+                }
+            }
+        });
+
+        requestedQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    if (!task.getResult().isEmpty()) {
+                        user.setRequested(true);
+                        listener.onUserUpdate();
+                    }
+                } else {
+                    //Log.d(TAG, "Error getting documents: ", task.getException());
+                }
+            }
+        });
+
+
     }
 
 }

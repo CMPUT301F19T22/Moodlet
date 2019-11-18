@@ -28,6 +28,7 @@ public class SearchFragment extends Fragment implements
     private ArrayList<User> userDataList;
     private UserListAdapter userAdapter;
     private IUserServiceProvider service;
+    private boolean isSearchBarEmpty;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -55,18 +56,28 @@ public class SearchFragment extends Fragment implements
     @Override
     public boolean onQueryTextChange(String newString) {
         if (newString.isEmpty()) {
+            isSearchBarEmpty = true;
             userDataList.clear();
             userAdapter.notifyDataSetChanged();
         } else {
+            isSearchBarEmpty = false;
             service.getUsers(newString, this);
         }
         return true;
     }
 
     @Override
-    public void OnSearchResult(ArrayList<User> searchResult) {
-        userDataList.clear();
-        userDataList.addAll(searchResult);
+    public void onSearchResult(ArrayList<User> searchResult) {
+        if (!isSearchBarEmpty) {
+            userDataList.clear();
+            userDataList.addAll(searchResult);
+            userAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void onUserUpdate() {
         userAdapter.notifyDataSetChanged();
     }
+
 }

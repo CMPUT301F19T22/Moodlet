@@ -34,12 +34,12 @@ public interface IUserServiceProvider {
      */
     interface LoginListener {
         void onLoginSuccess();
-
         void onLoginFailure();
     }
 
     interface OnUserSearchListener {
-        void OnSearchResult(ArrayList<User> searchResult);
+        void onSearchResult(ArrayList<User> searchResult);
+        void onUserUpdate();
     }
 
     /**
@@ -93,5 +93,5 @@ public interface IUserServiceProvider {
     void loginUser(String txt_email, String txt_password, final LoginListener listener);
 
     void getUsers(String searchText, OnUserSearchListener listener);
-    
+
 }
