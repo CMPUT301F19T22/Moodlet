@@ -6,7 +6,7 @@ package com.cmput3owo1.moodlet.models;
  */
 public class User {
     private String username;
-    private String fullName;
+    private String fullname;
     private String email;
     private boolean requested = false;
     private boolean following = false;
@@ -46,16 +46,16 @@ public class User {
      * Returns the full name of the user
      * @return The full name
      */
-    public String getFullName() {
-        return fullName;
+    public String getFullname() {
+        return fullname;
     }
 
     /**
      * Set the full name of the user
-     * @param fullName The full name
+     * @param fullname The full name
      */
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
     }
 
     /**
