@@ -56,6 +56,8 @@ public class MoodHistoryFragment extends Fragment
 
         moodEventList = new ArrayList<>();
 
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
+
         recyclerAdapter = new MoodEventAdapter(moodEventList, this);
         recyclerView.setAdapter(recyclerAdapter);
 
