@@ -8,14 +8,13 @@ import androidx.annotation.Nullable;
 import com.cmput3owo1.moodlet.models.FollowRequest;
 import com.cmput3owo1.moodlet.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -26,6 +25,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import static android.content.ContentValues.TAG;
 
@@ -36,8 +36,8 @@ import static android.content.ContentValues.TAG;
  */
 public class UserService implements IUserServiceProvider{
 
-    FirebaseAuth auth;
-    FirebaseFirestore db;
+    private FirebaseAuth auth;
+    private FirebaseFirestore db;
 
     public UserService (){
         auth = FirebaseAuth.getInstance();
@@ -159,91 +159,89 @@ public class UserService implements IUserServiceProvider{
     }
 
     @Override
-    public void getUsers(String searchText, final OnUserSearchListener listener) {
-        Query usersQuery = db.collection("users")
+    public void getUsers(final String searchText, final OnUserSearchListener listener) {
+        db.collection("users")
                 .orderBy("username")
                 .whereGreaterThanOrEqualTo("username", searchText)
-                .whereLessThanOrEqualTo("username", searchText + '\uf8ff');
-
-        usersQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    ArrayList<User> searchList = new ArrayList<>();
-                    for (QueryDocumentSnapshot doc : task.getResult()) {
-                        User user = doc.toObject(User.class);
-                        searchList.add(user);
-                        getFollowStatusForUser(user, listener);
+                .whereLessThanOrEqualTo("username", searchText + '\uf8ff')
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        final ArrayList<User> searchList = new ArrayList<>();
+                        ArrayList<Task<?>> taskList = new ArrayList<>();
+                        for (QueryDocumentSnapshot doc : task.getResult()) {
+                            User user = doc.toObject(User.class);
+                            searchList.add(user);
+                            taskList.add(getFollowStatusForUser(user));
+                            taskList.add(getRequestStatusForUser(user));
+                        }
+                        Tasks.whenAllComplete(taskList).addOnSuccessListener(new OnSuccessListener<List<Task<?>>>() {
+                            @Override
+                            public void onSuccess(List<Task<?>> tasks) {
+                                listener.onSearchResult(searchList, searchText);
+                            }
+                        });
                     }
-                    listener.onSearchResult(searchList);
-
-                } else {
-                    //Log.d(TAG, "Error getting documents: ", task.getException());
-                }
-            }
-        });
+                });
     }
 
-    private void getFollowStatusForUser(final User user, final OnUserSearchListener listener) {
-        String currentUser = auth.getCurrentUser().getDisplayName();
-
-        DocumentReference followingDoc;
-        final Query requestedQuery;
-
-        followingDoc = db.document("users/" + currentUser + "/following/" + user.getUsername());
-        requestedQuery = db.collection("requests")
-                .whereEqualTo("requestFrom", currentUser)
-                .whereEqualTo("requestTo", user.getUsername())
-                .limit(1);
-
-        followingDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        user.setFollowing(true);
-                        listener.onUserUpdate();
-                    }
-                } else {
-                    //Log.d(TAG, "Failed with: ", task.getException());
-                }
-            }
-        });
-
-        requestedQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                    user.setRequested(true);
-                    listener.onUserUpdate();
-                }
-            }
-        });
-
-
-    }
 
     @Override
-    public void sendFollowRequest(String username, final OnFollowRequestListener listener) {
+    public void sendFollowRequest(final User user, final OnUserSearchListener listener) {
         String currentUser = auth.getCurrentUser().getDisplayName();
-
-        FollowRequest followRequest = new FollowRequest(currentUser, username);
-        db.collection("requests").document()
+        FollowRequest followRequest = new FollowRequest(currentUser, user.getUsername());
+        db.collection("requests")
+                .document()
                 .set(followRequest)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        listener.onRequestSuccess();
+                        listener.onRequestSuccess(user);
                     }
-                })
-                .addOnFailureListener(new OnFailureListener() {
+                });
+                //TODO .addOnFailureListener() - Add this later
+    }
+
+    private Task<DocumentSnapshot> getFollowStatusForUser(final User user) {
+        String currentUser = auth.getCurrentUser().getDisplayName();
+
+        return db.document("users/" + currentUser + "/following/" + user.getUsername())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
-                    public void onFailure(@NonNull Exception e) {
-                        listener.onRequestFailure();
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                user.setFollowing(true);
+                            }
+                        }
                     }
                 });
     }
+
+    private Task<QuerySnapshot> getRequestStatusForUser(final User user) {
+        String currentUser = auth.getCurrentUser().getDisplayName();
+
+        return db.collection("requests")
+                .whereEqualTo("requestFrom", currentUser)
+                .whereEqualTo("requestTo", user.getUsername())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            QuerySnapshot queryDocumentSnapshots = task.getResult();
+                            for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                                user.setRequested(true);
+                            }
+                        }
+                    }
+                });
+    }
+
+
 }
 
 

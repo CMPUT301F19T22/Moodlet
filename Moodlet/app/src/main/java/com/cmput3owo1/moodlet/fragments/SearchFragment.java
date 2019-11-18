@@ -22,14 +22,12 @@ import java.util.ArrayList;
  * Placeholder for the user search. Not implemented.
          */
 public class SearchFragment extends Fragment implements
-        SearchView.OnQueryTextListener, IUserServiceProvider.OnUserSearchListener, UserListAdapter.OnFollowClickListener,
-        IUserServiceProvider.OnFollowRequestListener{
+        SearchView.OnQueryTextListener, IUserServiceProvider.OnUserSearchListener, UserListAdapter.OnFollowClickListener {
     private SearchView userSearchView;
     private ListView userListView;
     private ArrayList<User> userDataList;
     private UserListAdapter userAdapter;
     private IUserServiceProvider service;
-    private boolean isSearchBarEmpty;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -57,19 +55,17 @@ public class SearchFragment extends Fragment implements
     @Override
     public boolean onQueryTextChange(String newString) {
         if (newString.isEmpty()) {
-            isSearchBarEmpty = true;
             userDataList.clear();
             userAdapter.notifyDataSetChanged();
         } else {
-            isSearchBarEmpty = false;
             service.getUsers(newString, this);
         }
         return true;
     }
 
     @Override
-    public void onSearchResult(ArrayList<User> searchResult) {
-        if (!isSearchBarEmpty) {
+    public void onSearchResult(ArrayList<User> searchResult, String searchText) {
+        if (searchText.equals(userSearchView.getQuery().toString())) {
             userDataList.clear();
             userDataList.addAll(searchResult);
             userAdapter.notifyDataSetChanged();
@@ -77,22 +73,15 @@ public class SearchFragment extends Fragment implements
     }
 
     @Override
-    public void onUserUpdate() {
+    public void onFollowClick(User user) {
+        service.sendFollowRequest(user, this);
+    }
+
+    @Override
+    public void onRequestSuccess(User user) {
+        user.setRequested(true);
         userAdapter.notifyDataSetChanged();
     }
 
-    @Override
-    public void onFollowClick(User user) {
-        service.sendFollowRequest(user.getUsername(), this);
-    }
 
-    @Override
-    public void onRequestSuccess() {
-
-    }
-
-    @Override
-    public void onRequestFailure() {
-
-    }
 }
