@@ -4,9 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
-    android:layout_margin="7dp"
-    android:paddingLeft="3dp"
-    android:paddingTop="10dp">
+    android:background="?android:attr/selectableItemBackground"
+    android:paddingHorizontal="10dp"
+    android:paddingVertical="12dp">
 
     <ImageView
         android:id="@+id/mood_emoji"
