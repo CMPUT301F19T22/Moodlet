@@ -18,11 +18,11 @@ import com.cmput3owo1.moodlet.services.UserService;
 
 import java.util.ArrayList;
 
-/**
- * Placeholder for the user search. Not implemented.
-         */
+
 public class SearchFragment extends Fragment implements
-        SearchView.OnQueryTextListener, IUserServiceProvider.OnUserSearchListener, UserListAdapter.OnFollowClickListener {
+        SearchView.OnQueryTextListener, UserListAdapter.OnFollowClickListener,
+        IUserServiceProvider.OnUserSearchListener, IUserServiceProvider.OnFollowRequestListener {
+
     private SearchView userSearchView;
     private ListView userListView;
     private ArrayList<User> userDataList;
@@ -58,7 +58,7 @@ public class SearchFragment extends Fragment implements
             userDataList.clear();
             userAdapter.notifyDataSetChanged();
         } else {
-            service.getUsers(newString, this);
+            service.searchForUsers(newString, this);
         }
         return true;
     }

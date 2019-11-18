@@ -8,6 +8,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.cmput3owo1.moodlet.R;
 import com.cmput3owo1.moodlet.models.User;
 import com.google.android.material.button.MaterialButton;
@@ -24,7 +27,7 @@ public class UserListAdapter extends ArrayAdapter<User> {
     }
 
     public UserListAdapter(Context context, ArrayList<User> userList, OnFollowClickListener listener) {
-        super(context,0, userList);
+        super(context, 0, userList);
         this.userList = userList;
         this.context = context;
         this.listener = listener;
@@ -36,8 +39,8 @@ public class UserListAdapter extends ArrayAdapter<User> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-
+    @NonNull
+    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         ViewHolder holder;
 
         if (convertView == null) {
@@ -56,23 +59,19 @@ public class UserListAdapter extends ArrayAdapter<User> {
 
         holder.usernameTextView.setText(user.getUsername());
         if (user.isFollowing()) {
-            holder.requestButton.setText("Following");
+            holder.requestButton.setText(resources.getString(R.string.following));
             holder.requestButton.setEnabled(false);
-            holder.requestButton.setBackgroundTintList(resources.getColorStateList(R.color.lightColorAccent));
         } else if (user.isRequested()) {
-            holder.requestButton.setText("Requested");
+            holder.requestButton.setText(resources.getString(R.string.requested));
             holder.requestButton.setEnabled(false);
-            holder.requestButton.setBackgroundTintList(resources.getColorStateList(R.color.lightColorAccent));
         } else {
             holder.requestButton.setText(resources.getString(R.string.follow));
             holder.requestButton.setEnabled(true);
-            holder.requestButton.setBackgroundTintList(resources.getColorStateList(R.color.transparent));
         }
 
         holder.requestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //holder.requestButton.setEnabled(false);
                 listener.onFollowClick(user);
             }
         });

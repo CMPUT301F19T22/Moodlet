@@ -23,7 +23,7 @@
         android:textColor="@color/colorAccent"
         android:text="@string/follow"
         android:textSize="12sp"
-        app:backgroundTint="@color/transparent"
+        app:backgroundTint="@color/follow_btn_color_selector"
         app:cornerRadius="8dp"
         app:strokeColor="@color/colorAccent"
         app:strokeWidth="2dp"/>

@@ -3,8 +3,6 @@ package com.cmput3owo1.moodlet.services;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 import com.cmput3owo1.moodlet.models.FollowRequest;
 import com.cmput3owo1.moodlet.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -16,10 +14,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -159,7 +154,7 @@ public class UserService implements IUserServiceProvider{
     }
 
     @Override
-    public void getUsers(final String searchText, final OnUserSearchListener listener) {
+    public void searchForUsers(final String searchText, final OnUserSearchListener listener) {
         db.collection("users")
                 .orderBy("username")
                 .whereGreaterThanOrEqualTo("username", searchText)
@@ -173,8 +168,8 @@ public class UserService implements IUserServiceProvider{
                         for (QueryDocumentSnapshot doc : task.getResult()) {
                             User user = doc.toObject(User.class);
                             searchList.add(user);
-                            taskList.add(getFollowStatusForUser(user));
-                            taskList.add(getRequestStatusForUser(user));
+                            taskList.add(setFollowStatusForUser(user));
+                            taskList.add(setRequestStatusForUser(user));
                         }
                         Tasks.whenAllComplete(taskList).addOnSuccessListener(new OnSuccessListener<List<Task<?>>>() {
                             @Override
@@ -188,7 +183,7 @@ public class UserService implements IUserServiceProvider{
 
 
     @Override
-    public void sendFollowRequest(final User user, final OnUserSearchListener listener) {
+    public void sendFollowRequest(final User user, final OnFollowRequestListener listener) {
         String currentUser = auth.getCurrentUser().getDisplayName();
         FollowRequest followRequest = new FollowRequest(currentUser, user.getUsername());
         db.collection("requests")
@@ -203,7 +198,7 @@ public class UserService implements IUserServiceProvider{
                 //TODO .addOnFailureListener() - Add this later
     }
 
-    private Task<DocumentSnapshot> getFollowStatusForUser(final User user) {
+    private Task<DocumentSnapshot> setFollowStatusForUser(final User user) {
         String currentUser = auth.getCurrentUser().getDisplayName();
 
         return db.document("users/" + currentUser + "/following/" + user.getUsername())
@@ -221,7 +216,7 @@ public class UserService implements IUserServiceProvider{
                 });
     }
 
-    private Task<QuerySnapshot> getRequestStatusForUser(final User user) {
+    private Task<QuerySnapshot> setRequestStatusForUser(final User user) {
         String currentUser = auth.getCurrentUser().getDisplayName();
 
         return db.collection("requests")

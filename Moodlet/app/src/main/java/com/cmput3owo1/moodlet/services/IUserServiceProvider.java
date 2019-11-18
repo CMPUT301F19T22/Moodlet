@@ -36,6 +36,9 @@ public interface IUserServiceProvider {
 
     interface OnUserSearchListener {
         void onSearchResult(ArrayList<User> searchResult, String searchText);
+    }
+
+    interface OnFollowRequestListener {
         void onRequestSuccess(User user);
     }
 
@@ -89,8 +92,8 @@ public interface IUserServiceProvider {
      */
     void loginUser(String txt_email, String txt_password, final LoginListener listener);
 
-    void getUsers(String searchText, OnUserSearchListener listener);
+    void searchForUsers(String searchText, OnUserSearchListener listener);
 
-    void sendFollowRequest(User user, OnUserSearchListener listener);
+    void sendFollowRequest(User user, OnFollowRequestListener listener);
 
 }
