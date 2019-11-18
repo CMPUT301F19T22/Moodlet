@@ -3,9 +3,13 @@ package com.cmput3owo1.moodlet.services;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
+import com.cmput3owo1.moodlet.models.FollowRequest;
 import com.cmput3owo1.moodlet.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -13,7 +17,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -205,16 +211,12 @@ public class UserService implements IUserServiceProvider{
             }
         });
 
-        requestedQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        requestedQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    if (!task.getResult().isEmpty()) {
-                        user.setRequested(true);
-                        listener.onUserUpdate();
-                    }
-                } else {
-                    //Log.d(TAG, "Error getting documents: ", task.getException());
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                    user.setRequested(true);
+                    listener.onUserUpdate();
                 }
             }
         });
@@ -222,6 +224,26 @@ public class UserService implements IUserServiceProvider{
 
     }
 
+    @Override
+    public void sendFollowRequest(String username, final OnFollowRequestListener listener) {
+        String currentUser = auth.getCurrentUser().getDisplayName();
+
+        FollowRequest followRequest = new FollowRequest(currentUser, username);
+        db.collection("requests").document()
+                .set(followRequest)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        listener.onRequestSuccess();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        listener.onRequestFailure();
+                    }
+                });
+    }
 }
 
 

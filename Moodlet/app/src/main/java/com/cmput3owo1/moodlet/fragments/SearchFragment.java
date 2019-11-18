@@ -22,7 +22,8 @@ import java.util.ArrayList;
  * Placeholder for the user search. Not implemented.
          */
 public class SearchFragment extends Fragment implements
-        SearchView.OnQueryTextListener, IUserServiceProvider.OnUserSearchListener {
+        SearchView.OnQueryTextListener, IUserServiceProvider.OnUserSearchListener, UserListAdapter.OnFollowClickListener,
+        IUserServiceProvider.OnFollowRequestListener{
     private SearchView userSearchView;
     private ListView userListView;
     private ArrayList<User> userDataList;
@@ -39,7 +40,7 @@ public class SearchFragment extends Fragment implements
         userListView = rootView.findViewById(R.id.user_list_view);
         userDataList = new ArrayList<>();
 
-        userAdapter = new UserListAdapter(getContext(), userDataList);
+        userAdapter = new UserListAdapter(getContext(), userDataList, this);
         userListView.setAdapter(userAdapter);
 
         userSearchView.setIconifiedByDefault(false);
@@ -80,4 +81,18 @@ public class SearchFragment extends Fragment implements
         userAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void onFollowClick(User user) {
+        service.sendFollowRequest(user.getUsername(), this);
+    }
+
+    @Override
+    public void onRequestSuccess() {
+
+    }
+
+    @Override
+    public void onRequestFailure() {
+
+    }
 }

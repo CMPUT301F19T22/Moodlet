@@ -17,11 +17,17 @@ import java.util.ArrayList;
 public class UserListAdapter extends ArrayAdapter<User> {
     private ArrayList<User> userList;
     private Context context;
+    private OnFollowClickListener listener;
 
-    public UserListAdapter(Context context, ArrayList<User> userList) {
+    public interface OnFollowClickListener {
+        void onFollowClick(User user);
+    }
+
+    public UserListAdapter(Context context, ArrayList<User> userList, OnFollowClickListener listener) {
         super(context,0, userList);
         this.userList = userList;
         this.context = context;
+        this.listener = listener;
     }
 
     static class ViewHolder {
@@ -45,7 +51,7 @@ public class UserListAdapter extends ArrayAdapter<User> {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        User user = getItem(position);
+        final User user = getItem(position);
         Resources resources = context.getResources();
 
         holder.usernameTextView.setText(user.getUsername());
@@ -62,6 +68,14 @@ public class UserListAdapter extends ArrayAdapter<User> {
             holder.requestButton.setEnabled(true);
             holder.requestButton.setBackgroundTintList(resources.getColorStateList(R.color.transparent));
         }
+
+        holder.requestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //holder.requestButton.setEnabled(false);
+                listener.onFollowClick(user);
+            }
+        });
 
         return convertView;
     }

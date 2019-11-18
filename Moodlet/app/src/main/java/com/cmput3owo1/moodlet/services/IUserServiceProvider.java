@@ -19,11 +19,8 @@ public interface IUserServiceProvider {
      */
     interface RegistrationListener {
         void onRegistrationSuccess();
-
         void onRegistrationFailure();
-
         void onDatabaseAccessFailure();
-
         void onUsernameIsTaken();
     }
 
@@ -40,6 +37,11 @@ public interface IUserServiceProvider {
     interface OnUserSearchListener {
         void onSearchResult(ArrayList<User> searchResult);
         void onUserUpdate();
+    }
+
+    interface OnFollowRequestListener {
+        void onRequestSuccess();
+        void onRequestFailure();
     }
 
     /**
@@ -93,5 +95,7 @@ public interface IUserServiceProvider {
     void loginUser(String txt_email, String txt_password, final LoginListener listener);
 
     void getUsers(String searchText, OnUserSearchListener listener);
+
+    void sendFollowRequest(String username, OnFollowRequestListener listener);
 
 }
