@@ -30,7 +30,7 @@ import java.util.ArrayList;
  * and time sorted in reverse chronological order of each mood event.
  */
 public class MoodHistoryFragment extends Fragment
-        implements MoodEventAdapter.OnItemClickListener, IMoodEventServiceProvider.OnMoodHistoryUpdateListener {
+        implements MoodEventAdapter.OnItemClickListener, IMoodEventServiceProvider.OnMoodHistoryUpdateListener, IMoodEventServiceProvider.OnMoodUpdateListener {
 
     private RecyclerView recyclerView;
     private MoodEventAdapter recyclerAdapter;
@@ -127,7 +127,8 @@ public class MoodHistoryFragment extends Fragment
          */
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-            moodEventList.remove(viewHolder.getAdapterPosition());
+            MoodEvent deletedMood = moodEventList.remove(viewHolder.getAdapterPosition());
+            moodEventService.deleteMoodEvent(deletedMood, MoodHistoryFragment.this);
             recyclerAdapter.notifyDataSetChanged();
         }
 
@@ -153,5 +154,14 @@ public class MoodHistoryFragment extends Fragment
 
         }
     };
+
+    /**
+     * Callback function that is triggered upon deleting a MoodEvent, which will update the recyclerAdapter.
+     */
+    @Override
+    public void onMoodUpdateSuccess() {
+        recyclerAdapter.notifyDataSetChanged();
+
+    }
 }
 

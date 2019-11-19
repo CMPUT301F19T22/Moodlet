@@ -106,6 +106,7 @@ public class MoodEventService implements IMoodEventServiceProvider {
         return newMoodEventRef.getId();
     }
 
+
     /**
      * Edit an existing MoodEvent on the database.
      * @param moodEvent The {@link MoodEvent} to edit.
@@ -122,6 +123,35 @@ public class MoodEventService implements IMoodEventServiceProvider {
         listener.onMoodUpdateSuccess();
 
     }
+
+    /**
+     * Delete swiped MoodEvent from database.
+     * @param moodEvent The mood event to be deleted.
+     * @param listener The listener to notify upon completion of deletion.
+     */
+    @Override
+    public void deleteMoodEvent(MoodEvent moodEvent, OnMoodUpdateListener listener) {
+        DocumentReference newMoodEventRef = db.collection("moodEvents").document(moodEvent.getId());
+
+
+        newMoodEventRef.delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+
+                    }
+                })
+
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+
+        listener.onMoodUpdateSuccess();
+    }
+
 
     /**
      * Listen to mood history updates of the current user. Calls the listener's onMoodHistoryUpdate
