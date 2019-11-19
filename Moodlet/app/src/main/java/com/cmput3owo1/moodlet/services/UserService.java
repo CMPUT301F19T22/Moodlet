@@ -146,6 +146,8 @@ public class UserService implements IUserServiceProvider{
 
     @Override
     public void searchForUsers(final String searchText, final OnUserSearchListener listener) {
+        final String currentUser = auth.getCurrentUser().getDisplayName();
+
         db.collection("users")
                 .orderBy("username")
                 .whereGreaterThanOrEqualTo("username", searchText)
@@ -158,9 +160,11 @@ public class UserService implements IUserServiceProvider{
                         ArrayList<Task<?>> taskList = new ArrayList<>();
                         for (QueryDocumentSnapshot doc : task.getResult()) {
                             User user = doc.toObject(User.class);
-                            searchList.add(user);
-                            taskList.add(setFollowStatusForUser(user));
-                            taskList.add(setRequestStatusForUser(user));
+                            if (!user.getUsername().equals(currentUser)) {
+                                searchList.add(user);
+                                taskList.add(setFollowStatusForUser(user));
+                                taskList.add(setRequestStatusForUser(user));
+                            }
                         }
                         Tasks.whenAllComplete(taskList).addOnSuccessListener(new OnSuccessListener<List<Task<?>>>() {
                             @Override
