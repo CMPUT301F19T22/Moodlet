@@ -167,7 +167,7 @@ public class AddMoodFragment extends Fragment
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 selectedMood = EmotionalState.values()[i];
                 mood.setEmotionalState(selectedMood);
-                moodDisplayName = selectedMood.getDisplayName();
+                moodDisplayName = selectedMood.toString();
                 int color = selectedMood.getColor();
                 bg.setColorFilter(color);
             }
