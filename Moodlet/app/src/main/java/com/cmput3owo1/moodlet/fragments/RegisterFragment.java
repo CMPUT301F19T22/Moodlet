@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.cmput3owo1.moodlet.R;
 import com.cmput3owo1.moodlet.activities.LoginActivity;
+import com.cmput3owo1.moodlet.models.User;
 import com.cmput3owo1.moodlet.services.IUserServiceProvider;
 import com.cmput3owo1.moodlet.services.UserService;
 
@@ -87,7 +88,8 @@ public class RegisterFragment extends Fragment implements IUserServiceProvider.R
                 } else if (!txt_password.equals(txt_confirm_password)) {
                     Toast.makeText(getActivity(), R.string.password_does_not_match, Toast.LENGTH_SHORT).show();
                 } else {
-                    userService.validateUsernameAndCreateUser(txt_username, txt_email, txt_password, txt_fullname, RegisterFragment.this);
+                    User newUser = new User(txt_username, txt_fullname, txt_email);
+                    userService.validateUsernameAndCreateUser(newUser, txt_password, RegisterFragment.this);
                 }
             }
         });

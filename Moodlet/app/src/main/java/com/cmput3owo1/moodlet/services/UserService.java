@@ -50,23 +50,21 @@ public class UserService implements IUserServiceProvider{
     /**
      * This function first checks if the username is taken. If the username is not taken,
      * the account will be created, otherwise it will notify the user that their username is already taken
-     * @param username Username to register with.
-     * @param email Email to register with.
+     * @param user User details of the user to register
      * @param password Password of Account to register with.
-     * @param fullname Full name of user registering.
      * @param listener Registration listener passed from fragment
      */
     @Override
-    public void validateUsernameAndCreateUser(final String username, final String email, final String password, final String fullname, final RegistrationListener listener){
+    public void validateUsernameAndCreateUser(final User user, final String password, final RegistrationListener listener){
 
-        db.collection("users").document(username).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        db.collection("users").document(user.getUsername()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if(task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     Log.v("data","Cached document data: " + document.getData());
                     if(document.getData() == null) {
-                        createUser(username, email, password, fullname, listener);
+                        createUser(user, password, listener);
                     } else {
                         listener.onUsernameIsTaken();
                     }
@@ -79,24 +77,24 @@ public class UserService implements IUserServiceProvider{
 
     /**
      * This a wrapper function that is called to create a user account with their email and password.
-     * @param username Username to register with.
-     * @param email Email to register with.
+     * @param user User details of the user to register
      * @param password Password of Account to register with.
-     * @param fullname Full name of user registering.
      * @param listener Registration listener passed from fragment
      */
-    @Override
-    public void createUser(final String username, final String email, String password, final String fullname, final RegistrationListener listener){
-        auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+    private void createUser(final User user, String password, final RegistrationListener listener){
+        auth.createUserWithEmailAndPassword(user.getEmail(), password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()) {
-                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setDisplayName(username).build();
-                    user.updateProfile(profileUpdates);
+                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                            .setDisplayName(user.getUsername())
+                            .build();
+
+                    currentUser.updateProfile(profileUpdates);
                     Log.v(TAG, "Putting user into DB");
-                    putUserIntoDB(email, fullname, username, listener);
+                    putUserIntoDB(user, listener);
                 } else {
                     listener.onRegistrationFailure();
                 }
@@ -106,19 +104,12 @@ public class UserService implements IUserServiceProvider{
 
     /**
      * This function is called to put the registered user into the database.
-     * @param username Username to register with.
-     * @param email Email to register with.
-     * @param fullname Full name of user registering.
+     * @param user The user to put into the database
      * @param listener Registration listener passed from fragment
      */
-    @Override
-    public void putUserIntoDB(final String email, final String fullname, final String username, final RegistrationListener listener){
-        HashMap<String, String> data = new HashMap<>();
-        data.put("email", email);
-        data.put("fullname", fullname);
-        data.put("username", username);
+    private void putUserIntoDB(User user, final RegistrationListener listener){
 
-        db.collection("users").document(username).set(data)
+        db.collection("users").document(user.getUsername()).set(user)
             .addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
