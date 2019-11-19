@@ -57,7 +57,8 @@ public class UserListAdapter extends ArrayAdapter<User> {
         final User user = getItem(position);
         Resources resources = context.getResources();
 
-        holder.usernameTextView.setText(user.getUsername());
+        String usernameDisplayText = "@" + user.getUsername();
+        holder.usernameTextView.setText(usernameDisplayText);
         if (user.isFollowing()) {
             holder.requestButton.setText(resources.getString(R.string.following));
             holder.requestButton.setEnabled(false);

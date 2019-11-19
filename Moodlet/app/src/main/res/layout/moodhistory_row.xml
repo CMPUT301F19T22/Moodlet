@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:gravity="center"
     android:background="?android:attr/selectableItemBackground"
-    android:paddingHorizontal="10dp"
+    android:paddingHorizontal="15dp"
     android:paddingVertical="12dp">
 
     <ImageView
@@ -25,16 +25,16 @@
             android:id="@+id/mood_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Mood"
-            android:textSize="18dp"
-            android:textStyle="bold"/>
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/moodListColor"/>
 
         <TextView
             android:id="@+id/date_time_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="13dp"
-            android:text="month day year - time"
+            android:textSize="13sp"
+            android:textColor="@color/dateListColor"
             android:paddingTop="5dp"/>
     </LinearLayout>
 
