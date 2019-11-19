@@ -128,7 +128,7 @@ public class MoodHistoryFragment extends Fragment
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
             MoodEvent deletedMood = moodEventList.remove(viewHolder.getAdapterPosition());
-            moodEventService.deleteMoodEvent(deletedMood, MoodHistoryFragment.this);
+            moodEventService.deleteMoodEvent(getActivity(), deletedMood, MoodHistoryFragment.this);
             recyclerAdapter.notifyDataSetChanged();
         }
 

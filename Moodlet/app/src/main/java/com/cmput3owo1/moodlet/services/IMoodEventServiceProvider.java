@@ -1,5 +1,6 @@
 package com.cmput3owo1.moodlet.services;
 
+import android.content.Context;
 import android.net.Uri;
 
 import com.cmput3owo1.moodlet.models.EmotionalState;
@@ -64,10 +65,11 @@ public interface IMoodEventServiceProvider {
 
     /**
      * Delete swiped MoodEvent from database.
+     * @param context The activity information.
      * @param moodEvent The mood event to be deleted.
      * @param listener The listener to notify upon completion of deletion.
      */
-    void deleteMoodEvent(MoodEvent moodEvent, OnMoodUpdateListener listener);
+    void deleteMoodEvent(Context context, MoodEvent moodEvent, OnMoodUpdateListener listener);
 
     /**
      * Listen to mood history updates of the current user. Calls the listener's onMoodHistoryUpdate
