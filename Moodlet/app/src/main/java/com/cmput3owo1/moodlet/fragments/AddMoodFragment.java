@@ -268,5 +268,4 @@ public class AddMoodFragment extends Fragment
     public void onMoodUpdateSuccess(){
         getActivity().finish();
     }
-
 }
