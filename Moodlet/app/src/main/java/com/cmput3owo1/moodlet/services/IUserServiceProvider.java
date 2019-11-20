@@ -22,7 +22,6 @@ public interface IUserServiceProvider {
         void onRegistrationFailure();
         void onDatabaseAccessFailure();
         void onUsernameIsTaken();
-        void showProgressBar();
     }
 
     /**
@@ -33,7 +32,6 @@ public interface IUserServiceProvider {
     interface LoginListener {
         void onLoginSuccess();
         void onLoginFailure();
-        void showProgressBar();
     }
 
     interface OnUserSearchListener {

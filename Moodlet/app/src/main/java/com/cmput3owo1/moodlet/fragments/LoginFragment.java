@@ -89,7 +89,8 @@ public class LoginFragment extends Fragment implements IUserServiceProvider.Logi
                 if(txt_email.isEmpty() || txt_password.isEmpty()) {
                     Toast.makeText(getActivity(), R.string.all_fields_required, Toast.LENGTH_SHORT).show();
                 } else {
-                    userService.loginUser(txt_email, txt_password,LoginFragment.this);
+                    showProgressBar();
+                    userService.loginUser(txt_email, txt_password, LoginFragment.this);
                 }
             }
         });
@@ -116,7 +117,7 @@ public class LoginFragment extends Fragment implements IUserServiceProvider.Logi
         Toast.makeText(getActivity(), R.string.authentication_failed, Toast.LENGTH_SHORT).show();
     }
 
-    public void hideProgressBar() {
+    private void hideProgressBar() {
 
         setAllToClickable();
 
@@ -126,8 +127,7 @@ public class LoginFragment extends Fragment implements IUserServiceProvider.Logi
         loginButton.setVisibility(View.VISIBLE);
     }
 
-    @Override
-    public void showProgressBar() {
+    private void showProgressBar() {
 
         setAllToUnclickable();
 

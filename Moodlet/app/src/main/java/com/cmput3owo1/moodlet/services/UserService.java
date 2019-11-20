@@ -55,7 +55,6 @@ public class UserService implements IUserServiceProvider{
      */
     @Override
     public void validateUsernameAndCreateUser(final User user, final String password, final RegistrationListener listener){
-        listener.showProgressBar();
         db.collection("users").document(user.getUsername()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -129,7 +128,6 @@ public class UserService implements IUserServiceProvider{
      */
     @Override
     public void loginUser(String txt_email, String txt_password, final LoginListener listener){
-        listener.showProgressBar();
         auth.signInWithEmailAndPassword(txt_email, txt_password)
             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                    @Override

@@ -64,8 +64,7 @@ public class RegisterFragment extends Fragment implements IUserServiceProvider.R
         progressBar.setBackgroundColor(getResources().getColor(R.color.transparent));
 
         //  Click listener to change to login fragment
-        loginText.setOnClickListener
-                (new View.OnClickListener() {
+        loginText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -95,6 +94,7 @@ public class RegisterFragment extends Fragment implements IUserServiceProvider.R
                     Toast.makeText(getActivity(), R.string.password_does_not_match, Toast.LENGTH_SHORT).show();
                 } else {
                     User newUser = new User(txt_username, txt_fullname, txt_email);
+                    showProgressBar();
                     userService.validateUsernameAndCreateUser(newUser, txt_password, RegisterFragment.this);
                 }
             }
@@ -139,7 +139,7 @@ public class RegisterFragment extends Fragment implements IUserServiceProvider.R
         Toast.makeText(getActivity(), R.string.username_taken, Toast.LENGTH_SHORT).show();
     }
 
-    public void hideProgressBar(){
+    private void hideProgressBar(){
         setAllToClickable();
 
         progressBar.setVisibility(View.INVISIBLE);
@@ -148,8 +148,7 @@ public class RegisterFragment extends Fragment implements IUserServiceProvider.R
         registerButton.setVisibility(View.VISIBLE);
     }
 
-    @Override
-    public void showProgressBar() {
+    private void showProgressBar() {
         setAllToUnclickable();
 
         registerButton.setVisibility(View.INVISIBLE);
