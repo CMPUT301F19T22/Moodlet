@@ -137,17 +137,19 @@ public class AddMoodFragment extends Fragment
                             mood.setSocialSituation(selectedSocial);
                             mood.setEmotionalState(selectedMood);
 
-                            if(reasonEdit.getText().toString() != null){
+                            String[] words = reasonEdit.getText().toString().split(" ");
+                            if(words.length <= 3) {
                                 mood.setReasoning(reasonEdit.getText().toString());
-                            }
-
-                            if(selectedImage != null) {
-                                progressDialog = new ProgressDialog(getActivity());
-                                progressDialog.setTitle("Uploading...");
-                                progressDialog.show();
-                                mes.uploadImage(AddMoodFragment.this, selectedImage);
+                                if(selectedImage != null) {
+                                    progressDialog = new ProgressDialog(getActivity());
+                                    progressDialog.setTitle("Uploading...");
+                                    progressDialog.show();
+                                    mes.uploadImage(AddMoodFragment.this, selectedImage);
+                                }else{
+                                    mes.editMoodEvent(mood,AddMoodFragment.this);
+                                }
                             }else{
-                                mes.editMoodEvent(mood,AddMoodFragment.this);
+                                Toast.makeText(getActivity(), R.string.word_count_exceeded, Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -200,21 +202,22 @@ public class AddMoodFragment extends Fragment
                 mood.setEmotionalState(selectedMood);
                 mood.setSocialSituation(selectedSocial);
 
-                if(reasonEdit.getText().toString() != null){
+                String[] words = reasonEdit.getText().toString().split(" ");
+                if(words.length <= 3) {
                     mood.setReasoning(reasonEdit.getText().toString());
-                }
-
-                if(selectedImage != null) {
-                    progressDialog = new ProgressDialog(getActivity());
-                    progressDialog.setTitle("Uploading...");
-                    progressDialog.show();
-                    mes.uploadImage(AddMoodFragment.this, selectedImage);
+                    if(selectedImage != null) {
+                        progressDialog = new ProgressDialog(getActivity());
+                        progressDialog.setTitle("Uploading...");
+                        progressDialog.show();
+                        mes.uploadImage(AddMoodFragment.this, selectedImage);
+                    }else{
+                        mes.addMoodEvent(mood,AddMoodFragment.this);
+                    }
                 }else{
-                    mes.addMoodEvent(mood,AddMoodFragment.this);
+                    Toast.makeText(getActivity(), R.string.word_count_exceeded, Toast.LENGTH_SHORT).show();
                 }
             }
         });
-
         return view;
     }
 

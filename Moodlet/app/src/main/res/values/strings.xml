@@ -23,4 +23,5 @@
     <string name="following">Following</string>
     <string name="requested">Requested</string>
     <string name="upload_failure">Upload failed</string>
+    <string name="word_count_exceeded">Reason must have less than 3 words</string>
 </resources>
