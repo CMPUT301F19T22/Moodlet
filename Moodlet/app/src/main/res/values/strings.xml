@@ -20,4 +20,8 @@
     <string name="please_try_again_later">Something went wrong, please try again later</string>
     <string name="delete_failed">Failed to delete</string>
     <string name="delete_success">Successfully deleted!</string>
+    <string name="search_hint">Search for users to follow</string>
+    <string name="follow">Follow</string>
+    <string name="following">Following</string>
+    <string name="requested">Requested</string>
 </resources>

@@ -3,8 +3,12 @@
     <color name="colorPrimary">#2699FB</color>
     <color name="colorPrimaryDark">#141414</color>
     <color name="colorAccent">#2699FB</color>
-    <color name="appBarTitle">#8B8B8B</color>
+    <color name="appBarTitle">#818282</color>
     <color name="appBarBackground">#E9E9E9</color>
+    <color name="transparent">#00E9E9E9</color>
+    <color name="lightColorAccent">#D4E8F6</color>
+    <color name="moodListColor">#3F3F3F</color>
+    <color name="dateListColor">#B3B4B4</color>
     <color name="happy">#fffbab</color>
     <color name="sad">#b5fff4</color>
     <color name="angry">#e89292</color>
