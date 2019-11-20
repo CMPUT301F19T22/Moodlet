@@ -61,7 +61,8 @@ public class RegisterFragment extends Fragment implements IUserServiceProvider.R
         progressBar = registerFragmentView.findViewById(R.id.register_progress_bar);
 
         //  Click listener to change to login fragment
-        loginText.setOnClickListener(new View.OnClickListener() {
+        loginText.setOnClickListener
+                (new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
