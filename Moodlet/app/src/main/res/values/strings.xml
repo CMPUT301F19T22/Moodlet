@@ -22,4 +22,5 @@
     <string name="follow">Follow</string>
     <string name="following">Following</string>
     <string name="requested">Requested</string>
+    <string name="upload_failure">Upload failed</string>
 </resources>

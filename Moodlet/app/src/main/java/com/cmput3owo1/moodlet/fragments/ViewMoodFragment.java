@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.cmput3owo1.moodlet.R;
 import com.cmput3owo1.moodlet.models.MoodEvent;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -29,7 +30,7 @@ public class ViewMoodFragment extends Fragment {
     private TextView socialDisplay;
     private TextView date;
     private TextView reasonDisplay;
-    private ImageView imageUpload;
+    private ImageView imageDisplay;
     private Button toggleEdit;
 
     /**
@@ -56,7 +57,7 @@ public class ViewMoodFragment extends Fragment {
         SimpleDateFormat sdf = new SimpleDateFormat(pattern);
 
         //Setup view references
-        imageUpload = view.findViewById(R.id.imageToUpload);
+        imageDisplay = view.findViewById(R.id.imageDisplay);
         moodDisplay = view.findViewById(R.id.moodDisplay);
         socialDisplay = view.findViewById(R.id.socialDisplay);
         reasonDisplay = view.findViewById(R.id.reasonDisplay);
@@ -74,6 +75,11 @@ public class ViewMoodFragment extends Fragment {
         reasonDisplay.setText(moodObj.getReasoning());
         date.setText(sdf.format(argDate));
         bg.setColorFilter(moodObj.getEmotionalState().getColor());
+
+        if(moodObj.getPhotographPath() != null){
+            Picasso.get().load(moodObj.getPhotographPath()).into(imageDisplay);
+
+        }
 
         toggleEdit.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -80,25 +80,27 @@ public class AddMoodFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_mood,container,false);
+        mes = new MoodEventService();
 
         //Generate current date/time
-        date = view.findViewById(R.id.date);
         String pattern = "MMMM d, yyyy \nh:mm a";
         SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+        date = view.findViewById(R.id.date);
         dateText = sdf.format(new Date());
         date.setText(dateText);
 
+        //Setup view references
         moodSpinner = view.findViewById(R.id.moodSelected);
         socialSpinner= view.findViewById(R.id.socialSelected);
         reasonEdit = view.findViewById(R.id.reasonEdit);
         imageUpload = view.findViewById(R.id.imageToUpload);
         bg = view.findViewById(R.id.bg_vector);
-        mes = new MoodEventService();
 
         //Temporary debug buttons
         addMood = view.findViewById(R.id.add_mood);
         confirmEdit = view.findViewById(R.id.confirm_edit);
 
+        //Set up spinners
         moodAdapter = new ArrayAdapter<EmotionalState>(getActivity(), R.layout.mood_spinner_style, EmotionalState.values());
         moodAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         moodSpinner.setAdapter(moodAdapter);
@@ -108,18 +110,19 @@ public class AddMoodFragment extends Fragment
 
 
         //fix logic up later
+        //Try catch for checking if in EditMode
         try {
             Bundle args = getArguments();
             if(!args.isEmpty()){
                 editMode = true;
                 mood = (MoodEvent) args.getSerializable("MoodEvent");
                 final Date argDate = (Date) args.getSerializable("date");
+                //Fill in fields
                 moodSpinner.setSelection(moodAdapter.getPosition(mood.getEmotionalState()));
                 socialSpinner.setSelection(socialAdapter.getPosition(mood.getSocialSituation()));
                 reasonEdit.setText(mood.getReasoning());
                 date.setText(sdf.format(argDate));
                 mood.setDate(argDate);
-
                 bg.setColorFilter(mood.getEmotionalState().getColor());
 
                 //REMOVE LATER, debugging Proof of Concept
@@ -130,6 +133,10 @@ public class AddMoodFragment extends Fragment
                     confirmEdit.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+
+                            mood.setSocialSituation(selectedSocial);
+                            mood.setEmotionalState(selectedMood);
+
                             if(reasonEdit.getText().toString() != null){
                                 mood.setReasoning(reasonEdit.getText().toString());
                             }
@@ -256,7 +263,7 @@ public class AddMoodFragment extends Fragment
     @Override
     public void onImageUploadFailure() {
         progressDialog.dismiss();
-        Toast.makeText(getActivity(), "Upload Failed.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), R.string.upload_failure, Toast.LENGTH_SHORT).show();
     }
 
     /**
