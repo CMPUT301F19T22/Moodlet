@@ -1,8 +1,6 @@
 package com.cmput3owo1.moodlet.services;
 
 import android.util.Log;
-import android.view.View;
-import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import com.cmput3owo1.moodlet.models.FollowRequest;
@@ -21,7 +19,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import static android.content.ContentValues.TAG;

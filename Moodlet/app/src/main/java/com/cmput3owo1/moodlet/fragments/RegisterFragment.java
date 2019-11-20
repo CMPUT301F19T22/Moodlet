@@ -61,6 +61,8 @@ public class RegisterFragment extends Fragment implements IUserServiceProvider.R
         loginText = registerFragmentView.findViewById(R.id.swap_to_login_text_view);
         progressBar = registerFragmentView.findViewById(R.id.register_progress_bar);
 
+        progressBar.setBackgroundColor(getResources().getColor(R.color.transparent));
+
         //  Click listener to change to login fragment
         loginText.setOnClickListener
                 (new View.OnClickListener() {
@@ -106,9 +108,9 @@ public class RegisterFragment extends Fragment implements IUserServiceProvider.R
      */
     @Override
     public void onRegistrationSuccess() {
-        progressBar.setVisibility(View.INVISIBLE);
         Intent intent = new Intent(getActivity(), LoginActivity.class);
         startActivity(intent);
+        getActivity().finish();
     }
 
     /**
@@ -116,7 +118,7 @@ public class RegisterFragment extends Fragment implements IUserServiceProvider.R
      */
     @Override
     public void onRegistrationFailure() {
-        progressBar.setVisibility(View.INVISIBLE);
+        hideProgressBar();
         Toast.makeText(getActivity(), R.string.account_already_exists, Toast.LENGTH_SHORT).show();
     }
 
@@ -124,7 +126,7 @@ public class RegisterFragment extends Fragment implements IUserServiceProvider.R
      *   Interface function to show toast message when there is a problem accessing database
      */
     public void onDatabaseAccessFailure() {
-        progressBar.setVisibility(View.INVISIBLE);
+        hideProgressBar();
         Toast.makeText(getActivity(), R.string.please_try_again_later, Toast.LENGTH_SHORT).show();
     }
 
@@ -133,15 +135,47 @@ public class RegisterFragment extends Fragment implements IUserServiceProvider.R
      */
     @Override
     public void onUsernameIsTaken() {
-        progressBar.setVisibility(View.INVISIBLE);
+        hideProgressBar();
         Toast.makeText(getActivity(), R.string.username_taken, Toast.LENGTH_SHORT).show();
     }
 
+    public void hideProgressBar(){
+        setAllToClickable();
+
+        progressBar.setVisibility(View.INVISIBLE);
+
+        registerButton.setClickable(true);
+        registerButton.setVisibility(View.VISIBLE);
+    }
 
     @Override
     public void showProgressBar() {
-        progressBar.bringToFront();
+        setAllToUnclickable();
+
+        registerButton.setVisibility(View.INVISIBLE);
+        registerButton.setClickable(false);
+
         progressBar.setVisibility(View.VISIBLE);
     }
+
+
+    private void setAllToUnclickable() {
+        loginText.setClickable(false);
+        username.setEnabled(false);
+        fullname.setEnabled(false);
+        email.setEnabled(false);
+        password.setEnabled(false);
+        confirmPassword.setEnabled(false);
+    }
+
+    private void setAllToClickable() {
+        loginText.setClickable(true);
+        username.setEnabled(true);
+        fullname.setEnabled(true);
+        email.setEnabled(true);
+        password.setEnabled(true);
+        confirmPassword.setEnabled(true);
+    }
+
 }
 

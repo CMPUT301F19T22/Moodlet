@@ -68,6 +68,8 @@ public class LoginFragment extends Fragment implements IUserServiceProvider.Logi
         loginButton = loginFragmentView.findViewById(R.id.btn_login);
         progressBar = loginFragmentView.findViewById(R.id.login_progress_bar);
 
+        progressBar.setBackgroundColor(getResources().getColor(R.color.transparent));
+
         signupText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -100,9 +102,9 @@ public class LoginFragment extends Fragment implements IUserServiceProvider.Logi
      */
     @Override
     public void onLoginSuccess() {
-        progressBar.setVisibility(View.INVISIBLE);
         Intent intent = new Intent(getActivity(), MainActivity.class);
         startActivity(intent);
+        getActivity().finish();
     }
 
     /**
@@ -110,14 +112,40 @@ public class LoginFragment extends Fragment implements IUserServiceProvider.Logi
      */
     @Override
     public void onLoginFailure() {
-        progressBar.setVisibility(View.INVISIBLE);
+        hideProgressBar();
         Toast.makeText(getActivity(), R.string.authentication_failed, Toast.LENGTH_SHORT).show();
     }
 
+    public void hideProgressBar() {
+
+        setAllToClickable();
+
+        progressBar.setVisibility(View.INVISIBLE);
+
+        loginButton.setClickable(true);
+        loginButton.setVisibility(View.VISIBLE);
+    }
 
     @Override
     public void showProgressBar() {
-        progressBar.bringToFront();
+
+        setAllToUnclickable();
+
+        loginButton.setVisibility(View.INVISIBLE);
+        loginButton.setClickable(false);
+
         progressBar.setVisibility(View.VISIBLE);
+    }
+
+    private void setAllToUnclickable() {
+        email.setEnabled(false);
+        password.setEnabled(false);
+        signupText.setClickable(false);
+    }
+
+    private void setAllToClickable() {
+        email.setEnabled(true);
+        password.setEnabled(true);
+        signupText.setClickable(true);
     }
 }
