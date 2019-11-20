@@ -76,8 +76,7 @@ public class FeedListAdapter extends ArrayAdapter<MoodEventAssociation> {
         MoodEventAssociation moodEventAssociation = getItem(position);
         MoodEvent moodEvent = moodEventAssociation.getMoodEvent();
         String dateString = simpleDateFormat.format(moodEvent.getDate());
-        String enumName = moodEvent.getEmotionalState().name();
-        String moodDisplayText = enumName.substring(0,1).toUpperCase() + enumName.substring(1).toLowerCase();
+        String moodDisplayText =  moodEvent.getEmotionalState().toString();
         String usernameDisplayText = "@" + moodEventAssociation.getUsername();
 
         holder.usernameTextView.setText(usernameDisplayText);
