@@ -129,12 +129,11 @@ public class MoodEventService implements IMoodEventServiceProvider {
 
     /**
      * Delete swiped MoodEvent from database.
-     * @param context The activity information.
      * @param moodEvent The mood event to be deleted.
      * @param listener The listener to notify upon completion of deletion.
      */
     @Override
-    public void deleteMoodEvent(final Context context, MoodEvent moodEvent, final OnMoodUpdateListener listener) {
+    public void deleteMoodEvent(MoodEvent moodEvent, final OnMoodUpdateListener listener) {
         DocumentReference newMoodEventRef = db.collection("moodEvents").document(moodEvent.getId());
 
 
@@ -149,7 +148,7 @@ public class MoodEventService implements IMoodEventServiceProvider {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(context, R.string.delete_failed, Toast.LENGTH_SHORT).show();
+                        listener.onMoodDeleteFailure();
                     }
                 });
     }

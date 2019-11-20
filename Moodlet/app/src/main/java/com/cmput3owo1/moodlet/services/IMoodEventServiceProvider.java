@@ -41,6 +41,8 @@ public interface IMoodEventServiceProvider {
      */
     interface OnMoodUpdateListener {
         void onMoodUpdateSuccess();
+        void onMoodDeleteFailure();
+
     }
 
     /**
@@ -65,11 +67,10 @@ public interface IMoodEventServiceProvider {
 
     /**
      * Delete swiped MoodEvent from database.
-     * @param context The activity information.
      * @param moodEvent The mood event to be deleted.
      * @param listener The listener to notify upon completion of deletion.
      */
-    void deleteMoodEvent(Context context, MoodEvent moodEvent, OnMoodUpdateListener listener);
+    void deleteMoodEvent(MoodEvent moodEvent, OnMoodUpdateListener listener);
 
     /**
      * Listen to mood history updates of the current user. Calls the listener's onMoodHistoryUpdate

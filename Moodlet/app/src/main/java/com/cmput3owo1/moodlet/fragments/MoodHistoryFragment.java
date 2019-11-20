@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -127,9 +128,10 @@ public class MoodHistoryFragment extends Fragment
          */
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-            MoodEvent deletedMood = moodEventList.remove(viewHolder.getAdapterPosition());
-            moodEventService.deleteMoodEvent(getActivity(), deletedMood, MoodHistoryFragment.this);
-            recyclerAdapter.notifyDataSetChanged();
+//            MoodEvent deletedMood = moodEventList.remove(viewHolder.getAdapterPosition());
+//            moodEventService.deleteMoodEvent(getActivity(), deletedMood, MoodHistoryFragment.this);
+//            recyclerAdapter.notifyDataSetChanged();
+            moodEventService.deleteMoodEvent(moodEventList.get(viewHolder.getAdapterPosition()), MoodHistoryFragment.this);
         }
 
         /**
@@ -156,12 +158,20 @@ public class MoodHistoryFragment extends Fragment
     };
 
     /**
-     * Callback function that is triggered upon deleting a MoodEvent, which will update the recyclerAdapter.
+     * Callback function that is triggered upon successfully deleting a MoodEvent
      */
     @Override
     public void onMoodUpdateSuccess() {
-        recyclerAdapter.notifyDataSetChanged();
+        Toast.makeText(getActivity(), R.string.delete_success, Toast.LENGTH_SHORT).show();
+    }
 
+    /**
+     * Callback function that is triggered upon failing to delete a MoodEvent
+     */
+    @Override
+    public void onMoodDeleteFailure() {
+        Toast.makeText(getActivity(), R.string.delete_failed, Toast.LENGTH_SHORT).show();
     }
 }
+
 
