@@ -212,7 +212,7 @@ public class MoodEventService implements IMoodEventServiceProvider {
         final String username = auth.getCurrentUser().getDisplayName();
         final String filepath = "images/" + username + "/" + imageToUpload.getLastPathSegment();
 
-        StorageReference filepathRef = storageRef.child(filepath);
+        final StorageReference filepathRef = storageRef.child(filepath);
 
         filepathRef.putFile(imageToUpload).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -222,7 +222,12 @@ public class MoodEventService implements IMoodEventServiceProvider {
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                listener.onImageUploadSuccess(filepath);
+                filepathRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        listener.onImageUploadSuccess(uri.toString());
+                    }
+                });
 
             }
         });
