@@ -56,14 +56,16 @@
             android:hint="@string/password" />
 
 
-        <Button
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.AppCompat.Button"
             android:id="@+id/btn_login"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:layout_marginTop="16dp"
-            android:background="@drawable/background_btn"
             android:text="@string/login"
-            android:textColor="#FFF" />
+            android:textColor="#FFF"
+            app:cornerRadius="10dp"
+            app:backgroundTint="@color/colorAccent"/>
 
     </LinearLayout>
 

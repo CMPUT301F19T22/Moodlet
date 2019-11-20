@@ -76,14 +76,16 @@
             android:layout_marginTop="16dp"
             android:hint="@string/confirm_password" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.AppCompat.Button"
             android:id="@+id/btn_register"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:layout_marginTop="16dp"
-            android:background="@drawable/background_btn"
             android:text="@string/register"
-            android:textColor="#FFF" />
+            android:textColor="#FFF"
+            app:cornerRadius="10dp"
+            app:backgroundTint="@color/colorAccent"/>
 
     </LinearLayout>
 
