@@ -1,6 +1,8 @@
 package com.cmput3owo1.moodlet.services;
 
 import android.widget.ProgressBar;
+import com.cmput3owo1.moodlet.models.User;
+import java.util.ArrayList;
 
 /**
  * Interface that abstracts user service functions. It contains functions for
@@ -20,6 +22,7 @@ public interface IUserServiceProvider {
         void onRegistrationFailure();
         void onDatabaseAccessFailure();
         void onUsernameIsTaken();
+        void showProgressBar();
     }
 
     /**
@@ -30,6 +33,15 @@ public interface IUserServiceProvider {
     interface LoginListener {
         void onLoginSuccess();
         void onLoginFailure();
+        void showProgressBar();
+    }
+
+    interface OnUserSearchListener {
+        void onSearchResult(ArrayList<User> searchResult, String searchText);
+    }
+
+    interface OnFollowRequestListener {
+        void onRequestSuccess(User user);
     }
 
     /**
@@ -37,45 +49,28 @@ public interface IUserServiceProvider {
      */
     boolean hasPreviousLogin();
 
-
     /**
      * This function first checks if the username is taken. If the username is not taken,
      * the account will be created, otherwise it will notify the user that their username is already taken
-     * @param username Username to register with.
-     * @param email Email to register with.
+     *
+     * @param user Details of the user to register
      * @param password Password of Account to register with.
-     * @param fullname Full name of user registering.
      * @param listener Registration listener passed from fragment
      */
-    void validateUsernameAndCreateUser(final String username, final String email, final String password,
-                                       final String fullname, final ProgressBar progressBar, final RegistrationListener listener);
+    void validateUsernameAndCreateUser(User user, String password, RegistrationListener listener);
 
-    /**
-     * This a wrapper function that is called to create a user account with their email and password.
-     * @param username Username to register with.
-     * @param email Email to register with.
-     * @param password Password of Account to register with.
-     * @param fullname Full name of user registering.
-     * @param listener Registration listener passed from fragment
-     */
-    void createUser(final String username, final String email, String password, final String fullname, final ProgressBar progressBar, final RegistrationListener listener);
-
-    /**
-     * This function is called to put the registered user into the database.
-     * @param username Username to register with.
-     * @param email Email to register with.
-     * @param fullname Full name of user registering.
-     * @param listener Registration listener passed from fragment
-     * @return none
-     */
-    void putUserIntoDB(final String email, final String fullname, final String username, final RegistrationListener listener);
 
     /**
      * This is a wrapper function that is called to login a user with their email and password.
-     * @param txt_email Email to login with.
+     *
+     * @param txt_email    Email to login with.
      * @param txt_password Password to login with.
-     * @param listener Login listener passed from fragment
+     * @param listener     Login listener passed from fragment
      */
-    void loginUser(String txt_email, String txt_password, final ProgressBar progressBar, final LoginListener listener);
+    void loginUser(String txt_email, String txt_password, LoginListener listener);
 
-    }
+    void searchForUsers(String searchText, OnUserSearchListener listener);
+
+    void sendFollowRequest(User user, OnFollowRequestListener listener);
+
+}

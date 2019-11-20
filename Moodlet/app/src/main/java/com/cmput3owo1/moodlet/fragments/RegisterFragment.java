@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.cmput3owo1.moodlet.R;
 import com.cmput3owo1.moodlet.activities.LoginActivity;
+import com.cmput3owo1.moodlet.models.User;
 import com.cmput3owo1.moodlet.services.IUserServiceProvider;
 import com.cmput3owo1.moodlet.services.UserService;
 
@@ -78,7 +79,7 @@ public class RegisterFragment extends Fragment implements IUserServiceProvider.R
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String txt_username = username.getText().toString();
+                String txt_username = username.getText().toString().toLowerCase();
                 String txt_email = email.getText().toString();
                 String txt_password = password.getText().toString();
                 String txt_fullname = fullname.getText().toString();
@@ -91,7 +92,8 @@ public class RegisterFragment extends Fragment implements IUserServiceProvider.R
                 } else if (!txt_password.equals(txt_confirm_password)) {
                     Toast.makeText(getActivity(), R.string.password_does_not_match, Toast.LENGTH_SHORT).show();
                 } else {
-                    userService.validateUsernameAndCreateUser(txt_username, txt_email, txt_password, txt_fullname, progressBar, RegisterFragment.this);
+                    User newUser = new User(txt_username, txt_fullname, txt_email);
+                    userService.validateUsernameAndCreateUser(newUser, txt_password, RegisterFragment.this);
                 }
             }
         });
@@ -133,6 +135,13 @@ public class RegisterFragment extends Fragment implements IUserServiceProvider.R
     public void onUsernameIsTaken() {
         progressBar.setVisibility(View.INVISIBLE);
         Toast.makeText(getActivity(), R.string.username_taken, Toast.LENGTH_SHORT).show();
+    }
+
+
+    @Override
+    public void showProgressBar() {
+        progressBar.bringToFront();
+        progressBar.setVisibility(View.VISIBLE);
     }
 }
 
