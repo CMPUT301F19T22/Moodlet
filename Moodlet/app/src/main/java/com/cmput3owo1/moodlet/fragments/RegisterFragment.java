@@ -143,8 +143,6 @@ public class RegisterFragment extends Fragment implements IUserServiceProvider.R
         setAllToClickable();
 
         progressBar.setVisibility(View.INVISIBLE);
-
-        registerButton.setClickable(true);
         registerButton.setVisibility(View.VISIBLE);
     }
 
@@ -152,14 +150,13 @@ public class RegisterFragment extends Fragment implements IUserServiceProvider.R
         setAllToUnclickable();
 
         registerButton.setVisibility(View.INVISIBLE);
-        registerButton.setClickable(false);
-
         progressBar.setVisibility(View.VISIBLE);
     }
 
 
     private void setAllToUnclickable() {
         loginText.setClickable(false);
+        registerButton.setClickable(false);
         username.setEnabled(false);
         fullname.setEnabled(false);
         email.setEnabled(false);
@@ -169,6 +166,7 @@ public class RegisterFragment extends Fragment implements IUserServiceProvider.R
 
     private void setAllToClickable() {
         loginText.setClickable(true);
+        registerButton.setClickable(true);
         username.setEnabled(true);
         fullname.setEnabled(true);
         email.setEnabled(true);

@@ -122,8 +122,6 @@ public class LoginFragment extends Fragment implements IUserServiceProvider.Logi
         setAllToClickable();
 
         progressBar.setVisibility(View.INVISIBLE);
-
-        loginButton.setClickable(true);
         loginButton.setVisibility(View.VISIBLE);
     }
 
@@ -132,8 +130,6 @@ public class LoginFragment extends Fragment implements IUserServiceProvider.Logi
         setAllToUnclickable();
 
         loginButton.setVisibility(View.INVISIBLE);
-        loginButton.setClickable(false);
-
         progressBar.setVisibility(View.VISIBLE);
     }
 
@@ -141,11 +137,13 @@ public class LoginFragment extends Fragment implements IUserServiceProvider.Logi
         email.setEnabled(false);
         password.setEnabled(false);
         signupText.setClickable(false);
+        loginButton.setClickable(false);
     }
 
     private void setAllToClickable() {
         email.setEnabled(true);
         password.setEnabled(true);
         signupText.setClickable(true);
+        loginButton.setClickable(true);
     }
 }
