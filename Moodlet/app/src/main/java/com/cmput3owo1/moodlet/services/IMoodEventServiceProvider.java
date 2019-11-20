@@ -41,8 +41,15 @@ public interface IMoodEventServiceProvider {
      */
     interface OnMoodUpdateListener {
         void onMoodUpdateSuccess();
-        void onMoodDeleteFailure();
 
+    }
+
+    /**
+     * Listener interface to notify when mood is deleted.
+     */
+    interface OnMoodDeleteListener {
+        void onMoodDeleteSuccess();
+        void onMoodDeleteFailure();
     }
 
     /**
@@ -70,7 +77,7 @@ public interface IMoodEventServiceProvider {
      * @param moodEvent The mood event to be deleted.
      * @param listener The listener to notify upon completion of deletion.
      */
-    void deleteMoodEvent(MoodEvent moodEvent, OnMoodUpdateListener listener);
+    void deleteMoodEvent(MoodEvent moodEvent, OnMoodDeleteListener listener);
 
     /**
      * Listen to mood history updates of the current user. Calls the listener's onMoodHistoryUpdate

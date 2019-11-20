@@ -31,7 +31,7 @@ import java.util.ArrayList;
  * and time sorted in reverse chronological order of each mood event.
  */
 public class MoodHistoryFragment extends Fragment
-        implements MoodEventAdapter.OnItemClickListener, IMoodEventServiceProvider.OnMoodHistoryUpdateListener, IMoodEventServiceProvider.OnMoodUpdateListener {
+        implements MoodEventAdapter.OnItemClickListener, IMoodEventServiceProvider.OnMoodHistoryUpdateListener, IMoodEventServiceProvider.OnMoodDeleteListener{
 
     private RecyclerView recyclerView;
     private MoodEventAdapter recyclerAdapter;
@@ -161,7 +161,7 @@ public class MoodHistoryFragment extends Fragment
      * Callback function that is triggered upon successfully deleting a MoodEvent
      */
     @Override
-    public void onMoodUpdateSuccess() {
+    public void onMoodDeleteSuccess() {
         Toast.makeText(getActivity(), R.string.delete_success, Toast.LENGTH_SHORT).show();
     }
 

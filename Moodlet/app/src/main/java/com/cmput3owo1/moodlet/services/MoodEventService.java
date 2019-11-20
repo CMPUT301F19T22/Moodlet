@@ -133,7 +133,7 @@ public class MoodEventService implements IMoodEventServiceProvider {
      * @param listener The listener to notify upon completion of deletion.
      */
     @Override
-    public void deleteMoodEvent(MoodEvent moodEvent, final OnMoodUpdateListener listener) {
+    public void deleteMoodEvent(MoodEvent moodEvent, final OnMoodDeleteListener listener) {
         DocumentReference newMoodEventRef = db.collection("moodEvents").document(moodEvent.getId());
 
 
@@ -141,7 +141,7 @@ public class MoodEventService implements IMoodEventServiceProvider {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        listener.onMoodUpdateSuccess();
+                        listener.onMoodDeleteSuccess();
                     }
                 })
 
@@ -152,7 +152,6 @@ public class MoodEventService implements IMoodEventServiceProvider {
                     }
                 });
     }
-
 
     /**
      * Listen to mood history updates of the current user. Calls the listener's onMoodHistoryUpdate

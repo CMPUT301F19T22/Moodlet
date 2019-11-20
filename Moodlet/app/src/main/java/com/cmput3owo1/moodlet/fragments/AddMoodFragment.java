@@ -268,11 +268,4 @@ public class AddMoodFragment extends Fragment
     public void onMoodUpdateSuccess(){
         getActivity().finish();
     }
-
-    /**
-     * Function will not be triggered
-     */
-    @Override
-    public void onMoodDeleteFailure() {}
-
 }
