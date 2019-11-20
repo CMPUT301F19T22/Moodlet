@@ -79,11 +79,10 @@ public class AddMoodFragment extends Fragment
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.fragment_add_mood,container,false);
 
+        //Generate current date/time
         date = view.findViewById(R.id.date);
-        bg = view.findViewById(R.id.bg_vector);
         String pattern = "MMMM d, yyyy \nh:mm a";
         SimpleDateFormat sdf = new SimpleDateFormat(pattern);
         dateText = sdf.format(new Date());
@@ -93,9 +92,8 @@ public class AddMoodFragment extends Fragment
         socialSpinner= view.findViewById(R.id.socialSelected);
         reasonEdit = view.findViewById(R.id.reasonEdit);
         imageUpload = view.findViewById(R.id.imageToUpload);
+        bg = view.findViewById(R.id.bg_vector);
         mes = new MoodEventService();
-        //set time when press fab, fix
-        mood = new MoodEvent();
 
         //Temporary debug buttons
         addMood = view.findViewById(R.id.add_mood);
@@ -166,7 +164,6 @@ public class AddMoodFragment extends Fragment
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 selectedMood = EmotionalState.values()[i];
-                mood.setEmotionalState(selectedMood);
                 moodDisplayName = selectedMood.getDisplayName();
                 int color = selectedMood.getColor();
                 bg.setColorFilter(color);
@@ -181,7 +178,6 @@ public class AddMoodFragment extends Fragment
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 selectedSocial = SocialSituation.values()[i];
-                mood.setSocialSituation(selectedSocial);
                 socialDisplayName = selectedSocial.getDisplayName();
             }
 
@@ -193,6 +189,10 @@ public class AddMoodFragment extends Fragment
         addMood.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mood = new MoodEvent();
+                mood.setEmotionalState(selectedMood);
+                mood.setSocialSituation(selectedSocial);
+
                 if(reasonEdit.getText().toString() != null){
                     mood.setReasoning(reasonEdit.getText().toString());
                 }
@@ -205,7 +205,6 @@ public class AddMoodFragment extends Fragment
                 }else{
                     mes.addMoodEvent(mood,AddMoodFragment.this);
                 }
-
             }
         });
 
