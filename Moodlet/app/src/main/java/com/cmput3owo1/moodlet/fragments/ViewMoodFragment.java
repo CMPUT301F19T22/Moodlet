@@ -70,7 +70,7 @@ public class ViewMoodFragment extends Fragment {
         final MoodEvent moodObj = (MoodEvent) args.getSerializable("MoodEvent");
         final Date argDate = (Date) args.getSerializable("date");
 
-        moodDisplay.setText(moodObj.getEmotionalState().toString());
+        moodDisplay.setText(moodObj.getEmotionalState().getDisplayName());
         socialDisplay.setText(moodObj.getSocialSituation().getDisplayName());
         reasonDisplay.setText(moodObj.getReasoning());
         date.setText(sdf.format(argDate));

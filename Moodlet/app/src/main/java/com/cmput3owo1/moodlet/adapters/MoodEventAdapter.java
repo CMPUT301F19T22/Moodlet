@@ -97,7 +97,7 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
         MoodEvent mood = moodEventList.get(position);
 
         // set TextViews in RecyclerView
-        holder.tvMood.setText(mood.getEmotionalState().toString());
+        holder.tvMood.setText(mood.getEmotionalState().getDisplayName());
         holder.tvDateTime.setText(simpleDateFormat.format(mood.getDate()));
 //        holder.tvTimeDiff.setText("1s");
 

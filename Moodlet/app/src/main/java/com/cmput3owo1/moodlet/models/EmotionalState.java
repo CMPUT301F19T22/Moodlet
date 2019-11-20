@@ -46,6 +46,13 @@ public enum EmotionalState {
         return this.displayName;
     }
 
+    /**
+     * Returns the display name of the emotional state when called.
+     * @return The display name
+     */
+    public String getDisplayName(){
+        return this.displayName;
+    }
 
     /**
      * Returns the color of the emotional state when called.
