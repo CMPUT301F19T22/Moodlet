@@ -3,7 +3,6 @@ package com.cmput3owo1.moodlet.activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.view.ViewGroup;
 
 import com.cmput3owo1.moodlet.R;
 import com.cmput3owo1.moodlet.fragments.LoginFragment;

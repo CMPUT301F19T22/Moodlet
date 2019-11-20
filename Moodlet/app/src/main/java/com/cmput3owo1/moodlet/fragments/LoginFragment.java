@@ -68,8 +68,6 @@ public class LoginFragment extends Fragment implements IUserServiceProvider.Logi
         loginButton = loginFragmentView.findViewById(R.id.btn_login);
         progressBar = loginFragmentView.findViewById(R.id.login_progress_bar);
 
-        progressBar.setBackgroundColor(getResources().getColor(R.color.transparent));
-
         signupText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
