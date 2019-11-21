@@ -36,9 +36,6 @@ import com.cmput3owo1.moodlet.models.MoodEvent;
 import com.cmput3owo1.moodlet.models.SocialSituation;
 import com.cmput3owo1.moodlet.services.IMoodEventServiceProvider;
 import com.cmput3owo1.moodlet.services.MoodEventService;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.api.GoogleApi;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -50,6 +47,7 @@ import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.GeoPoint;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -269,6 +267,10 @@ public class AddMoodFragment extends Fragment implements
             public void onClick(View view) {
                 if(reasonEdit.getText().toString() != null){
                     mood.setReasoning(reasonEdit.getText().toString());
+                }
+
+                if (currentLocationCheckbox.isChecked() && currentLocation != null) {
+                    mood.setLocation(new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude()));
                 }
 
                 if(selectedImage != null) {
