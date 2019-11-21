@@ -1,7 +1,9 @@
 package com.cmput3owo1.moodlet.fragments;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -19,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.cmput3owo1.moodlet.R;
@@ -46,6 +50,8 @@ public class AddMoodFragment extends Fragment
     private TextView date;
     private String dateText;
     private EditText reasonEdit;
+    private EditText locationEdit;
+    private CheckBox currentLocationCheckbox;
     private ArrayAdapter<EmotionalState> moodAdapter;
     private ArrayAdapter<SocialSituation> socialAdapter;
 
@@ -66,6 +72,10 @@ public class AddMoodFragment extends Fragment
 
     private Button addMood;
     private Button confirmEdit;
+
+    //Location
+    private static final String[] PERMISSIONS = { Manifest.permission.ACCESS_FINE_LOCATION };
+    private static final int LOCATION_REQUEST_CODE = 0;
 
     public AddMoodFragment(){
     }
@@ -92,6 +102,8 @@ public class AddMoodFragment extends Fragment
         moodSpinner = view.findViewById(R.id.moodSelected);
         socialSpinner= view.findViewById(R.id.socialSelected);
         reasonEdit = view.findViewById(R.id.reasonEdit);
+        locationEdit = view.findViewById(R.id.locationEdit);
+        currentLocationCheckbox = view.findViewById(R.id.currentLocationCheckbox);
         imageUpload = view.findViewById(R.id.imageToUpload);
         mes = new MoodEventService();
         //set time when press fab, fix
@@ -153,6 +165,24 @@ public class AddMoodFragment extends Fragment
         catch(Exception e){
         }
 
+        currentLocationCheckbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentLocationCheckbox.isChecked()) {
+                    locationEdit.setEnabled(false);
+                    // TODO: Get current location logic here
+                    // Dialog to accept permissions
+                    // On success, get location
+                    if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
+                            != PackageManager.PERMISSION_GRANTED) {
+                        requestPermissions(PERMISSIONS, LOCATION_REQUEST_CODE);
+                    }
+                } else {
+                    locationEdit.setEnabled(true);
+                }
+            }
+        });
+
         imageUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -210,6 +240,28 @@ public class AddMoodFragment extends Fragment
         });
 
         return view;
+    }
+
+    /**
+     * Callback for the result from requesting permissions. This function verifies that the user
+     * has accepted the location permissions and prompts the user to turn on Google location
+     * services if not already on.
+     * @param requestCode The permission request code passed in the requestPermissions function
+     * @param permissions The requested permissions
+     * @param grantResults The grant results for corresponding permissions
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == LOCATION_REQUEST_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // TODO: prompt user to turn on location services if not already, then get current location coordinates
+            } else {
+                currentLocationCheckbox.setChecked(false);
+                locationEdit.setEnabled(true);
+                Toast.makeText(getContext(), getResources().getString(R.string.location_permissions_denied), Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     /**
