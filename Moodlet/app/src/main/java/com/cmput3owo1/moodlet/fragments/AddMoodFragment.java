@@ -7,8 +7,10 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,8 +36,14 @@ import com.cmput3owo1.moodlet.models.MoodEvent;
 import com.cmput3owo1.moodlet.models.SocialSituation;
 import com.cmput3owo1.moodlet.services.IMoodEventServiceProvider;
 import com.cmput3owo1.moodlet.services.MoodEventService;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.api.GoogleApi;
 import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
@@ -86,6 +94,9 @@ public class AddMoodFragment extends Fragment implements
     private Button confirmEdit;
 
     //Location
+    private FusedLocationProviderClient fusedLocationProviderClient;
+    private LocationCallback locationCallback;
+    private Location currentLocation;
     private static final String[] PERMISSIONS = { Manifest.permission.ACCESS_FINE_LOCATION };
     private static final int LOCATION_REQUEST_CODE = 1;
     public static final int REQUEST_CHECK_SETTINGS = 2;
@@ -177,6 +188,25 @@ public class AddMoodFragment extends Fragment implements
         }
         catch(Exception e){
         }
+
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
+
+        locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                if (locationResult == null) {
+                    return;
+                }
+                for (Location location : locationResult.getLocations()) {
+                    // Update UI with location data
+                    // ...
+                    currentLocation = location;
+                    locationEdit.setText(String.format("Lat: %s, Lon: %s", location.getLatitude(), location.getLongitude()));
+                }
+                // Stop receiving location requests (only need current location)
+                fusedLocationProviderClient.removeLocationUpdates(locationCallback);
+            };
+        };
 
         currentLocationCheckbox.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -361,7 +391,7 @@ public class AddMoodFragment extends Fragment implements
 
 
     private void getCurrentLocation() {
-        Toast.makeText(getContext(), "Location settings enabled! Get location...", Toast.LENGTH_SHORT).show();
+        fusedLocationProviderClient.requestLocationUpdates(createLocationRequest(), locationCallback, Looper.getMainLooper());
     }
 
     private LocationRequest createLocationRequest() {
