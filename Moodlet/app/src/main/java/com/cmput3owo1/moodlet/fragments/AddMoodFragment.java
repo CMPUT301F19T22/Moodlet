@@ -1,8 +1,10 @@
 package com.cmput3owo1.moodlet.fragments;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -21,6 +23,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -31,6 +34,14 @@ import com.cmput3owo1.moodlet.models.MoodEvent;
 import com.cmput3owo1.moodlet.models.SocialSituation;
 import com.cmput3owo1.moodlet.services.IMoodEventServiceProvider;
 import com.cmput3owo1.moodlet.services.MoodEventService;
+import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -40,8 +51,9 @@ import java.util.Date;
  * A fragment that has editable fields that allow for a user to fill in and add a MoodEvent to
  * a database or edit an existing MoodEvent in a database.
  */
-public class AddMoodFragment extends Fragment
-        implements IMoodEventServiceProvider.OnImageUploadListener, IMoodEventServiceProvider.OnMoodUpdateListener {
+public class AddMoodFragment extends Fragment implements
+        IMoodEventServiceProvider.OnImageUploadListener,
+        IMoodEventServiceProvider.OnMoodUpdateListener {
 
     private boolean editMode;
     private Spinner moodSpinner;
@@ -75,7 +87,8 @@ public class AddMoodFragment extends Fragment
 
     //Location
     private static final String[] PERMISSIONS = { Manifest.permission.ACCESS_FINE_LOCATION };
-    private static final int LOCATION_REQUEST_CODE = 0;
+    private static final int LOCATION_REQUEST_CODE = 1;
+    public static final int REQUEST_CHECK_SETTINGS = 2;
 
     public AddMoodFragment(){
     }
@@ -170,12 +183,13 @@ public class AddMoodFragment extends Fragment
             public void onClick(View v) {
                 if (currentLocationCheckbox.isChecked()) {
                     locationEdit.setEnabled(false);
-                    // TODO: Get current location logic here
-                    // Dialog to accept permissions
-                    // On success, get location
+                    // Request location permissions if they are not yet granted
                     if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
                             != PackageManager.PERMISSION_GRANTED) {
                         requestPermissions(PERMISSIONS, LOCATION_REQUEST_CODE);
+                    } else {
+                        // Check if location settings are enabled
+                        checkLocationSettings();
                     }
                 } else {
                     locationEdit.setEnabled(true);
@@ -255,8 +269,10 @@ public class AddMoodFragment extends Fragment
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == LOCATION_REQUEST_CODE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // TODO: prompt user to turn on location services if not already, then get current location coordinates
+                // Check if location settings are enabled
+                checkLocationSettings();
             } else {
+                // Deselect checkbox and re-enable location edit text
                 currentLocationCheckbox.setChecked(false);
                 locationEdit.setEnabled(true);
                 Toast.makeText(getContext(), getResources().getString(R.string.location_permissions_denied), Toast.LENGTH_SHORT).show();
@@ -265,6 +281,8 @@ public class AddMoodFragment extends Fragment
     }
 
     /**
+     * Callback for handling the result of the location settings response.
+     * Otherwise...
      * Callback for when an image is imported into the Fragment. This function verifies if data is returned
      * from the call and updates the user's currently selected image, and displays the imported
      * image.
@@ -275,15 +293,35 @@ public class AddMoodFragment extends Fragment
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(data != null) {
-            selectedImage = data.getData();
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getApplicationContext().getContentResolver(), selectedImage);
-                imageUpload.setImageBitmap(bitmap);
+
+        // Check location settings result
+        if (requestCode == REQUEST_CHECK_SETTINGS) {
+            switch (resultCode) {
+                case Activity.RESULT_OK:
+                    // User has enabled location settings
+                    getCurrentLocation();
+                    return;
+                case Activity.RESULT_CANCELED:
+                    // Deselect checkbox and re-enable location edit text
+                    currentLocationCheckbox.setChecked(false);
+                    locationEdit.setEnabled(true);
+                    Toast.makeText(getContext(), getResources().getString(R.string.location_settings_denied), Toast.LENGTH_SHORT).show();
+                    return;
+                default:
+                    // Ignore
             }
-            catch (IOException e)
-            {
-                e.printStackTrace();
+        } else {
+            // Handle importing image
+            if(data != null) {
+                selectedImage = data.getData();
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getApplicationContext().getContentResolver(), selectedImage);
+                    imageUpload.setImageBitmap(bitmap);
+                }
+                catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -319,5 +357,61 @@ public class AddMoodFragment extends Fragment
     @Override
     public void onMoodUpdateSuccess(){
         getActivity().finish();
+    }
+
+
+    private void getCurrentLocation() {
+        Toast.makeText(getContext(), "Location settings enabled! Get location...", Toast.LENGTH_SHORT).show();
+    }
+
+    private LocationRequest createLocationRequest() {
+        LocationRequest locationRequest = LocationRequest.create();
+        locationRequest.setInterval(10000);
+        locationRequest.setFastestInterval(5000);
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        return locationRequest;
+    }
+
+    /**
+     * Source: https://developer.android.com/training/location/change-location-settings
+     */
+    private void checkLocationSettings() {
+        // Create a locations settings request prompt for the user to enable location settings
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                .addLocationRequest(createLocationRequest())
+                .setAlwaysShow(true);
+        Task<LocationSettingsResponse> task = LocationServices.getSettingsClient(getContext()).checkLocationSettings(builder.build());
+
+        task.addOnSuccessListener(getActivity(), new OnSuccessListener<LocationSettingsResponse>() {
+            @Override
+            public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
+                // All location settings are satisfied. The client can initialize
+                // location requests here.
+                // ...
+                getCurrentLocation();
+            }
+        });
+
+        task.addOnFailureListener(getActivity(), new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                if (e instanceof ResolvableApiException) {
+                    // Location settings are not satisfied, but this can be fixed
+                    // by showing the user a dialog.
+                    try {
+                        // Show the dialog by calling startResolutionForResult(),
+                        // and check the result in onActivityResult().
+
+                        // Note that upon resolution, the onActivityResult callback of the activity
+                        // is called and will need to be forwarded to this fragment
+                        ResolvableApiException resolvable = (ResolvableApiException) e;
+                        resolvable.startResolutionForResult(getActivity(), REQUEST_CHECK_SETTINGS);
+                    } catch (IntentSender.SendIntentException sendEx) {
+                        // Ignore the error.
+                        Toast.makeText(getContext(), "Error!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
     }
 }

@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.cmput3owo1.moodlet.R;
 import com.cmput3owo1.moodlet.fragments.AddMoodFragment;
@@ -13,6 +14,9 @@ import com.cmput3owo1.moodlet.fragments.ViewMoodFragment;
  * depending on where the activity is invoked.
  */
 public class MoodEditorActivity extends AppCompatActivity {
+
+    private AddMoodFragment addMoodFragment;
+    private ViewMoodFragment viewMoodFragment;
 
     /**
      * Called when the activity is started and sets up the corresponding fragment to display.
@@ -41,13 +45,13 @@ public class MoodEditorActivity extends AppCompatActivity {
             // Create a new Fragment to be placed in the activity layout
             Intent intent = getIntent();
             if(intent.hasExtra("add")){
-                AddMoodFragment addMoodFragment = new AddMoodFragment();
+                addMoodFragment = new AddMoodFragment();
 
                 getSupportFragmentManager().beginTransaction()
                         .add(R.id.fragment_container, addMoodFragment).commit();
             }
             else if(intent.hasExtra("view")){
-                ViewMoodFragment viewMoodFragment = new ViewMoodFragment();
+                viewMoodFragment = new ViewMoodFragment();
                 viewMoodFragment.setArguments(getIntent().getExtras());
 
                 getSupportFragmentManager().beginTransaction()
@@ -57,4 +61,19 @@ public class MoodEditorActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * This function is used to forward the onActivityResult call to the AddMoodFragment when
+     * requesting location settings so that the results can be handled in the fragment.
+     * @param requestCode The request code initially supplied to identify where the result is obtained from
+     * @param resultCode The result code from the calling activity
+     * @param data The intent to return if additional data exists
+     */
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == AddMoodFragment.REQUEST_CHECK_SETTINGS) {
+            addMoodFragment.onActivityResult(requestCode, resultCode, data);
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
 }
