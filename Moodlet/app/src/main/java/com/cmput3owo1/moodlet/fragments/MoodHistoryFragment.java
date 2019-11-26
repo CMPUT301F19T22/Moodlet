@@ -6,11 +6,14 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -39,6 +42,15 @@ public class MoodHistoryFragment extends Fragment
     private IMoodEventServiceProvider moodEventService;
     private FloatingActionButton addMood;
 
+    /**
+     * Called when the fragment is starting.
+     * @param savedInstanceState Used to restore a fragment's previous state
+     */
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
     /**
      * This function is called to have the fragment instantiate its user interface view.
@@ -76,6 +88,17 @@ public class MoodHistoryFragment extends Fragment
         });
 
         return view;
+    }
+
+    /**
+     * Initialize the contents of the Activity's standard options menu.
+     * @param menu The options menu in which you place your items.
+     * @param inflater The MenuInflater object that can be used to inflate any itmes in the menu
+     */
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.mood_history_fragment_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     /**

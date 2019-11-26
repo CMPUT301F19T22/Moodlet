@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/filter"
+        android:orderInCategory="1"
+        android:title="Logout"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_filter_list_24px"
+        />
+
+
+    <item
+        android:id="@+id/logout"
+        android:orderInCategory="1"
+        android:title="Logout"
+        android:icon="@drawable/ic_more_vert_24px"
+        />
+
+</menu>
