@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -20,11 +21,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cmput3owo1.moodlet.R;
+import com.cmput3owo1.moodlet.activities.LoginActivity;
 import com.cmput3owo1.moodlet.activities.MoodEditorActivity;
 import com.cmput3owo1.moodlet.adapters.MoodEventAdapter;
 import com.cmput3owo1.moodlet.models.MoodEvent;
 import com.cmput3owo1.moodlet.services.IMoodEventServiceProvider;
 import com.cmput3owo1.moodlet.services.MoodEventService;
+import com.cmput3owo1.moodlet.services.UserService;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -41,6 +44,7 @@ public class MoodHistoryFragment extends Fragment
     private ArrayList<MoodEvent> moodEventList;
     private IMoodEventServiceProvider moodEventService;
     private FloatingActionButton addMood;
+    private UserService userService;
 
     /**
      * Called when the fragment is starting.
@@ -77,6 +81,8 @@ public class MoodHistoryFragment extends Fragment
         moodEventService = new MoodEventService();
         moodEventService.getMoodHistoryUpdates(this);
 
+        userService = new UserService();
+
         addMood = view.findViewById(R.id.add_mood_fab);
         addMood.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,6 +105,21 @@ public class MoodHistoryFragment extends Fragment
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.mood_history_fragment_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch(item.getItemId()){
+            case R.id.logout:
+                userService.logoutUser();
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                getActivity().finish();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     /**

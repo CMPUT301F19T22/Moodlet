@@ -1,11 +1,13 @@
 package com.cmput3owo1.moodlet.fragments;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -14,6 +16,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.cmput3owo1.moodlet.R;
+import com.cmput3owo1.moodlet.activities.LoginActivity;
+import com.cmput3owo1.moodlet.services.UserService;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -32,6 +36,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private MapView mapView;
     private GoogleMap map;
+    private UserService userService;
 
     /**
      * Called when the fragment is starting.
@@ -56,12 +61,29 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         // Obtain the view to inflate
         View view = inflater.inflate(R.layout.fragment_map, container, false);
 
+        userService = new UserService();
+
         // MapView setup
         mapView = view.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
 
         return view;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch(item.getItemId()){
+            case R.id.logout:
+                userService.logoutUser();
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                getActivity().finish();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     /**
