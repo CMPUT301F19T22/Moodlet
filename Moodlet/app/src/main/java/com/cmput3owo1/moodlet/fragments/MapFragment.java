@@ -1,13 +1,9 @@
 package com.cmput3owo1.moodlet.fragments;
 
-import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -16,7 +12,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.cmput3owo1.moodlet.R;
-import com.cmput3owo1.moodlet.activities.LoginActivity;
 import com.cmput3owo1.moodlet.services.UserService;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -69,32 +64,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mapView.getMapAsync(this);
 
         return view;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
-        switch(item.getItemId()){
-            case R.id.logout:
-                userService.logoutUser();
-                Intent intent = new Intent(getActivity(), LoginActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                getActivity().finish();
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    /**
-     * Initialize the contents of the Activity's standard options menu.
-     * @param menu The options menu in which you place your items.
-     * @param inflater The MenuInflater object that can be used to inflate any itmes in the menu
-     */
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.general_fragment_menu, menu);
-        super.onCreateOptionsMenu(menu, inflater);
     }
 
     /**

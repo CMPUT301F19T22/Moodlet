@@ -10,12 +10,4 @@
         android:icon="@drawable/ic_filter_list_24px"
         />
 
-
-    <item
-        android:id="@+id/logout"
-        android:orderInCategory="1"
-        android:title="Logout"
-        android:icon="@drawable/ic_more_vert_24px"
-        />
-
 </menu>

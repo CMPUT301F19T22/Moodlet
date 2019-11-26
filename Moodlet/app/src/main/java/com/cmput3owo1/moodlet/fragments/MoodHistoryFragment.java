@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cmput3owo1.moodlet.R;
-import com.cmput3owo1.moodlet.activities.LoginActivity;
 import com.cmput3owo1.moodlet.activities.MoodEditorActivity;
 import com.cmput3owo1.moodlet.adapters.MoodEventAdapter;
 import com.cmput3owo1.moodlet.models.MoodEvent;
@@ -107,20 +106,20 @@ public class MoodHistoryFragment extends Fragment
         super.onCreateOptionsMenu(menu, inflater);
     }
 
+
+
+    /*
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         switch(item.getItemId()){
-            case R.id.logout:
-                userService.logoutUser();
-                Intent intent = new Intent(getActivity(), LoginActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                getActivity().finish();
+            case R.id.filter:
+                TODO: Show filter options when pressed and apply filter
         }
 
         return super.onOptionsItemSelected(item);
     }
+     */
 
     /**
      * Called when the user is clicking on a mood event to edit

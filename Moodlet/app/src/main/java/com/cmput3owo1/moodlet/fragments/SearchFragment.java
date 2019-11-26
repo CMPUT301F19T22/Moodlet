@@ -1,11 +1,7 @@
 package com.cmput3owo1.moodlet.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -16,7 +12,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.cmput3owo1.moodlet.R;
-import com.cmput3owo1.moodlet.activities.LoginActivity;
 import com.cmput3owo1.moodlet.adapters.UserListAdapter;
 import com.cmput3owo1.moodlet.models.User;
 import com.cmput3owo1.moodlet.services.IUserServiceProvider;
@@ -60,32 +55,6 @@ public class SearchFragment extends Fragment implements
         userSearchView.setOnQueryTextListener(this);
 
         return rootView;
-    }
-
-    /**
-     * Initialize the contents of the Activity's standard options menu.
-     * @param menu The options menu in which you place your items.
-     * @param inflater The MenuInflater object that can be used to inflate any itmes in the menu
-     */
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.general_fragment_menu, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
-        switch(item.getItemId()){
-            case R.id.logout:
-                service.logoutUser();
-                Intent intent = new Intent(getActivity(), LoginActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                getActivity().finish();
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

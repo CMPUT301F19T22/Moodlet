@@ -1,12 +1,9 @@
 package com.cmput3owo1.moodlet.services;
 
-import android.content.Intent;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
 
-import com.cmput3owo1.moodlet.activities.MainActivity;
 import com.cmput3owo1.moodlet.models.FollowRequest;
 import com.cmput3owo1.moodlet.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -23,7 +20,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import static android.content.ContentValues.TAG;
