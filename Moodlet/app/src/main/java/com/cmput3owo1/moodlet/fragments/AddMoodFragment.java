@@ -44,14 +44,21 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.firebase.firestore.GeoPoint;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 /**
  * A fragment that has editable fields that allow for a user to fill in and add a MoodEvent to
@@ -66,6 +73,7 @@ public class AddMoodFragment extends Fragment implements
     private Spinner socialSpinner;
     private ImageView bg;
     private TextView date;
+    private TextView clearLocation;
     private String dateText;
     private EditText reasonEdit;
     private EditText locationEdit;
@@ -95,9 +103,11 @@ public class AddMoodFragment extends Fragment implements
     private FusedLocationProviderClient fusedLocationProviderClient;
     private LocationCallback locationCallback;
     private Location currentLocation;
+    private GeoPoint placesLocation;
     private static final String[] PERMISSIONS = { Manifest.permission.ACCESS_FINE_LOCATION };
     private static final int LOCATION_REQUEST_CODE = 1;
-    public static final int REQUEST_CHECK_SETTINGS = 2;
+    public static final int REQUEST_CHECK_SETTINGS = 2; // Keep public to access in parent activity
+    private static final int PLACES_REQUEST_CODE = 3;
 
     public AddMoodFragment(){
     }
@@ -125,6 +135,7 @@ public class AddMoodFragment extends Fragment implements
         socialSpinner= view.findViewById(R.id.socialSelected);
         reasonEdit = view.findViewById(R.id.reasonEdit);
         locationEdit = view.findViewById(R.id.locationEdit);
+        clearLocation = view.findViewById(R.id.locationClear);
         currentLocationCheckbox = view.findViewById(R.id.currentLocationCheckbox);
         imageUpload = view.findViewById(R.id.imageToUpload);
         mes = new MoodEventService();
@@ -187,8 +198,41 @@ public class AddMoodFragment extends Fragment implements
         catch(Exception e){
         }
 
+        // Set a click listener for the textview to clear the selected place
+        clearLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                placesLocation = null;
+                locationEdit.setText("");
+            }
+        });
+
+        // Initialize the SDK
+        if (!Places.isInitialized()) {
+            Places.initialize(getContext(), getResources().getString(R.string.GOOGLE_API_KEY));
+        }
+
+        // Set click/focus change listeners to launch the places autocomplete widget
+        locationEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchAutocomplete();
+            }
+        });
+
+        locationEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    launchAutocomplete();
+                }
+            }
+        });
+
+        // Initialize the fused location provider
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
 
+        // Set the location callback
         locationCallback = new LocationCallback() {
             @Override
             public void onLocationResult(LocationResult locationResult) {
@@ -196,21 +240,19 @@ public class AddMoodFragment extends Fragment implements
                     return;
                 }
                 for (Location location : locationResult.getLocations()) {
-                    // Update UI with location data
-                    // ...
                     currentLocation = location;
-                    locationEdit.setText(String.format("Lat: %s, Lon: %s", location.getLatitude(), location.getLongitude()));
                 }
                 // Stop receiving location requests (only need current location)
                 fusedLocationProviderClient.removeLocationUpdates(locationCallback);
             };
         };
 
+        // Set a click listener to check if user wishes to use current location
         currentLocationCheckbox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (currentLocationCheckbox.isChecked()) {
-                    locationEdit.setEnabled(false);
+                    locationEdit.setEnabled(false);;
                     // Request location permissions if they are not yet granted
                     if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
                             != PackageManager.PERMISSION_GRANTED) {
@@ -271,6 +313,11 @@ public class AddMoodFragment extends Fragment implements
 
                 if (currentLocationCheckbox.isChecked() && currentLocation != null) {
                     mood.setLocation(new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude()));
+                } else if (placesLocation != null) {
+                    mood.setLocation(placesLocation);
+                    // TODO: maybe combine 'places' with 'current location'?
+                    // TODO: Implement `places autocomplete` functionality!!!
+                    // Or check if edittext not empty??
                 }
 
                 if(selectedImage != null) {
@@ -342,6 +389,13 @@ public class AddMoodFragment extends Fragment implements
                 default:
                     // Ignore
             }
+        } else if (requestCode == PLACES_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK && data != null) {
+                Place place = Autocomplete.getPlaceFromIntent(data);
+                LatLng latLng = place.getLatLng();
+                placesLocation = new GeoPoint(latLng.latitude, latLng.longitude);
+                locationEdit.setText(String.format("%s, %s", place.getName(), place.getAddress()));
+            }
         } else {
             // Handle importing image
             if(data != null) {
@@ -392,10 +446,32 @@ public class AddMoodFragment extends Fragment implements
     }
 
 
+    /**
+     * A function that launches the autocomplete widget to prompt the user to search for a place
+     */
+    private void launchAutocomplete() {
+        List<Place.Field> fields = Arrays.asList(
+                Place.Field.ID,
+                Place.Field.NAME,
+                Place.Field.ADDRESS,
+                Place.Field.LAT_LNG
+        );
+        Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields).build(getContext());
+        startActivityForResult(intent, PLACES_REQUEST_CODE);
+    }
+
+    /**
+     * A function that calls the fused location provider to obtain updates on the user's location
+     */
     private void getCurrentLocation() {
         fusedLocationProviderClient.requestLocationUpdates(createLocationRequest(), locationCallback, Looper.getMainLooper());
     }
 
+    /**
+     * Creates a location request to obtain the user's current location
+     *
+     * @return The created location request
+     */
     private LocationRequest createLocationRequest() {
         LocationRequest locationRequest = LocationRequest.create();
         locationRequest.setInterval(10000);
@@ -405,6 +481,10 @@ public class AddMoodFragment extends Fragment implements
     }
 
     /**
+     * A function that checks if the location settings on the Android device is enabled.
+     * If location settings are not enabled, it prompts the user to enable them. If the
+     * user grants location settings, the function will attempt to obtain the current location.
+     *
      * Source: https://developer.android.com/training/location/change-location-settings
      */
     private void checkLocationSettings() {

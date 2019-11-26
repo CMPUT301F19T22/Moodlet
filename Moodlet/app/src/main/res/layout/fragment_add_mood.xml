@@ -157,29 +157,48 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/reasonLabel" />
 
-            <TextView
-                android:id="@+id/locationLabel"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/locationLabelContainer"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="32dp"
-                android:text="Location"
-                android:textSize="18sp"
-                android:textStyle="bold"
+                android:orientation="horizontal"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/reasonEdit" />
+                app:layout_constraintTop_toBottomOf="@+id/reasonEdit" >
+
+                <TextView
+                    android:id="@+id/locationLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/location_label"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/locationClear"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:textSize="14sp"
+                    android:text="@string/location_clear"/>
+
+            </LinearLayout>
 
             <EditText
                 android:id="@+id/locationEdit"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
                 android:layout_marginTop="8dp"
                 android:hint="@string/location_hint"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/locationLabel" />
+                app:layout_constraintTop_toBottomOf="@+id/locationLabelContainer" />
 
             <CheckBox
                 android:id="@+id/currentLocationCheckbox"
@@ -201,7 +220,7 @@
                 android:background="#C2C2C2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/currentLocationCheckbox">
+                app:layout_constraintTop_toBottomOf="@+id/currentLocationCheckbox" >
 
                 <ImageView
                     android:id="@+id/imageToUpload"
