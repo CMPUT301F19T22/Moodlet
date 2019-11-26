@@ -197,6 +197,9 @@
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="8dp"
                 android:hint="@string/location_hint"
+                android:maxLines="1"
+                android:inputType="text"
+                android:scrollHorizontally="true"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/locationLabelContainer" />
 
