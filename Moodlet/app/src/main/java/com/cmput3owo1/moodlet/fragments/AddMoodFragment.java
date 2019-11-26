@@ -320,9 +320,7 @@ public class AddMoodFragment extends Fragment implements
                     mood.setLocation(new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude()));
                 } else if (placesLocation != null) {
                     mood.setLocation(placesLocation);
-                    // TODO: maybe combine 'places' with 'current location'?
-                    // TODO: Implement `places autocomplete` functionality!!!
-                    // Or check if edittext not empty??
+                    // TODO: Set the place's description?
                 }
 
                 String[] words = reasonEdit.getText().toString().split(" ");
