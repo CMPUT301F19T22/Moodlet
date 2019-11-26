@@ -154,7 +154,7 @@ public class MoodHistoryFragmentTest {
         // Click on mood drop down and select a mood
         onView(withId(R.id.moodSelected)).perform(click());
 
-        // Select confused from drop down
+        // Select jealous from drop down
         onData(allOf(is(instanceOf(EmotionalState.class)), is(EmotionalState.JEALOUS))).perform(click());
 
         // add mood event
