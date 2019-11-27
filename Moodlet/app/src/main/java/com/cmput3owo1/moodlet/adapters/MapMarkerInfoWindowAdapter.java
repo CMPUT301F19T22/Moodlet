@@ -4,6 +4,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.cmput3owo1.moodlet.R;
@@ -22,6 +23,7 @@ public class MapMarkerInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
     private LayoutInflater inflater;
 
+    private LinearLayout infoWindowTitle;
     private TextView usernameInfo;
     private TextView locationInfo;
     private TextView emotionInfo;
@@ -44,6 +46,7 @@ public class MapMarkerInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
     public View getInfoWindow(Marker marker) {
         View infoWindow = inflater.inflate(R.layout.marker_info_window, null);
 
+        infoWindowTitle = infoWindow.findViewById(R.id.infoWindowTitle);
         usernameInfo = infoWindow.findViewById(R.id.usernameInfo);
         locationInfo = infoWindow.findViewById(R.id.locationInfo);
         emotionInfo = infoWindow.findViewById(R.id.emotionInfo);
@@ -59,23 +62,14 @@ public class MapMarkerInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
             if (tagObject.getClass().equals(MoodEvent.class)) {
                 Log.e("MOODLET", "My Mood Event");
                 MoodEvent moodEvent = (MoodEvent) tagObject;
-                locationInfo.setText("Location placeholder");
-                emotionInfo.setText(moodEvent.getEmotionalState().getDisplayName());
-                dateInfo.setText(sdf.format(moodEvent.getDate()));
-                timeInfo.setText("? h");
-                setEmoticon(moodEvent.getEmotionalState());
-                infoWindowBar.setColorFilter(moodEvent.getEmotionalState().getColor());
+                setInfo(moodEvent, false);
+
             } else if (tagObject.getClass().equals(MoodEventAssociation.class)) {
                 Log.e("MOODLET", "Follower Mood Event");
                 MoodEventAssociation moodEventAssociation = (MoodEventAssociation) tagObject;
                 MoodEvent moodEvent = moodEventAssociation.getMoodEvent();
                 usernameInfo.setText(String.format("@%s - ", moodEventAssociation.getUsername()));
-                locationInfo.setText("Location placeholder");
-                emotionInfo.setText(moodEvent.getEmotionalState().getDisplayName());
-                dateInfo.setText(sdf.format(moodEvent.getDate()));
-                timeInfo.setText("? h");
-                setEmoticon(moodEvent.getEmotionalState());
-                infoWindowBar.setColorFilter(moodEvent.getEmotionalState().getColor());
+                setInfo(moodEvent, true);
             }
             return infoWindow;
         }
@@ -94,6 +88,24 @@ public class MapMarkerInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
     @Override
     public View getInfoContents(Marker marker) {
         return null;
+    }
+
+    /**
+     * Sets the information on the info window from the given mood event.
+     * @param moodEvent The mood event to obtain the information from.
+     * @param isFollower A flag to indicate whether the mood event information is from a follower
+     */
+    private void setInfo(MoodEvent moodEvent, boolean isFollower) {
+        String locationDescription = moodEvent.getLocationDescription();
+        locationInfo.setText(locationDescription);
+        if (!isFollower && locationDescription == null) {
+            infoWindowTitle.setVisibility(View.GONE);
+        }
+        emotionInfo.setText(moodEvent.getEmotionalState().getDisplayName());
+        dateInfo.setText(sdf.format(moodEvent.getDate()));
+        timeInfo.setText("? h");
+        setEmoticon(moodEvent.getEmotionalState());
+        infoWindowBar.setColorFilter(moodEvent.getEmotionalState().getColor());
     }
 
     /**
