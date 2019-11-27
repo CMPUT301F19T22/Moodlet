@@ -1,6 +1,5 @@
 package com.cmput3owo1.moodlet.services;
 
-import android.content.Context;
 import android.net.Uri;
 import android.widget.Toast;
 
