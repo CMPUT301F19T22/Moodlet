@@ -26,7 +26,6 @@ import com.cmput3owo1.moodlet.adapters.MoodEventAdapter;
 import com.cmput3owo1.moodlet.models.MoodEvent;
 import com.cmput3owo1.moodlet.services.IMoodEventServiceProvider;
 import com.cmput3owo1.moodlet.services.MoodEventService;
-import com.cmput3owo1.moodlet.services.UserService;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -103,20 +102,18 @@ public class MoodHistoryFragment extends Fragment
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-
-
-    /*
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         switch(item.getItemId()){
             case R.id.filter:
-                TODO: Show filter options when pressed and apply filter
+                // TODO: Create intent to go to activity to apply filter options
+                 Toast.makeText(getContext(), "Filter options", Toast.LENGTH_SHORT).show();
         }
 
         return super.onOptionsItemSelected(item);
     }
-     */
+
 
     /**
      * Called when the user is clicking on a mood event to edit

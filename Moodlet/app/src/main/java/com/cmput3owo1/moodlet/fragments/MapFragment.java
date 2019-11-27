@@ -8,11 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.cmput3owo1.moodlet.R;
-import com.cmput3owo1.moodlet.services.UserService;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -32,15 +30,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private MapView mapView;
     private GoogleMap map;
 
-    /**
-     * Called when the fragment is starting.
-     * @param savedInstanceState Used to restore a fragment's previous state
-     */
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-    }
 
     /**
      * This function is called to have the fragment instantiate its user interface view.

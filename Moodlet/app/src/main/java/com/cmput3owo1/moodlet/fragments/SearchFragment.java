@@ -6,9 +6,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.cmput3owo1.moodlet.R;
@@ -29,16 +31,6 @@ public class SearchFragment extends Fragment implements
     private ArrayList<User> userDataList;
     private UserListAdapter userAdapter;
     private IUserServiceProvider service;
-
-    /**
-     * Called when the fragment is starting.
-     * @param savedInstanceState Used to restore a fragment's previous state
-     */
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
