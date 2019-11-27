@@ -12,7 +12,7 @@
       android:strokeAlpha="0.39"
       android:fillAlpha="0.39">
     <aapt:attr name="android:fillColor">
-      <gradient 
+      <gradient
           android:startY="76.03"
           android:startX="67.54"
           android:endY="167.15"
@@ -35,7 +35,7 @@
   <path
       android:pathData="M25.31,96.12A70.06,70.06 0,1 0,45.83 46.56,70.14 70.14,0 0,0 25.31,96.12Z">
     <aapt:attr name="android:fillColor">
-      <gradient 
+      <gradient
           android:startY="166.19"
           android:startX="95.38"
           android:endY="26.04"

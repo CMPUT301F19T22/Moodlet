@@ -3,6 +3,7 @@ package com.cmput3owo1.moodlet.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -25,6 +26,7 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
     private ArrayList<MoodEvent> moodEventList;
     private OnItemClickListener listener;
     private SimpleDateFormat simpleDateFormat;
+    private ImageView tvIcon;
 
     /**
      * Listener interface to get the position of a mood event upon a click on the RecyclerView
@@ -50,12 +52,14 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
      */
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView tvMood, tvDateTime;
+        ImageView tvIcon;
 //        TextView tvTimeDiff;
 
         ViewHolder(View itemView) {
             super(itemView);
             tvMood = itemView.findViewById(R.id.mood_textview);
             tvDateTime = itemView.findViewById(R.id.date_time_textview);
+            tvIcon = itemView.findViewById(R.id.mood_emoji);
 //            tvTimeDiff = itemView.findViewById(R.id.time_difference);
             itemView.setOnClickListener(this);
         }
@@ -99,6 +103,31 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
         // set TextViews in RecyclerView
         holder.tvMood.setText(mood.getEmotionalState().getDisplayName());
         holder.tvDateTime.setText(simpleDateFormat.format(mood.getDate()));
+
+
+        switch(mood.getEmotionalState()) {
+            case SAD:
+                holder.tvIcon.setImageResource(R.drawable.ic_mood_sad);
+                break;
+            case ANGRY:
+                holder.tvIcon.setImageResource(R.drawable.ic_mood_angry);
+                break;
+            case CONFUSED:
+                holder.tvIcon.setImageResource(R.drawable.ic_mood_confused);
+                break;
+            case EXCITED:
+                holder.tvIcon.setImageResource(R.drawable.ic_mood_excited);
+                break;
+            case HAPPY:
+                holder.tvIcon.setImageResource(R.drawable.ic_mood_happy);
+                break;
+            case JEALOUS:
+                holder.tvIcon.setImageResource(R.drawable.ic_mood_jealous);
+                break;
+            case SCARED:
+                holder.tvIcon.setImageResource(R.drawable.ic_mood_scared);
+                break;
+        }
 //        holder.tvTimeDiff.setText("1s");
 
     }
