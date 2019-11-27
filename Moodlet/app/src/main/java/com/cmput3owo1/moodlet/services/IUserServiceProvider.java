@@ -1,9 +1,7 @@
 package com.cmput3owo1.moodlet.services;
 
-import androidx.fragment.app.FragmentActivity;
-
+import android.widget.ProgressBar;
 import com.cmput3owo1.moodlet.models.User;
-
 import java.util.ArrayList;
 
 /**

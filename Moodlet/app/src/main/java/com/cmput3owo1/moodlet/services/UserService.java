@@ -56,13 +56,11 @@ public class UserService implements IUserServiceProvider{
      */
     @Override
     public void validateUsernameAndCreateUser(final User user, final String password, final RegistrationListener listener){
-
         db.collection("users").document(user.getUsername()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if(task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
-                    Log.v("data","Cached document data: " + document.getData());
                     if(document.getData() == null) {
                         createUser(user, password, listener);
                     } else {
@@ -81,6 +79,7 @@ public class UserService implements IUserServiceProvider{
      * @param password Password of Account to register with.
      * @param listener Registration listener passed from fragment
      */
+
     private void createUser(final User user, String password, final RegistrationListener listener){
         auth.createUserWithEmailAndPassword(user.getEmail(), password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
