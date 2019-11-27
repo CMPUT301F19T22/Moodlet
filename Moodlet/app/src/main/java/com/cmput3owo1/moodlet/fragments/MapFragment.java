@@ -6,30 +6,53 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.cmput3owo1.moodlet.R;
+import com.cmput3owo1.moodlet.models.MoodEvent;
+import com.cmput3owo1.moodlet.models.MoodEventAssociation;
+import com.cmput3owo1.moodlet.services.IMoodEventServiceProvider;
+import com.cmput3owo1.moodlet.services.MoodEventService;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.firestore.GeoPoint;
+
+import java.util.ArrayList;
 
 /**
  * A fragment that holds a Google API MapView that displays the location of the user's mood event
  * history and optionally displays the location of the user's followers' most recent mood event.
  */
-public class MapFragment extends Fragment implements OnMapReadyCallback {
+public class MapFragment extends Fragment implements
+        OnMapReadyCallback,
+        IMoodEventServiceProvider.OnMoodHistoryUpdateListener,
+        IMoodEventServiceProvider.OnFeedUpdateListener {
 
     private static final String TAG = "Moodlet";
     private static final LatLng EDMONTON = new LatLng(53.5444,-113.4909);
+    private static final float MARKER_COLOR = 207.61f; // Hue
+//    private static final float FOLLOWER_MARKER_COLOR =
+
+
+    private IMoodEventServiceProvider moodEventService;
+
+    private CheckBox showFollowersCheckbox;
+
+    private ArrayList<MoodEvent> myMoodEvents;
+    private ArrayList<MoodEventAssociation> followerMoodEvents;
 
     private MapView mapView;
     private GoogleMap map;
-
 
     /**
      * This function is called to have the fragment instantiate its user interface view.
@@ -43,6 +66,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                              ViewGroup container, Bundle savedInstanceState) {
         // Obtain the view to inflate
         View view = inflater.inflate(R.layout.fragment_map, container, false);
+
+        // Get checkbox
+        showFollowersCheckbox = view.findViewById(R.id.showFollowers);
+
+        // Mood event lists setup
+        myMoodEvents = new ArrayList<>();
+        followerMoodEvents = new ArrayList<>();
+
+        // Setup mood event service
+        moodEventService = new MoodEventService();
 
         // MapView setup
         mapView = view.findViewById(R.id.mapView);
@@ -140,5 +173,73 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         // TODO: change this to the last known location
         this.map.moveCamera(CameraUpdateFactory.newLatLngZoom(EDMONTON, 12));
+//        updateMap(showFollowersCheckbox.isChecked());
+
+        // Set the update callbacks
+        moodEventService.getMoodHistoryUpdates(this);
+        moodEventService.getFeedUpdates(this);
+    }
+
+    /**
+     * Gets called when there is an update to the user's Mood Event History
+     * @param newHistory The updated Mood Event History
+     */
+    @Override
+    public void onMoodHistoryUpdate(ArrayList<MoodEvent> newHistory) {
+        myMoodEvents.clear();
+        myMoodEvents.addAll(newHistory);
+        updateMap(showFollowersCheckbox.isChecked());
+    }
+
+    /**
+     * Gets called when there is an update to the user's Feed
+     * @param newFeed The updated feed
+     */
+    @Override
+    public void onFeedUpdate(ArrayList<MoodEventAssociation> newFeed) {
+        followerMoodEvents.clear();
+        followerMoodEvents.addAll(newFeed);
+        updateMap(showFollowersCheckbox.isChecked());
+    }
+
+    /**
+     * This function updates the markers shown on the map
+     * @param showFollowers The flag to show/hide the follower markers
+     */
+    private void updateMap(boolean showFollowers) {
+        // Clear all markers
+        map.clear();
+
+        // Add markers for user's mood events
+        for (MoodEvent moodEvent : myMoodEvents) {
+            GeoPoint location = moodEvent.getLocation();
+            if (location != null) {
+                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                map.addMarker(new MarkerOptions()
+                        .position(latLng)
+                        .icon(BitmapDescriptorFactory.defaultMarker(MARKER_COLOR))
+                        .alpha(0.8f)
+                        .title(moodEvent.getEmotionalState().getDisplayName())
+                );
+            }
+        }
+
+        // Add markers for follower(s)' mood events
+        if (showFollowers) {
+            // TODO: clear
+            for (MoodEventAssociation moodEventAssociation : followerMoodEvents) {
+                // TODO
+            }
+        }
+    }
+
+    /**
+     * Creates
+     * @param moodEvent
+     * @param position
+     * @return
+     */
+    private MarkerOptions createMarkerOptions(MoodEvent moodEvent, LatLng position) {
+        return null;
     }
 }
