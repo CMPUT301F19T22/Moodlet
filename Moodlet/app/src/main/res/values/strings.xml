@@ -29,5 +29,10 @@
     <string name="mood">Mood</string>
     <string name="social_situation">Social Situation</string>
     <string name="reason">Reason</string>
-
+    <string name="location_label">Location</string>
+    <string name="location_checkbox">Use current location?</string>
+    <string name="location_hint">Search for a location</string>
+    <string name="location_clear">(Clear)</string>
+    <string name="location_permissions_denied">Location permissions are needed to tag the current location</string>
+    <string name="location_settings_denied">Location settings are needed to tag the current location</string>
 </resources>
