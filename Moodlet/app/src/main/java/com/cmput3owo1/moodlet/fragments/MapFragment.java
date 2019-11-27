@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.cmput3owo1.moodlet.R;
+import com.cmput3owo1.moodlet.adapters.MapMarkerInfoWindowAdapter;
 import com.cmput3owo1.moodlet.models.MoodEvent;
 import com.cmput3owo1.moodlet.models.MoodEventAssociation;
 import com.cmput3owo1.moodlet.services.IMoodEventServiceProvider;
@@ -20,10 +21,10 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.firestore.GeoPoint;
 
@@ -41,8 +42,9 @@ public class MapFragment extends Fragment implements
     private static final String TAG = "Moodlet";
     private static final LatLng EDMONTON = new LatLng(53.5444,-113.4909);
     private static final float MARKER_COLOR = 207.61f; // Hue
-//    private static final float FOLLOWER_MARKER_COLOR =
+    private static final float FOLLOWER_MARKER_COLOR = 164f;
 
+    private LayoutInflater inflater;
 
     private IMoodEventServiceProvider moodEventService;
 
@@ -64,8 +66,12 @@ public class MapFragment extends Fragment implements
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+
+        // Set the layout inflater
+        this.inflater = inflater;
+
         // Obtain the view to inflate
-        View view = inflater.inflate(R.layout.fragment_map, container, false);
+        View view = this.inflater.inflate(R.layout.fragment_map, container, false);
 
         // Get checkbox
         showFollowersCheckbox = view.findViewById(R.id.showFollowers);
@@ -155,7 +161,8 @@ public class MapFragment extends Fragment implements
     @Override
     public void onMapReady(GoogleMap map) {
         this.map = map;
-
+        this.map.getUiSettings().setMapToolbarEnabled(false);
+        this.map.setInfoWindowAdapter(new MapMarkerInfoWindowAdapter(this.inflater));
         // TODO: Set camera to last known/recorded location
         // this.map.setMyLocationEnabled(true);
         // this.map.setOnMyLocationButtonClickListener(mapView.getContext());
@@ -215,12 +222,12 @@ public class MapFragment extends Fragment implements
             GeoPoint location = moodEvent.getLocation();
             if (location != null) {
                 LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                map.addMarker(new MarkerOptions()
+                Marker marker = map.addMarker(new MarkerOptions()
                         .position(latLng)
                         .icon(BitmapDescriptorFactory.defaultMarker(MARKER_COLOR))
                         .alpha(0.8f)
-                        .title(moodEvent.getEmotionalState().getDisplayName())
                 );
+                marker.setTag(moodEvent);
             }
         }
 
