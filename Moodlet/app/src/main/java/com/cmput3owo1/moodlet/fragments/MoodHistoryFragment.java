@@ -43,7 +43,6 @@ public class MoodHistoryFragment extends Fragment
     private ArrayList<MoodEvent> moodEventList;
     private IMoodEventServiceProvider moodEventService;
     private FloatingActionButton addMood;
-    private UserService userService;
 
     /**
      * Called when the fragment is starting.
@@ -79,8 +78,6 @@ public class MoodHistoryFragment extends Fragment
 
         moodEventService = new MoodEventService();
         moodEventService.getMoodHistoryUpdates(this);
-
-        userService = new UserService();
 
         addMood = view.findViewById(R.id.add_mood_fab);
         addMood.setOnClickListener(new View.OnClickListener() {

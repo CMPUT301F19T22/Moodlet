@@ -30,7 +30,6 @@ public class FeedFragment extends Fragment implements IMoodEventServiceProvider.
     private FeedListAdapter feedAdapter;
     private ArrayList<MoodEventAssociation> feedDataList;
     private IMoodEventServiceProvider service;
-    private IUserServiceProvider userService;
 
     /**
      * Called when the fragment is starting.
@@ -62,8 +61,6 @@ public class FeedFragment extends Fragment implements IMoodEventServiceProvider.
 
         feedAdapter = new FeedListAdapter(getContext(), feedDataList);
         feedListView.setAdapter(feedAdapter);
-
-        userService = new UserService();
 
         return rootView;
     }

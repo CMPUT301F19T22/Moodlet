@@ -31,7 +31,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private MapView mapView;
     private GoogleMap map;
-    private UserService userService;
 
     /**
      * Called when the fragment is starting.
@@ -55,8 +54,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                              ViewGroup container, Bundle savedInstanceState) {
         // Obtain the view to inflate
         View view = inflater.inflate(R.layout.fragment_map, container, false);
-
-        userService = new UserService();
 
         // MapView setup
         mapView = view.findViewById(R.id.mapView);

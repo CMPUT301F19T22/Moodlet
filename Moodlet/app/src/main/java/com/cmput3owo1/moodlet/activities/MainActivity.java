@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.cmput3owo1.moodlet.R;
+import com.cmput3owo1.moodlet.services.IUserServiceProvider;
 import com.cmput3owo1.moodlet.services.UserService;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -24,7 +25,7 @@ import androidx.navigation.ui.NavigationUI;
 public class MainActivity extends AppCompatActivity {
 
 
-    private UserService userService;
+    private IUserServiceProvider userService;
     /**
      * Called when the activity is starting. Sets up the navigation.
      * @param savedInstanceState Used to restore an activity's previous state
