@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cmput3owo1.moodlet.R;
@@ -45,7 +46,7 @@ public class FeedListAdapter extends ArrayAdapter<MoodEventAssociation> {
         TextView usernameTextView;
         TextView emotionalStateTextView;
         TextView dateTextView;
-        //ImageView emoticonImageView;
+        ImageView emoticonImageView;
     }
 
     /**
@@ -66,7 +67,7 @@ public class FeedListAdapter extends ArrayAdapter<MoodEventAssociation> {
             holder.usernameTextView = (TextView) convertView.findViewById(R.id.feed_username);
             holder.emotionalStateTextView = (TextView) convertView.findViewById(R.id.feed_mood);
             holder.dateTextView = (TextView) convertView.findViewById(R.id.feed_date);
-            //holder.emoticonImageView = (ImageView) convertView.findViewById(R.id.feed_emoticon);
+            holder.emoticonImageView = (ImageView) convertView.findViewById(R.id.feed_mood_emoji);
             convertView.setTag(holder);
         }
         else {
@@ -82,7 +83,31 @@ public class FeedListAdapter extends ArrayAdapter<MoodEventAssociation> {
         holder.usernameTextView.setText(usernameDisplayText);
         holder.emotionalStateTextView.setText(moodDisplayText);
         holder.dateTextView.setText(dateString);
-        //holder.emoticonImageView.setImageBitmap(moodEvent.getEmotionalState().getEmoticon());
+
+        switch(moodEvent.getEmotionalState()) {
+            case SAD:
+                holder.emoticonImageView.setImageResource(R.drawable.ic_mood_sad);
+                break;
+            case ANGRY:
+                holder.emoticonImageView.setImageResource(R.drawable.ic_mood_angry);
+                break;
+            case CONFUSED:
+                holder.emoticonImageView.setImageResource(R.drawable.ic_mood_confused);
+                break;
+            case EXCITED:
+                holder.emoticonImageView.setImageResource(R.drawable.ic_mood_excited);
+                break;
+            case HAPPY:
+                holder.emoticonImageView.setImageResource(R.drawable.ic_mood_happy);
+                break;
+            case JEALOUS:
+                holder.emoticonImageView.setImageResource(R.drawable.ic_mood_jealous);
+                break;
+            case SCARED:
+                holder.emoticonImageView.setImageResource(R.drawable.ic_mood_scared);
+                break;
+        }
+
 
         return convertView;
     }
