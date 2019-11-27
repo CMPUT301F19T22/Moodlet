@@ -3,6 +3,7 @@ package com.cmput3owo1.moodlet.services;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+
 import com.cmput3owo1.moodlet.models.FollowRequest;
 import com.cmput3owo1.moodlet.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -140,6 +141,12 @@ public class UserService implements IUserServiceProvider{
                    }
                }
             );
+    }
+
+    @Override
+    public void logoutUser(){
+        auth.signOut();
+
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.cmput3owo1.moodlet.services;
 
-import android.widget.ProgressBar;
 import com.cmput3owo1.moodlet.models.User;
 import java.util.ArrayList;
 
@@ -66,6 +65,11 @@ public interface IUserServiceProvider {
      * @param listener     Login listener passed from fragment
      */
     void loginUser(String txt_email, String txt_password, LoginListener listener);
+
+    /**
+     * This is a wrapper function that is called to logout the current signed in user
+     */
+    void logoutUser();
 
     void searchForUsers(String searchText, OnUserSearchListener listener);
 
