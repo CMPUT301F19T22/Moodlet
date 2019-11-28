@@ -93,7 +93,6 @@ public class MoodEventService implements IMoodEventServiceProvider {
         return newMoodEventRef.getId();
     }
 
-
     /**
      * Edit an existing MoodEvent on the database.
      * @param moodEvent The {@link MoodEvent} to edit.
@@ -238,7 +237,12 @@ public class MoodEventService implements IMoodEventServiceProvider {
 
         runMoodHistoryQuery(moodHistoryQuery, listener);
     }
-    
+
+    /**
+     * Run the specified Mood History query and notify the listener on completion
+     * @param moodHistoryQuery The query to run
+     * @param listener The listener to pass the new mood history list to
+     */
     private void runMoodHistoryQuery(Query moodHistoryQuery, final OnMoodHistoryUpdateListener listener) {
         moodHistoryQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -252,6 +256,7 @@ public class MoodEventService implements IMoodEventServiceProvider {
             }
         });
     }
+
     /**
      * Listen to mood history updates of the current user. Calls the listener's onMoodHistoryUpdate
      * method with the new mood history list when a change occurs.
