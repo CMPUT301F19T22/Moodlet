@@ -107,11 +107,11 @@ public class MoodEventService implements IMoodEventServiceProvider {
         final String username = auth.getCurrentUser().getDisplayName();
         newMoodEventRef.update("username", username);
 
+        // See if moodEvent is the most recent - if so, we have to notify followers
         Query moodHistoryQuery = db.collection("moodEvents")
                 .whereEqualTo("username", username)
                 .orderBy("date", Query.Direction.DESCENDING)
                 .limit(1);
-
         moodHistoryQuery.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -156,11 +156,12 @@ public class MoodEventService implements IMoodEventServiceProvider {
     @Override
     public void deleteMoodEvent(final MoodEvent moodEvent, final OnMoodDeleteListener listener) {
         String username = auth.getCurrentUser().getDisplayName();
+
+        // See if moodEvent is the most recent - if so, we have to notify followers
         Query moodHistoryQuery = db.collection("moodEvents")
                 .whereEqualTo("username", username)
                 .orderBy("date", Query.Direction.DESCENDING)
                 .limit(2);
-
         moodHistoryQuery.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot snapshots) {
@@ -182,7 +183,8 @@ public class MoodEventService implements IMoodEventServiceProvider {
                                 public void onSuccess(Void aVoid) {
                                     listener.onMoodDeleteSuccess();
 
-                                    // Most recent event was deleted
+                                    // Most recent event was deleted, we need to update followers
+                                    // with the next most recent event
                                     if (mostRecentEvent.getId().equals(moodEvent.getId())) {
                                         updateFollowersFeed(finalNextMostRecentEvent);
                                     }
