@@ -49,7 +49,6 @@ public class MoodHistoryFragment extends Fragment
     private ArrayList<MoodEvent> moodEventList;
     private IMoodEventServiceProvider moodEventService;
     private FloatingActionButton addMood;
-
     private IUserServiceProvider userService;
     private long timeBackButtonPressed = 0;
 
