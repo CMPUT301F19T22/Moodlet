@@ -33,7 +33,7 @@ public class Utils {
         } else if (diffSeconds >= 1) {
             return String.format(Locale.US, "%d s", (int) diffSeconds);
         } else {
-            return "0 s";
+            return "Just now";
         }
     }
 
