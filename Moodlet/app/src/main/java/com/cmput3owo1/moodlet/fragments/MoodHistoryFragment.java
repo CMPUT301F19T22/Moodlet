@@ -27,6 +27,7 @@ import com.cmput3owo1.moodlet.activities.MoodEditorActivity;
 import com.cmput3owo1.moodlet.adapters.MoodEventAdapter;
 import com.cmput3owo1.moodlet.models.MoodEvent;
 import com.cmput3owo1.moodlet.services.IMoodEventServiceProvider;
+import com.cmput3owo1.moodlet.services.IUserServiceProvider;
 import com.cmput3owo1.moodlet.services.MoodEventService;
 import com.cmput3owo1.moodlet.services.UserService;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -41,13 +42,15 @@ import java.util.Date;
 public class MoodHistoryFragment extends Fragment
         implements MoodEventAdapter.OnItemClickListener, IMoodEventServiceProvider.OnMoodHistoryUpdateListener, IMoodEventServiceProvider.OnMoodDeleteListener{
 
+    private static final long BACK_BUTTON_TIMEOUT = 2000;
+
     private RecyclerView recyclerView;
     private MoodEventAdapter recyclerAdapter;
     private ArrayList<MoodEvent> moodEventList;
     private IMoodEventServiceProvider moodEventService;
     private FloatingActionButton addMood;
 
-    private static final long BACK_BUTTON_TIMEOUT = 2000;
+    private IUserServiceProvider userService;
     private long timeBackButtonPressed = 0;
 
     /**
@@ -58,13 +61,15 @@ public class MoodHistoryFragment extends Fragment
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Initialize the user service
+        userService = new UserService();
+
         // Set custom back navigation
         // Source: https://developer.android.com/guide/navigation/navigation-custom-back
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
                 if ((new Date()).getTime() - timeBackButtonPressed < BACK_BUTTON_TIMEOUT) {
-                    UserService userService = new UserService();
                     userService.logoutUser();
                     Intent intent = new Intent(getContext(), LoginActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
