@@ -33,8 +33,8 @@ import java.util.ArrayList;
 import java.util.Date;
 
 /**
- * A fragment that hold the list of user's mood events while displaying the emotion, date,
- * and time sorted in reverse chronological order of each mood event.
+ * A fragment that hold the list of user's {@link MoodEvent} objects while displaying the emotion,
+ * date, and time sorted in reverse chronological order of each mood event.
  */
 public class MoodHistoryFragment extends Fragment
         implements MoodEventAdapter.OnItemClickListener, IMoodEventServiceProvider.OnMoodHistoryUpdateListener, IMoodEventServiceProvider.OnMoodDeleteListener{

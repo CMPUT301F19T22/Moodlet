@@ -17,15 +17,30 @@ import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 
+/**
+ * This class is the adapter class to a ListView containing {@link User} objects.
+ * The purpose is to connect the User data with the ListView and to create the
+ * {@link ViewHolder} objects that will display the data. It converts a user
+ * object at a position to the view in the list.
+ */
 public class UserListAdapter extends ArrayAdapter<User> {
     private ArrayList<User> userList;
     private Context context;
     private OnFollowClickListener listener;
 
+    /**
+     * Listener interface called when the follow button by the user is selected.
+     */
     public interface OnFollowClickListener {
         void onFollowClick(User user);
     }
 
+    /**
+     * Constructor that takes the context and the ArrayList of {@link User} objects
+     * @param context The app context
+     * @param userList The list of User objects to display
+     * @param listener The listener to notify on follow button click
+     */
     public UserListAdapter(Context context, ArrayList<User> userList, OnFollowClickListener listener) {
         super(context, 0, userList);
         this.userList = userList;
@@ -33,11 +48,21 @@ public class UserListAdapter extends ArrayAdapter<User> {
         this.listener = listener;
     }
 
+    /**
+     * ViewHolder class that holds the views inside of a user in the list
+     */
     static class ViewHolder {
         TextView usernameTextView;
         MaterialButton requestButton;
     }
 
+    /**
+     * Get a view that displays the data at the specified position in the data set
+     * @param position The position of the item within the adapter's data set
+     * @param convertView The old view to reuse, if possible
+     * @param parent The parent that this view will eventually be attached to
+     * @return The view that displays the data
+     */
     @Override
     @NonNull
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
