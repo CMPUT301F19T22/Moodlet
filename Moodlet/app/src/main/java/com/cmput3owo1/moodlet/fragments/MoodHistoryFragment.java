@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -21,14 +22,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cmput3owo1.moodlet.R;
+import com.cmput3owo1.moodlet.activities.LoginActivity;
 import com.cmput3owo1.moodlet.activities.MoodEditorActivity;
 import com.cmput3owo1.moodlet.adapters.MoodEventAdapter;
 import com.cmput3owo1.moodlet.models.MoodEvent;
 import com.cmput3owo1.moodlet.services.IMoodEventServiceProvider;
 import com.cmput3owo1.moodlet.services.MoodEventService;
+import com.cmput3owo1.moodlet.services.UserService;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * A fragment that hold the list of user's mood events while displaying the emotion, date,
@@ -43,6 +47,9 @@ public class MoodHistoryFragment extends Fragment
     private IMoodEventServiceProvider moodEventService;
     private FloatingActionButton addMood;
 
+    private static final long BACK_BUTTON_TIMEOUT = 2000;
+    private long timeBackButtonPressed = 0;
+
     /**
      * Called when the fragment is starting.
      * @param savedInstanceState Used to restore a fragment's previous state
@@ -50,6 +57,27 @@ public class MoodHistoryFragment extends Fragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Set custom back navigation
+        // Source: https://developer.android.com/guide/navigation/navigation-custom-back
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if ((new Date()).getTime() - timeBackButtonPressed < BACK_BUTTON_TIMEOUT) {
+                    UserService userService = new UserService();
+                    userService.logoutUser();
+                    Intent intent = new Intent(getContext(), LoginActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    getActivity().finish();
+                } else {
+                    timeBackButtonPressed = (new Date()).getTime();
+                    Toast.makeText(getContext(), "Press back again to logout!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
+
         setHasOptionsMenu(true);
     }
 
