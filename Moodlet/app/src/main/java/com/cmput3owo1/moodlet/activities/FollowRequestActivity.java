@@ -5,15 +5,27 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.cmput3owo1.moodlet.R;
+import com.cmput3owo1.moodlet.adapters.RequestListAdapter;
 import com.cmput3owo1.moodlet.models.FollowRequest;
+import com.cmput3owo1.moodlet.models.User;
+import com.cmput3owo1.moodlet.services.IUserServiceProvider;
+import com.cmput3owo1.moodlet.services.UserService;
 import com.google.firebase.firestore.Query;
 
-public class FollowRequestActivity extends AppCompatActivity {
+import java.util.ArrayList;
+
+public class FollowRequestActivity extends AppCompatActivity implements IUserServiceProvider.OnAcceptRequestsListener {
 
     Toolbar toolbar;
+    private ListView requestsListView;
+    private RequestListAdapter requestsAdapter;
+    private ArrayList<FollowRequest> requestDataList;
+    private IUserServiceProvider service;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +47,20 @@ public class FollowRequestActivity extends AppCompatActivity {
 
             }
         });
+
+        service = new UserService();
+
+        requestsListView = findViewById(R.id.requests_list_view);
+        requestDataList = new ArrayList<>();
+        requestsAdapter = new RequestListAdapter(this, requestDataList); // not sure how the listener works
+
+        requestsListView.setAdapter(requestsAdapter);
+        
+
     }
 
+    @Override
+    public void onAcceptRequestsUpdate(ArrayList<FollowRequest> newRequests) {
+
+    }
 }
