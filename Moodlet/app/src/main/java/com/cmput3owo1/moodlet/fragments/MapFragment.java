@@ -185,6 +185,14 @@ public class MapFragment extends Fragment implements
         // Set the update callbacks
         moodEventService.getMoodHistoryUpdates(this);
         moodEventService.getFeedUpdates(this);
+
+        // Set a click listener for the checkbox
+        showFollowersCheckbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateMap(showFollowersCheckbox.isChecked());
+            }
+        });
     }
 
     /**
@@ -233,9 +241,17 @@ public class MapFragment extends Fragment implements
 
         // Add markers for follower(s)' mood events
         if (showFollowers) {
-            // TODO: clear
             for (MoodEventAssociation moodEventAssociation : followerMoodEvents) {
-                // TODO
+                GeoPoint location = moodEventAssociation.getMoodEvent().getLocation();
+                if (location != null) {
+                    LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                    Marker marker = map.addMarker(new MarkerOptions()
+                            .position(latLng)
+                            .icon(BitmapDescriptorFactory.defaultMarker(FOLLOWER_MARKER_COLOR))
+                            .alpha(0.8f)
+                    );
+                    marker.setTag(moodEventAssociation);
+                }
             }
         }
     }

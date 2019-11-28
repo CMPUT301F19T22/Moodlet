@@ -1,6 +1,5 @@
 package com.cmput3owo1.moodlet.adapters;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,6 +14,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class MapMarkerInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
@@ -58,17 +59,18 @@ public class MapMarkerInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
         Object tagObject = marker.getTag();
 
         if (tagObject != null) {
-            Log.e("MOODLET", tagObject.getClass().toString());
             if (tagObject.getClass().equals(MoodEvent.class)) {
-                Log.e("MOODLET", "My Mood Event");
                 MoodEvent moodEvent = (MoodEvent) tagObject;
                 setInfo(moodEvent, false);
 
             } else if (tagObject.getClass().equals(MoodEventAssociation.class)) {
-                Log.e("MOODLET", "Follower Mood Event");
                 MoodEventAssociation moodEventAssociation = (MoodEventAssociation) tagObject;
                 MoodEvent moodEvent = moodEventAssociation.getMoodEvent();
-                usernameInfo.setText(String.format("@%s - ", moodEventAssociation.getUsername()));
+                if (moodEventAssociation.getMoodEvent().getLocationDescription() == null) {
+                    usernameInfo.setText(String.format("@%s", moodEventAssociation.getUsername()));
+                } else {
+                    usernameInfo.setText(String.format("@%s - ", moodEventAssociation.getUsername()));
+                }
                 setInfo(moodEvent, true);
             }
             return infoWindow;
@@ -102,10 +104,42 @@ public class MapMarkerInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
             infoWindowTitle.setVisibility(View.GONE);
         }
         emotionInfo.setText(moodEvent.getEmotionalState().getDisplayName());
-        dateInfo.setText(sdf.format(moodEvent.getDate()));
-        timeInfo.setText("? h");
+        Date date = moodEvent.getDate();
+        dateInfo.setText(sdf.format(date));
+        timeInfo.setText(getTimeDifference(date));
         setEmoticon(moodEvent.getEmotionalState());
         infoWindowBar.setColorFilter(moodEvent.getEmotionalState().getColor());
+    }
+
+    /**
+     * Helper function to obtain the time difference between the current date to the specified date
+     * @param date The date to compare with.
+     * @return A formatted string for the time difference
+     */
+    private String getTimeDifference(Date date) {
+        // Get the date difference in milliseconds
+        long dateDiff = (new Date()).getTime() - date.getTime();
+
+        // Separate into different time units
+        long diffSeconds = dateDiff / 1000;
+        long diffMinutes = diffSeconds / 60;
+        long diffHours = diffMinutes / 60;
+        long diffDays = diffHours / 24;
+        long diffYears = diffDays / 365;
+
+        if (diffYears >= 1) {
+            return String.format(Locale.US, "%d y", (int) diffYears);
+        } else if (diffDays >= 1) {
+            return String.format(Locale.US, "%d d", (int) diffDays);
+        } else if (diffHours >= 1) {
+            return String.format(Locale.US, "%d h", (int) diffHours);
+        } else if (diffMinutes >= 1) {
+            return String.format(Locale.US, "%d m", (int) diffMinutes);
+        } else if (diffSeconds >= 1) {
+            return String.format(Locale.US, "%d s", (int) diffSeconds);
+        } else {
+            return "0 s";
+        }
     }
 
     /**
