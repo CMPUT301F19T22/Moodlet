@@ -323,7 +323,6 @@ public class AddMoodFragment extends Fragment implements
                 } else if (placesLocation != null) {
                     mood.setLocation(placesLocation);
                     mood.setLocationDescription(placesLocationDescription);
-                    // TODO: Set the place's description?
                 }
 
                 String[] words = reasonEdit.getText().toString().split(" ");

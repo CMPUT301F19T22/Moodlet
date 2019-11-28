@@ -33,6 +33,10 @@ public class MapMarkerInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
     private ImageView emoticonInfo;
     private ImageView infoWindowBar;
 
+    /**
+     * Constructor for the MapMarkerInfoWindowAdapter
+     * @param inflater The LayoutInflater object that can be used to inflate any views in the parent fragment.
+     */
     public MapMarkerInfoWindowAdapter(LayoutInflater inflater) {
         this.inflater = inflater;
     }

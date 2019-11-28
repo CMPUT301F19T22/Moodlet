@@ -180,13 +180,12 @@ public class MapFragment extends Fragment implements
 
         // TODO: change this to the last known location
         this.map.moveCamera(CameraUpdateFactory.newLatLngZoom(EDMONTON, 12));
-//        updateMap(showFollowersCheckbox.isChecked());
 
         // Set the update callbacks
         moodEventService.getMoodHistoryUpdates(this);
         moodEventService.getFeedUpdates(this);
 
-        // Set a click listener for the checkbox
+        // Set a click listener for the checkbox to show followers' mood events
         showFollowersCheckbox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -254,15 +253,5 @@ public class MapFragment extends Fragment implements
                 }
             }
         }
-    }
-
-    /**
-     * Creates
-     * @param moodEvent
-     * @param position
-     * @return
-     */
-    private MarkerOptions createMarkerOptions(MoodEvent moodEvent, LatLng position) {
-        return null;
     }
 }
