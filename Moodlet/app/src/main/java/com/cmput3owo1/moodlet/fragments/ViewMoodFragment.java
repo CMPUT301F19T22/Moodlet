@@ -1,24 +1,24 @@
 package com.cmput3owo1.moodlet.fragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.cmput3owo1.moodlet.R;
 import com.cmput3owo1.moodlet.models.MoodEvent;
+import com.squareup.picasso.Picasso;
 
-import java.io.Serializable;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -29,15 +29,15 @@ import java.util.Date;
 public class ViewMoodFragment extends Fragment {
 
     private boolean editMode;
-
     private ImageView bg;
     private TextView moodDisplay;
     private TextView socialDisplay;
     private TextView date;
     private TextView reasonDisplay;
-    private ImageView imageUpload;
+    private ImageView imageDisplay;
     private Button toggleEdit;
-
+    private MoodEvent moodObj;
+    private Date argDate;
     /**
      * Default constructor for the Fragment
      */
@@ -55,44 +55,74 @@ public class ViewMoodFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_view_mood, container, false);
+        setHasOptionsMenu(true);
 
+        //Setup date pattern and SimpleDateFormat.
         date = view.findViewById(R.id.date);
-        bg = view.findViewById(R.id.bg_vector);
         String pattern = "MMMM d, yyyy \nh:mm a";
-        imageUpload = view.findViewById(R.id.imageToUpload);
         SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+
+        //Setup view references
+        imageDisplay = view.findViewById(R.id.imageDisplay);
         moodDisplay = view.findViewById(R.id.moodDisplay);
         socialDisplay = view.findViewById(R.id.socialDisplay);
         reasonDisplay = view.findViewById(R.id.reasonDisplay);
-        toggleEdit = view.findViewById(R.id.toggle_edit);
+        bg = view.findViewById(R.id.bg_vector);
 
+        //Get parameters from Mood
         Bundle args = getArguments();
-        final MoodEvent moodObj = (MoodEvent) args.getSerializable("MoodEvent");
-        final Date argDate = (Date) args.getSerializable("date");
+        moodObj = (MoodEvent) args.getSerializable("MoodEvent");
+        argDate = (Date) args.getSerializable("date");
 
+        //Set text after obtaining data
         moodDisplay.setText(moodObj.getEmotionalState().getDisplayName());
         socialDisplay.setText(moodObj.getSocialSituation().getDisplayName());
         reasonDisplay.setText(moodObj.getReasoning());
         date.setText(sdf.format(argDate));
         bg.setColorFilter(moodObj.getEmotionalState().getColor());
 
-        toggleEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        if(moodObj.getPhotographPath() != null){
+            Picasso.get().load(moodObj.getPhotographPath()).into(imageDisplay);
 
+        }
+
+        return view;
+    }
+
+    /** Initialize the contents of the fragment's options menu.
+     * @param menu The options menu in which you place your items.
+     */
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.mood_view_fragment_menu, menu);
+        getActivity().setTitle("View Mood");
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    /**
+     * A hook that is called whenever an item in the options menu is selected.
+     * This method changes the fragment to allow for the user to edit the selected mood
+     * when the option is clicked.
+     * @param item The menu item that was selected
+     * @return boolean indicating state of whether option item was selected
+     */
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch(item.getItemId()){
+            case R.id.editToggle:
                 AddMoodFragment fragment = new AddMoodFragment ();
                 Bundle args = new Bundle();
                 args.putSerializable("MoodEvent",moodObj);
                 args.putSerializable("date",argDate);
                 args.putBoolean("edit",true);
                 fragment.setArguments(args);
-
                 FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.fragment_container, fragment);
                 fragmentTransaction.commit();
-            }
-        });
-        return view;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 }

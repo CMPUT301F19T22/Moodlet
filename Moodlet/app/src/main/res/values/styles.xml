@@ -1,21 +1,24 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="actionBarStyle">@style/ActionBarTheme</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:fontFamily">@font/bahnschrift</item>
     </style>
 
-    <style name="ActionBarTheme" parent="@style/Widget.AppCompat.Light.ActionBar.Solid" >
-        <item name="titleTextStyle">@style/MyActionBarTitle</item>
-        <item name="background">@color/appBarBackground</item>
+    <style name="ActionBarTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar" >
+        <item name="android:background">@color/appBarBackground</item>
+        <item name="android:actionButtonStyle">@style/NavigationButtonStyle</item>
+        <item name="android:textColorPrimary">@color/appBarTitle</item>
+        <item name="toolbarNavigationButtonStyle">@style/NavigationButtonStyle</item>
     </style>
 
-    <style name="MyActionBarTitle" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
-        <item name="android:textColor">@color/appBarTitle</item>
+    <style name="NavigationButtonStyle" parent="@style/Widget.AppCompat.ActionButton">
+        <item name="android:tint">@color/appBarTitle</item>
     </style>
 
 </resources>

@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cmput3owo1.moodlet.R;
@@ -14,6 +15,8 @@ import com.cmput3owo1.moodlet.models.MoodEventAssociation;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
+
+import static com.cmput3owo1.moodlet.utils.Utils.getTimeDifference;
 
 /**
  * This class is the adapter class to a ListView containing {@link MoodEventAssociation} objects.
@@ -45,7 +48,8 @@ public class FeedListAdapter extends ArrayAdapter<MoodEventAssociation> {
         TextView usernameTextView;
         TextView emotionalStateTextView;
         TextView dateTextView;
-        //ImageView emoticonImageView;
+        TextView timeDifferenceTextView;
+        ImageView emoticonImageView;
     }
 
     /**
@@ -66,7 +70,8 @@ public class FeedListAdapter extends ArrayAdapter<MoodEventAssociation> {
             holder.usernameTextView = (TextView) convertView.findViewById(R.id.feed_username);
             holder.emotionalStateTextView = (TextView) convertView.findViewById(R.id.feed_mood);
             holder.dateTextView = (TextView) convertView.findViewById(R.id.feed_date);
-            //holder.emoticonImageView = (ImageView) convertView.findViewById(R.id.feed_emoticon);
+            holder.timeDifferenceTextView = (TextView) convertView.findViewById(R.id.time_difference);
+            holder.emoticonImageView = (ImageView) convertView.findViewById(R.id.feed_mood_emoji);
             convertView.setTag(holder);
         }
         else {
@@ -76,10 +81,38 @@ public class FeedListAdapter extends ArrayAdapter<MoodEventAssociation> {
         MoodEventAssociation moodEventAssociation = getItem(position);
         MoodEvent moodEvent = moodEventAssociation.getMoodEvent();
         String dateString = simpleDateFormat.format(moodEvent.getDate());
-        holder.usernameTextView.setText(moodEventAssociation.getUsername());
-        holder.emotionalStateTextView.setText(moodEvent.getEmotionalState().name());
+        String moodDisplayText =  moodEvent.getEmotionalState().getDisplayName();
+        String usernameDisplayText = "@" + moodEventAssociation.getUsername();
+
+        holder.usernameTextView.setText(usernameDisplayText);
+        holder.emotionalStateTextView.setText(moodDisplayText);
         holder.dateTextView.setText(dateString);
-        //holder.emoticonImageView.setImageBitmap(moodEvent.getEmotionalState().getEmoticon());
+        holder.timeDifferenceTextView.setText(getTimeDifference(moodEvent.getDate()));
+
+        switch(moodEvent.getEmotionalState()) {
+            case SAD:
+                holder.emoticonImageView.setImageResource(R.drawable.ic_mood_sad);
+                break;
+            case ANGRY:
+                holder.emoticonImageView.setImageResource(R.drawable.ic_mood_angry);
+                break;
+            case CONFUSED:
+                holder.emoticonImageView.setImageResource(R.drawable.ic_mood_confused);
+                break;
+            case EXCITED:
+                holder.emoticonImageView.setImageResource(R.drawable.ic_mood_excited);
+                break;
+            case HAPPY:
+                holder.emoticonImageView.setImageResource(R.drawable.ic_mood_happy);
+                break;
+            case JEALOUS:
+                holder.emoticonImageView.setImageResource(R.drawable.ic_mood_jealous);
+                break;
+            case SCARED:
+                holder.emoticonImageView.setImageResource(R.drawable.ic_mood_scared);
+                break;
+        }
+
 
         return convertView;
     }

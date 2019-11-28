@@ -1,9 +1,17 @@
 package com.cmput3owo1.moodlet.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 
 import com.cmput3owo1.moodlet.R;
 import com.cmput3owo1.moodlet.fragments.AddMoodFragment;
@@ -14,6 +22,10 @@ import com.cmput3owo1.moodlet.fragments.ViewMoodFragment;
  */
 public class MoodEditorActivity extends AppCompatActivity {
 
+    private AddMoodFragment addMoodFragment;
+    private ViewMoodFragment viewMoodFragment;
+    private Toolbar toolbar;
+
     /**
      * Called when the activity is started and sets up the corresponding fragment to display.
      * @param savedInstanceState Used to restore an activity's previous state
@@ -23,9 +35,17 @@ public class MoodEditorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
 
-        if(getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
+        toolbar = findViewById(R.id.add_toolbar);
+        setSupportActionBar(toolbar);
+
+        // Manually replace navigation icon with custom icon.
+        toolbar.setNavigationIcon(R.drawable.ic_keyboard_arrow_left_24px);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         // Check that the activity is using the layout version with
         // the fragment_container FrameLayout
@@ -41,19 +61,37 @@ public class MoodEditorActivity extends AppCompatActivity {
             // Create a new Fragment to be placed in the activity layout
             Intent intent = getIntent();
             if(intent.hasExtra("add")){
-                AddMoodFragment addMoodFragment = new AddMoodFragment();
-
+                addMoodFragment = new AddMoodFragment();
+                Bundle args = new Bundle();
+                args.putBoolean("add",true);
+                addMoodFragment.setArguments(args);
                 getSupportFragmentManager().beginTransaction()
                         .add(R.id.fragment_container, addMoodFragment).commit();
             }
             else if(intent.hasExtra("view")){
-                ViewMoodFragment viewMoodFragment = new ViewMoodFragment();
+                viewMoodFragment = new ViewMoodFragment();
                 viewMoodFragment.setArguments(getIntent().getExtras());
 
                 getSupportFragmentManager().beginTransaction()
                         .add(R.id.fragment_container, viewMoodFragment).commit();
             }
 
+        }
+    }
+
+    /**
+     * This function is used to forward the onActivityResult call to the AddMoodFragment when
+     * requesting location settings so that the results can be handled in the fragment.
+     * @param requestCode The request code initially supplied to identify where the result is obtained from
+     * @param resultCode The result code from the calling activity
+     * @param data The intent to return if additional data exists
+     */
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == AddMoodFragment.REQUEST_CHECK_SETTINGS) {
+            addMoodFragment.onActivityResult(requestCode, resultCode, data);
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
         }
     }
 

@@ -1,5 +1,7 @@
 package com.cmput3owo1.moodlet.models;
 
+import com.google.firebase.firestore.Exclude;
+
 /**
  * Class to represent an app user. Contains just the basic info about the user: username, fullName,
  * and email.
@@ -8,6 +10,8 @@ public class User {
     private String username;
     private String fullName;
     private String email;
+    private boolean requested = false;
+    private boolean following = false;
 
     /**
      * Public constructor with no arguments
@@ -22,6 +26,12 @@ public class User {
      */
     public User(String username) {
         this.username = username;
+    }
+
+    public User(String username, String fullName, String email) {
+        this.username = username;
+        this.fullName = fullName;
+        this.email = email;
     }
 
     /**
@@ -70,5 +80,35 @@ public class User {
      */
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Exclude
+    public boolean isRequested() {
+        return requested;
+    }
+
+    public void setRequested(boolean requested) {
+        this.requested = requested;
+    }
+
+    @Exclude
+    public boolean isFollowing() {
+        return following;
+    }
+
+    public void setFollowing(boolean following) {
+        this.following = following;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        } else if(obj == null || obj.getClass()!= this.getClass()) {
+            return false;
+        }
+
+        User user = (User) obj;
+        return this.username.equals(user.getUsername());
     }
 }

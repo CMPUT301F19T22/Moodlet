@@ -31,6 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:singleLine="true"
             android:hint="@string/email" />
 
         <EditText
@@ -39,17 +40,35 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:singleLine="true"
             android:hint="@string/password" />
 
-
-        <Button
-            android:id="@+id/btn_login"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/background_btn"
-            android:text="@string/login"
-            android:textColor="#FFF" />
+            android:layout_height="wrap_content">
+
+                <com.google.android.material.button.MaterialButton
+                    style="@style/Widget.AppCompat.Button"
+                    android:id="@+id/btn_login"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/login"
+                    android:textColor="#FFF"
+                    app:cornerRadius="10dp"
+                    app:backgroundTint="@color/colorAccent"/>
+
+            <ProgressBar
+                android:id="@+id/login_progress_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:clickable="false"
+                android:background="@color/transparent"
+                android:visibility="invisible"
+                android:indeterminate="true" />
+        </FrameLayout>
+
 
     </LinearLayout>
 

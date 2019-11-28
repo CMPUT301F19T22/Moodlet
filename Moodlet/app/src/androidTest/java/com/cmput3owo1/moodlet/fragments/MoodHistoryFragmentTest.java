@@ -2,12 +2,8 @@ package com.cmput3owo1.moodlet.fragments;
 
 
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewParent;
 
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.test.espresso.DataInteraction;
-import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.matcher.BoundedMatcher;
 import androidx.test.filters.LargeTest;
@@ -16,12 +12,10 @@ import androidx.test.runner.AndroidJUnit4;
 
 import com.cmput3owo1.moodlet.R;
 import com.cmput3owo1.moodlet.activities.LoginActivity;
-import com.cmput3owo1.moodlet.activities.MainActivity;
 import com.cmput3owo1.moodlet.models.EmotionalState;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,11 +30,7 @@ import static androidx.test.espresso.action.ViewActions.swipeLeft;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.isSelected;
-import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.instanceOf;
@@ -120,7 +110,6 @@ public class MoodHistoryFragmentTest {
 
         // Navigate to the History Fragment
         onView(withId(R.id.navigation_mood_history)).perform(click());
-
 
         onView(withId(R.id.mood_event_rv)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
 

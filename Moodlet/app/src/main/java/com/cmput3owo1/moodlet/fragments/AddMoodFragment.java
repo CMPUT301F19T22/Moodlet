@@ -1,25 +1,38 @@
 package com.cmput3owo1.moodlet.fragments;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.IntentSender;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.cmput3owo1.moodlet.R;
 import com.cmput3owo1.moodlet.models.EmotionalState;
@@ -27,25 +40,48 @@ import com.cmput3owo1.moodlet.models.MoodEvent;
 import com.cmput3owo1.moodlet.models.SocialSituation;
 import com.cmput3owo1.moodlet.services.IMoodEventServiceProvider;
 import com.cmput3owo1.moodlet.services.MoodEventService;
+import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+import com.google.firebase.firestore.GeoPoint;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 /**
  * A fragment that has editable fields that allow for a user to fill in and add a MoodEvent to
  * a database or edit an existing MoodEvent in a database.
  */
-public class AddMoodFragment extends Fragment
-        implements IMoodEventServiceProvider.OnImageUploadListener, IMoodEventServiceProvider.OnMoodUpdateListener {
+public class AddMoodFragment extends Fragment implements
+        IMoodEventServiceProvider.OnImageUploadListener,
+        IMoodEventServiceProvider.OnMoodUpdateListener {
 
     private boolean editMode;
     private Spinner moodSpinner;
     private Spinner socialSpinner;
     private ImageView bg;
     private TextView date;
+    private TextView clearLocation;
     private String dateText;
     private EditText reasonEdit;
+    private EditText locationEdit;
+    private CheckBox currentLocationCheckbox;
     private ArrayAdapter<EmotionalState> moodAdapter;
     private ArrayAdapter<SocialSituation> socialAdapter;
 
@@ -55,6 +91,7 @@ public class AddMoodFragment extends Fragment
     //Add
     private String moodDisplayName;
     private String socialDisplayName;
+    private String[] words;
     private MoodEvent mood;
     private IMoodEventServiceProvider mes;
 
@@ -66,6 +103,17 @@ public class AddMoodFragment extends Fragment
 
     private Button addMood;
     private Button confirmEdit;
+
+    //Location
+    private FusedLocationProviderClient fusedLocationProviderClient;
+    private LocationCallback locationCallback;
+    private Location currentLocation;
+    private GeoPoint placesLocation;
+    private String placesLocationDescription;
+    private static final String[] PERMISSIONS = { Manifest.permission.ACCESS_FINE_LOCATION };
+    private static final int LOCATION_REQUEST_CODE = 1;
+    public static final int REQUEST_CHECK_SETTINGS = 2; // Keep public to access in parent activity
+    private static final int PLACES_REQUEST_CODE = 3;
 
     public AddMoodFragment(){
     }
@@ -79,28 +127,29 @@ public class AddMoodFragment extends Fragment
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.fragment_add_mood,container,false);
+        setHasOptionsMenu(true);
 
-        date = view.findViewById(R.id.date);
-        bg = view.findViewById(R.id.bg_vector);
+        mes = new MoodEventService();
+
+        //Generate current date/time
         String pattern = "MMMM d, yyyy \nh:mm a";
         SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+        date = view.findViewById(R.id.date);
         dateText = sdf.format(new Date());
         date.setText(dateText);
 
+        //Setup view references
         moodSpinner = view.findViewById(R.id.moodSelected);
         socialSpinner= view.findViewById(R.id.socialSelected);
         reasonEdit = view.findViewById(R.id.reasonEdit);
+        locationEdit = view.findViewById(R.id.locationEdit);
+        clearLocation = view.findViewById(R.id.locationClear);
+        currentLocationCheckbox = view.findViewById(R.id.currentLocationCheckbox);
         imageUpload = view.findViewById(R.id.imageToUpload);
-        mes = new MoodEventService();
-        //set time when press fab, fix
-        mood = new MoodEvent();
+        bg = view.findViewById(R.id.bg_vector);
 
-        //Temporary debug buttons
-        addMood = view.findViewById(R.id.add_mood);
-        confirmEdit = view.findViewById(R.id.confirm_edit);
-
+        //Set up spinners
         moodAdapter = new ArrayAdapter<EmotionalState>(getActivity(), R.layout.mood_spinner_style, EmotionalState.values());
         moodAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         moodSpinner.setAdapter(moodAdapter);
@@ -108,50 +157,93 @@ public class AddMoodFragment extends Fragment
         socialAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         socialSpinner.setAdapter(socialAdapter);
 
-
-        //fix logic up later
-        try {
-            Bundle args = getArguments();
-            if(!args.isEmpty()){
+        //Fills in fields if editMode is active
+        Bundle args = getArguments();
+        if(args!=null){
+            if(args.getBoolean("edit") == true) {
                 editMode = true;
                 mood = (MoodEvent) args.getSerializable("MoodEvent");
                 final Date argDate = (Date) args.getSerializable("date");
+                //Fill in fields
                 moodSpinner.setSelection(moodAdapter.getPosition(mood.getEmotionalState()));
                 socialSpinner.setSelection(socialAdapter.getPosition(mood.getSocialSituation()));
                 reasonEdit.setText(mood.getReasoning());
                 date.setText(sdf.format(argDate));
                 mood.setDate(argDate);
-
                 bg.setColorFilter(mood.getEmotionalState().getColor());
-
-                //REMOVE LATER, debugging Proof of Concept
-                if(args.getBoolean("edit")){
-                    addMood.setVisibility(View.INVISIBLE);
-                    confirmEdit.setVisibility(View.VISIBLE);
-
-                    confirmEdit.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            if(reasonEdit.getText().toString() != null){
-                                mood.setReasoning(reasonEdit.getText().toString());
-                            }
-
-                            if(selectedImage != null) {
-                                progressDialog = new ProgressDialog(getActivity());
-                                progressDialog.setTitle("Uploading...");
-                                progressDialog.show();
-                                mes.uploadImage(AddMoodFragment.this, selectedImage);
-                            }else{
-                                mes.editMoodEvent(mood,AddMoodFragment.this);
-                            }
-                        }
-                    });
-
-                }
             }
         }
-        catch(Exception e){
+
+
+        // Set a click listener for the textview to clear the selected place
+        clearLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                placesLocation = null;
+                placesLocationDescription = null;
+                locationEdit.setText("");
+            }
+        });
+
+        // Initialize the SDK
+        if (!Places.isInitialized()) {
+            Places.initialize(getContext(), getResources().getString(R.string.GOOGLE_API_KEY));
         }
+
+        // Set click/focus change listeners to launch the places autocomplete widget
+        locationEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchAutocomplete();
+            }
+        });
+
+        locationEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    launchAutocomplete();
+                }
+            }
+        });
+
+        // Initialize the fused location provider
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
+
+        // Set the location callback
+        locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                if (locationResult == null) {
+                    return;
+                }
+                for (Location location : locationResult.getLocations()) {
+                    currentLocation = location;
+                }
+                // Stop receiving location requests (only need current location)
+                fusedLocationProviderClient.removeLocationUpdates(locationCallback);
+            };
+        };
+
+        // Set a click listener to check if user wishes to use current location
+        currentLocationCheckbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentLocationCheckbox.isChecked()) {
+                    locationEdit.setEnabled(false);;
+                    // Request location permissions if they are not yet granted
+                    if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
+                            != PackageManager.PERMISSION_GRANTED) {
+                        requestPermissions(PERMISSIONS, LOCATION_REQUEST_CODE);
+                    } else {
+                        // Check if location settings are enabled
+                        checkLocationSettings();
+                    }
+                } else {
+                    locationEdit.setEnabled(true);
+                }
+            }
+        });
 
         imageUpload.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -166,7 +258,6 @@ public class AddMoodFragment extends Fragment
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 selectedMood = EmotionalState.values()[i];
-                mood.setEmotionalState(selectedMood);
                 moodDisplayName = selectedMood.getDisplayName();
                 int color = selectedMood.getColor();
                 bg.setColorFilter(color);
@@ -181,7 +272,6 @@ public class AddMoodFragment extends Fragment
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 selectedSocial = SocialSituation.values()[i];
-                mood.setSocialSituation(selectedSocial);
                 socialDisplayName = selectedSocial.getDisplayName();
             }
 
@@ -190,29 +280,51 @@ public class AddMoodFragment extends Fragment
             }
         });
 
-        addMood.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(reasonEdit.getText().toString() != null){
-                    mood.setReasoning(reasonEdit.getText().toString());
-                }
-
-                if(selectedImage != null) {
-                    progressDialog = new ProgressDialog(getActivity());
-                    progressDialog.setTitle("Uploading...");
-                    progressDialog.show();
-                    mes.uploadImage(AddMoodFragment.this, selectedImage);
-                }else{
-                    mes.addMoodEvent(mood,AddMoodFragment.this);
-                }
-
-            }
-        });
-
         return view;
     }
 
+    /** Initialize the contents of the fragment's options menu.
+     * @param menu The options menu in which you place your items.
+     */
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        if(editMode){
+            inflater.inflate(R.menu.mood_edit_fragment_menu, menu);
+            getActivity().setTitle("Edit Mood");
+        }else{
+            inflater.inflate(R.menu.mood_add_fragment_menu, menu);
+            getActivity().setTitle("Add Mood");
+        }
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
     /**
+     * Callback for the result from requesting permissions. This function verifies that the user
+     * has accepted the location permissions and prompts the user to turn on Google location
+     * services if not already on.
+     * @param requestCode The permission request code passed in the requestPermissions function
+     * @param permissions The requested permissions
+     * @param grantResults The grant results for corresponding permissions
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == LOCATION_REQUEST_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Check if location settings are enabled
+                checkLocationSettings();
+            } else {
+                // Deselect checkbox and re-enable location edit text
+                currentLocationCheckbox.setChecked(false);
+                locationEdit.setEnabled(true);
+                Toast.makeText(getContext(), getResources().getString(R.string.location_permissions_denied), Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    /**
+     * Callback for handling the result of the location settings response.
+     * Otherwise...
      * Callback for when an image is imported into the Fragment. This function verifies if data is returned
      * from the call and updates the user's currently selected image, and displays the imported
      * image.
@@ -223,15 +335,43 @@ public class AddMoodFragment extends Fragment
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(data != null) {
-            selectedImage = data.getData();
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getApplicationContext().getContentResolver(), selectedImage);
-                imageUpload.setImageBitmap(bitmap);
+
+        // Check location settings result
+        if (requestCode == REQUEST_CHECK_SETTINGS) {
+            switch (resultCode) {
+                case Activity.RESULT_OK:
+                    // User has enabled location settings
+                    getCurrentLocation();
+                    return;
+                case Activity.RESULT_CANCELED:
+                    // Deselect checkbox and re-enable location edit text
+                    currentLocationCheckbox.setChecked(false);
+                    locationEdit.setEnabled(true);
+                    Toast.makeText(getContext(), getResources().getString(R.string.location_settings_denied), Toast.LENGTH_SHORT).show();
+                    return;
+                default:
+                    // Ignore
             }
-            catch (IOException e)
-            {
-                e.printStackTrace();
+        } else if (requestCode == PLACES_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK && data != null) {
+                Place place = Autocomplete.getPlaceFromIntent(data);
+                LatLng latLng = place.getLatLng();
+                placesLocation = new GeoPoint(latLng.latitude, latLng.longitude);
+                placesLocationDescription = place.getName();
+                locationEdit.setText(String.format("%s, %s", place.getName(), place.getAddress()));
+            }
+        } else {
+            // Handle importing image
+            if(data != null) {
+                selectedImage = data.getData();
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getApplicationContext().getContentResolver(), selectedImage);
+                    imageUpload.setImageBitmap(bitmap);
+                }
+                catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -257,7 +397,7 @@ public class AddMoodFragment extends Fragment
     @Override
     public void onImageUploadFailure() {
         progressDialog.dismiss();
-        Toast.makeText(getActivity(), "Upload Failed.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), R.string.upload_failure, Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -267,5 +407,155 @@ public class AddMoodFragment extends Fragment
     @Override
     public void onMoodUpdateSuccess(){
         getActivity().finish();
+    }
+
+    /**
+     * A function that launches the autocomplete widget to prompt the user to search for a place
+     */
+    private void launchAutocomplete() {
+        List<Place.Field> fields = Arrays.asList(
+                Place.Field.ID,
+                Place.Field.NAME,
+                Place.Field.ADDRESS,
+                Place.Field.LAT_LNG
+        );
+        Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields).build(getContext());
+        startActivityForResult(intent, PLACES_REQUEST_CODE);
+    }
+
+    /**
+     * A function that calls the fused location provider to obtain updates on the user's location
+     */
+    private void getCurrentLocation() {
+        fusedLocationProviderClient.requestLocationUpdates(createLocationRequest(), locationCallback, Looper.getMainLooper());
+    }
+
+    /**
+     * Creates a location request to obtain the user's current location
+     *
+     * @return The created location request
+     */
+    private LocationRequest createLocationRequest() {
+        LocationRequest locationRequest = LocationRequest.create();
+        locationRequest.setInterval(10000);
+        locationRequest.setFastestInterval(5000);
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        return locationRequest;
+    }
+
+    /**
+     * A function that checks if the location settings on the Android device is enabled.
+     * If location settings are not enabled, it prompts the user to enable them. If the
+     * user grants location settings, the function will attempt to obtain the current location.
+     *
+     * Source: https://developer.android.com/training/location/change-location-settings
+     */
+    private void checkLocationSettings() {
+        // Create a locations settings request prompt for the user to enable location settings
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                .addLocationRequest(createLocationRequest())
+                .setAlwaysShow(true);
+        Task<LocationSettingsResponse> task = LocationServices.getSettingsClient(getContext()).checkLocationSettings(builder.build());
+
+        task.addOnSuccessListener(getActivity(), new OnSuccessListener<LocationSettingsResponse>() {
+            @Override
+            public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
+                // All location settings are satisfied. The client can initialize
+                // location requests here.
+                // ...
+                getCurrentLocation();
+            }
+        });
+
+        task.addOnFailureListener(getActivity(), new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                if (e instanceof ResolvableApiException) {
+                    // Location settings are not satisfied, but this can be fixed
+                    // by showing the user a dialog.
+                    try {
+                        // Show the dialog by calling startResolutionForResult(),
+                        // and check the result in onActivityResult().
+
+                        // Note that upon resolution, the onActivityResult callback of the activity
+                        // is called and will need to be forwarded to this fragment
+                        ResolvableApiException resolvable = (ResolvableApiException) e;
+                        resolvable.startResolutionForResult(getActivity(), REQUEST_CHECK_SETTINGS);
+                    } catch (IntentSender.SendIntentException sendEx) {
+                        // Ignore the error.
+                        Toast.makeText(getContext(), "Error!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+    }
+    /**
+     * A hook that is called whenever an item in the options menu is selected.
+     * This method handles the the addition and editing of moods when the corresponding
+     * action item is clicked.
+     * @param item The menu item that was selected
+     * @return boolean indicating state of whether option item was selected
+     */
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch(item.getItemId()){
+            case R.id.confirmEdit:
+                mood.setSocialSituation(selectedSocial);
+                mood.setEmotionalState(selectedMood);
+
+                if (currentLocationCheckbox.isChecked() && currentLocation != null) {
+                    mood.setLocation(new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude()));
+                } else if (placesLocation != null) {
+                    mood.setLocation(placesLocation);
+                    mood.setLocationDescription(placesLocationDescription);
+                }
+            
+                words = reasonEdit.getText().toString().split(" ");
+                if(words.length <= 3) {
+                    mood.setReasoning(reasonEdit.getText().toString());
+                    if(selectedImage != null) {
+                        progressDialog = new ProgressDialog(getActivity());
+                        progressDialog.setTitle("Uploading...");
+                        progressDialog.show();
+                        mes.uploadImage(AddMoodFragment.this, selectedImage);
+                    }else{
+                        mes.editMoodEvent(mood,AddMoodFragment.this);
+                    }
+                }else{
+                    Toast.makeText(getActivity(), R.string.word_count_exceeded, Toast.LENGTH_SHORT).show();
+                }
+                break;
+
+            case R.id.confirmAdd:
+                mood = new MoodEvent();
+                mood.setEmotionalState(selectedMood);
+                mood.setSocialSituation(selectedSocial);
+
+                if (currentLocationCheckbox.isChecked() && currentLocation != null) {
+                    mood.setLocation(new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude()));
+                } else if (placesLocation != null) {
+                    mood.setLocation(placesLocation);
+                    mood.setLocationDescription(placesLocationDescription);
+                }
+
+                words = reasonEdit.getText().toString().split(" ");
+                if(words.length <= 3) {
+                    mood.setReasoning(reasonEdit.getText().toString());
+                    if(selectedImage != null) {
+                        progressDialog = new ProgressDialog(getActivity());
+                        progressDialog.setTitle("Uploading...");
+                        progressDialog.show();
+                        mes.uploadImage(AddMoodFragment.this, selectedImage);
+                    }else{
+                        mes.addMoodEvent(mood,AddMoodFragment.this);
+                    }
+                }else{
+                    Toast.makeText(getActivity(), R.string.word_count_exceeded, Toast.LENGTH_SHORT).show();
+                }
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

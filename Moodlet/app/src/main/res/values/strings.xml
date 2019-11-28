@@ -20,4 +20,20 @@
     <string name="please_try_again_later">Something went wrong, please try again later</string>
     <string name="delete_failed">Failed to delete</string>
     <string name="delete_success">Successfully deleted!</string>
+    <string name="search_hint">Search for users to follow</string>
+    <string name="follow">Follow</string>
+    <string name="following">Following</string>
+    <string name="requested">Requested</string>
+    <string name="upload_failure">Upload failed</string>
+    <string name="word_count_exceeded">Reason must have less than 3 words</string>
+    <string name="mood">Mood</string>
+    <string name="social_situation">Social Situation</string>
+    <string name="reason">Reason</string>
+    <string name="location_label">Location</string>
+    <string name="location_checkbox">Use current location?</string>
+    <string name="location_hint">Search for a location</string>
+    <string name="location_clear">(Clear)</string>
+    <string name="location_permissions_denied">Location permissions are needed to tag the current location</string>
+    <string name="location_settings_denied">Location settings are needed to tag the current location</string>
+    <string name="show_friends">Show Friends</string>
 </resources>

@@ -4,15 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
-    android:layout_margin="7dp"
-    android:paddingLeft="3dp"
-    android:paddingTop="10dp">
+    android:background="?android:attr/selectableItemBackground"
+    android:paddingHorizontal="15dp"
+    android:paddingVertical="12dp">
 
     <ImageView
         android:id="@+id/mood_emoji"
         android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:src="@mipmap/ic_launcher_round"/>
+        android:layout_height="40dp"/>
 
     <LinearLayout
         android:layout_weight="4"
@@ -25,27 +24,27 @@
             android:id="@+id/mood_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Mood"
-            android:textSize="18dp"
-            android:textStyle="bold"/>
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/moodListColor"/>
 
         <TextView
             android:id="@+id/date_time_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="13dp"
-            android:text="month day year - time"
+            android:textSize="13sp"
+            android:textColor="@color/dateListColor"
             android:paddingTop="5dp"/>
     </LinearLayout>
 
-<!-- Will implement time difference later -->
-<!--    <TextView-->
-<!--        android:id="@+id/time_difference"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="time diff"-->
-<!--        android:textStyle="bold"-->
-<!--        android:paddingRight="30dp"-->
-<!--        android:paddingLeft="10dp"/>-->
+    <TextView
+        android:id="@+id/time_difference"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:paddingRight="30dp"
+        android:paddingEnd="30dp"
+        android:paddingLeft="10dp"
+        android:paddingStart="10dp"/>
 
 </LinearLayout>

@@ -3,6 +3,7 @@ package com.cmput3owo1.moodlet.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,6 +14,9 @@ import com.cmput3owo1.moodlet.models.MoodEvent;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Locale;
+
+import static com.cmput3owo1.moodlet.utils.Utils.getTimeDifference;
 
 /**
  * This class is the adapter class to a RecyclerView containing {@link MoodEventAdapter.ViewHolder} objects
@@ -23,6 +27,8 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
 
     private ArrayList<MoodEvent> moodEventList;
     private OnItemClickListener listener;
+    private SimpleDateFormat simpleDateFormat;
+    private ImageView tvIcon;
 
     /**
      * Listener interface to get the position of a mood event upon a click on the RecyclerView
@@ -39,6 +45,7 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
     public MoodEventAdapter(ArrayList<MoodEvent> moodEventList, OnItemClickListener listener) {
         this.moodEventList = moodEventList;
         this.listener = listener;
+        this.simpleDateFormat = new SimpleDateFormat("MMMM d, yyyy - h:mm a", Locale.US);
     }
 
 
@@ -47,13 +54,15 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
      */
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView tvMood, tvDateTime;
-//        TextView tvTimeDiff;
+        ImageView tvIcon;
+        TextView tvTimeDiff;
 
         ViewHolder(View itemView) {
             super(itemView);
             tvMood = itemView.findViewById(R.id.mood_textview);
             tvDateTime = itemView.findViewById(R.id.date_time_textview);
-//            tvTimeDiff = itemView.findViewById(R.id.time_difference);
+            tvIcon = itemView.findViewById(R.id.mood_emoji);
+            tvTimeDiff = itemView.findViewById(R.id.time_difference);
             itemView.setOnClickListener(this);
         }
 
@@ -94,9 +103,34 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
         MoodEvent mood = moodEventList.get(position);
 
         // set TextViews in RecyclerView
-        holder.tvMood.setText(mood.getEmotionalState().name());
-        holder.tvDateTime.setText(new SimpleDateFormat("MMMM dd, yyyy - HH:mm").format(mood.getDate()));
-//        holder.tvTimeDiff.setText("1s");
+        holder.tvMood.setText(mood.getEmotionalState().getDisplayName());
+        holder.tvDateTime.setText(simpleDateFormat.format(mood.getDate()));
+
+
+        switch(mood.getEmotionalState()) {
+            case SAD:
+                holder.tvIcon.setImageResource(R.drawable.ic_mood_sad);
+                break;
+            case ANGRY:
+                holder.tvIcon.setImageResource(R.drawable.ic_mood_angry);
+                break;
+            case CONFUSED:
+                holder.tvIcon.setImageResource(R.drawable.ic_mood_confused);
+                break;
+            case EXCITED:
+                holder.tvIcon.setImageResource(R.drawable.ic_mood_excited);
+                break;
+            case HAPPY:
+                holder.tvIcon.setImageResource(R.drawable.ic_mood_happy);
+                break;
+            case JEALOUS:
+                holder.tvIcon.setImageResource(R.drawable.ic_mood_jealous);
+                break;
+            case SCARED:
+                holder.tvIcon.setImageResource(R.drawable.ic_mood_scared);
+                break;
+        }
+        holder.tvTimeDiff.setText(getTimeDifference(mood.getDate()));
 
     }
 

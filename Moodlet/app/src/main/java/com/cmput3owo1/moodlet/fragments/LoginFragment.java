@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +31,7 @@ public class LoginFragment extends Fragment implements IUserServiceProvider.Logi
     EditText email, password;
     TextView signupText;
     Button loginButton;
+    ProgressBar progressBar;
 
     UserService userService = new UserService();
 
@@ -41,10 +43,11 @@ public class LoginFragment extends Fragment implements IUserServiceProvider.Logi
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//         if(userService.hasPreviousLogin()){
-//             Intent intent = new Intent(getActivity(), MainActivity.class);
-//             startActivity(intent);
-//         }
+         if(userService.hasPreviousLogin()){
+             Intent intent = new Intent(getActivity(), MainActivity.class);
+             startActivity(intent);
+             getActivity().finish();
+         }
     }
 
     /**
@@ -64,6 +67,7 @@ public class LoginFragment extends Fragment implements IUserServiceProvider.Logi
         email = loginFragmentView.findViewById(R.id.edit_text_email);
         password = loginFragmentView.findViewById(R.id.edit_text_password);
         loginButton = loginFragmentView.findViewById(R.id.btn_login);
+        progressBar = loginFragmentView.findViewById(R.id.login_progress_bar);
 
         signupText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,6 +88,7 @@ public class LoginFragment extends Fragment implements IUserServiceProvider.Logi
                 if(txt_email.isEmpty() || txt_password.isEmpty()) {
                     Toast.makeText(getActivity(), R.string.all_fields_required, Toast.LENGTH_SHORT).show();
                 } else {
+                    showProgressBar();
                     userService.loginUser(txt_email, txt_password, LoginFragment.this);
                 }
             }
@@ -99,6 +104,7 @@ public class LoginFragment extends Fragment implements IUserServiceProvider.Logi
     public void onLoginSuccess() {
         Intent intent = new Intent(getActivity(), MainActivity.class);
         startActivity(intent);
+        getActivity().finish();
     }
 
     /**
@@ -106,6 +112,37 @@ public class LoginFragment extends Fragment implements IUserServiceProvider.Logi
      */
     @Override
     public void onLoginFailure() {
+        hideProgressBar();
         Toast.makeText(getActivity(), R.string.authentication_failed, Toast.LENGTH_SHORT).show();
+    }
+
+    private void hideProgressBar() {
+
+        setAllToClickable();
+
+        progressBar.setVisibility(View.INVISIBLE);
+        loginButton.setVisibility(View.VISIBLE);
+    }
+
+    private void showProgressBar() {
+
+        setAllToUnclickable();
+
+        loginButton.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    private void setAllToUnclickable() {
+        email.setEnabled(false);
+        password.setEnabled(false);
+        signupText.setClickable(false);
+        loginButton.setClickable(false);
+    }
+
+    private void setAllToClickable() {
+        email.setEnabled(true);
+        password.setEnabled(true);
+        signupText.setClickable(true);
+        loginButton.setClickable(true);
     }
 }

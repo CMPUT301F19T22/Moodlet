@@ -6,11 +6,16 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -25,6 +30,7 @@ import com.cmput3owo1.moodlet.services.MoodEventService;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * A fragment that hold the list of user's mood events while displaying the emotion, date,
@@ -33,12 +39,41 @@ import java.util.ArrayList;
 public class MoodHistoryFragment extends Fragment
         implements MoodEventAdapter.OnItemClickListener, IMoodEventServiceProvider.OnMoodHistoryUpdateListener, IMoodEventServiceProvider.OnMoodDeleteListener{
 
+    private static final long BACK_BUTTON_TIMEOUT = 2000;
+    public static final String EXIT_EXTRAS_KEY = "EXIT";
+
     private RecyclerView recyclerView;
     private MoodEventAdapter recyclerAdapter;
     private ArrayList<MoodEvent> moodEventList;
     private IMoodEventServiceProvider moodEventService;
     private FloatingActionButton addMood;
+    private long timeBackButtonPressed = 0;
 
+    /**
+     * Called when the fragment is starting.
+     * @param savedInstanceState Used to restore a fragment's previous state
+     */
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // Set custom back navigation
+        // Source: https://developer.android.com/guide/navigation/navigation-custom-back
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if ((new Date()).getTime() - timeBackButtonPressed < BACK_BUTTON_TIMEOUT) {
+                    getActivity().finish();
+                } else {
+                    timeBackButtonPressed = (new Date()).getTime();
+                    Toast.makeText(getContext(), "Press back again to exit!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
+
+        setHasOptionsMenu(true);
+    }
 
     /**
      * This function is called to have the fragment instantiate its user interface view.
@@ -77,6 +112,30 @@ public class MoodHistoryFragment extends Fragment
 
         return view;
     }
+
+    /**
+     * Initialize the contents of the Activity's standard options menu.
+     * @param menu The options menu in which you place your items.
+     * @param inflater The MenuInflater object that can be used to inflate any itmes in the menu
+     */
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.mood_history_fragment_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch(item.getItemId()){
+            case R.id.filter:
+                // TODO: Create intent to go to activity to apply filter options
+                 Toast.makeText(getContext(), "Filter options", Toast.LENGTH_SHORT).show();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 
     /**
      * Called when the user is clicking on a mood event to edit

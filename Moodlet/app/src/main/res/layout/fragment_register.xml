@@ -30,6 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:singleLine="true"
             android:hint="@string/full_name" />
 
         <EditText
@@ -37,6 +38,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:singleLine="true"
             android:hint="@string/username" />
 
         <EditText
@@ -44,6 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:singleLine="true"
             android:hint="@string/email" />
 
         <EditText
@@ -62,18 +65,36 @@
             android:layout_marginTop="16dp"
             android:hint="@string/confirm_password" />
 
-        <Button
-            android:id="@+id/btn_register"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/background_btn"
-            android:text="@string/register"
-            android:textColor="#FFF" />
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.button.MaterialButton
+                style="@style/Widget.AppCompat.Button"
+                android:id="@+id/btn_register"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/register"
+                android:textColor="#FFF"
+                app:cornerRadius="10dp"
+                app:backgroundTint="@color/colorAccent"/>
+
+            <ProgressBar
+                android:id="@+id/register_progress_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:clickable="false"
+                android:background="@color/transparent"
+                android:visibility="invisible"
+                android:indeterminate="true" />
+        </FrameLayout>
 
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
