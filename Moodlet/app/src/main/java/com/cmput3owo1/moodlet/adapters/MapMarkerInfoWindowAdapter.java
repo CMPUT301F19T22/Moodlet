@@ -16,7 +16,7 @@ import com.google.android.gms.maps.model.Marker;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static com.cmput3owo1.moodlet.utils.Utils.timeAgo;
+import static com.cmput3owo1.moodlet.utils.Utils.timeDifference;
 
 public class MapMarkerInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
@@ -111,7 +111,7 @@ public class MapMarkerInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
         emotionInfo.setText(moodEvent.getEmotionalState().getDisplayName());
         Date date = moodEvent.getDate();
         dateInfo.setText(sdf.format(date));
-        timeInfo.setText(timeAgo(date));
+        timeInfo.setText(timeDifference(date));
         setEmoticon(moodEvent.getEmotionalState());
         infoWindowBar.setColorFilter(moodEvent.getEmotionalState().getColor());
     }
