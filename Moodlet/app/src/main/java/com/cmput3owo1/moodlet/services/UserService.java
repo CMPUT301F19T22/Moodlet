@@ -34,6 +34,9 @@ public class UserService implements IUserServiceProvider{
     private FirebaseAuth auth;
     private FirebaseFirestore db;
 
+    /**
+     * Public constructor, takes no arguments.
+     */
     public UserService (){
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
@@ -41,6 +44,7 @@ public class UserService implements IUserServiceProvider{
 
     /**
      * This function is called to check if there is an existing instance of the logged in user.
+     * @return Returns true if there is a logged in user; false otherwise.
      */
     @Override
     public boolean hasPreviousLogin(){
@@ -79,7 +83,6 @@ public class UserService implements IUserServiceProvider{
      * @param password Password of Account to register with.
      * @param listener Registration listener passed from fragment
      */
-
     private void createUser(final User user, String password, final RegistrationListener listener){
         auth.createUserWithEmailAndPassword(user.getEmail(), password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -143,12 +146,19 @@ public class UserService implements IUserServiceProvider{
             );
     }
 
+    /**
+     * Logs the current user out.
+     */
     @Override
     public void logoutUser(){
         auth.signOut();
-
     }
 
+    /**
+     * Search for users of Moodlet that begin with the searchText. Pass the results to the listener.
+     * @param searchText The username prefix to search with
+     * @param listener The listener to pass the user search results to
+     */
     @Override
     public void searchForUsers(final String searchText, final OnUserSearchListener listener) {
         final String currentUser = auth.getCurrentUser().getDisplayName();
@@ -181,7 +191,11 @@ public class UserService implements IUserServiceProvider{
                 });
     }
 
-
+    /**
+     * Send a follow request to the user specified.
+     * @param user The user to send the follow request to
+     * @param listener The listener to inform of a success
+     */
     @Override
     public void sendFollowRequest(final User user, final OnFollowRequestListener listener) {
         String currentUser = auth.getCurrentUser().getDisplayName();
@@ -198,6 +212,12 @@ public class UserService implements IUserServiceProvider{
                 //TODO .addOnFailureListener() - Add this later
     }
 
+    /**
+     * Set the follow status of the user. Looks in the Firestore database to determine if the
+     * current user is following the passed in user. If so, it sets the following status of that
+     * user to true.
+     * @param user The user to set the following status for.
+     */
     private Task<DocumentSnapshot> setFollowStatusForUser(final User user) {
         String currentUser = auth.getCurrentUser().getDisplayName();
 
@@ -216,6 +236,12 @@ public class UserService implements IUserServiceProvider{
                 });
     }
 
+    /**
+     * Set the request status of the user. Looks in the Firestore database to determine if the
+     * current user has sent a follow request to the passed in user. If so, it sets the request
+     * status of that user to true.
+     * @param user The user to set the request status for.
+     */
     private Task<QuerySnapshot> setRequestStatusForUser(final User user) {
         String currentUser = auth.getCurrentUser().getDisplayName();
 
@@ -235,7 +261,6 @@ public class UserService implements IUserServiceProvider{
                     }
                 });
     }
-
 
 }
 

@@ -111,6 +111,7 @@ public class MoodEventService implements IMoodEventServiceProvider {
                 .whereEqualTo("username", username)
                 .orderBy("date", Query.Direction.DESCENDING)
                 .limit(1);
+
         moodHistoryQuery.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -152,7 +153,7 @@ public class MoodEventService implements IMoodEventServiceProvider {
     }
 
     /**
-     * Delete swiped MoodEvent from database.
+     * Delete the specified MoodEvent from the database.
      * @param moodEvent The mood event to be deleted.
      * @param listener The listener to notify upon completion of deletion.
      */
@@ -160,11 +161,13 @@ public class MoodEventService implements IMoodEventServiceProvider {
     public void deleteMoodEvent(final MoodEvent moodEvent, final OnMoodDeleteListener listener) {
         String username = auth.getCurrentUser().getDisplayName();
 
-        // See if moodEvent is the most recent - if so, we have to notify followers
+        // See if moodEvent is the most recent - if so, we have to notify followers of the deletion
+        // and put the second most recent MoodEvent in the followers' feeds
         Query moodHistoryQuery = db.collection("moodEvents")
                 .whereEqualTo("username", username)
                 .orderBy("date", Query.Direction.DESCENDING)
                 .limit(2);
+
         moodHistoryQuery.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot snapshots) {
@@ -265,7 +268,6 @@ public class MoodEventService implements IMoodEventServiceProvider {
      */
     @Override
     public void uploadImage(final OnImageUploadListener listener, final Uri imageToUpload){
-
         final String username = auth.getCurrentUser().getDisplayName();
         final String filepath = "images/" + username + "/" + imageToUpload.getLastPathSegment();
 

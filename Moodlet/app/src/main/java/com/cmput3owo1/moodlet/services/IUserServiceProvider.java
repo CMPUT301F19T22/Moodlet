@@ -33,16 +33,25 @@ public interface IUserServiceProvider {
         void onLoginFailure();
     }
 
+    /**
+     * Interface for a listener that receives the results of a search for users. The search result
+     * contains the list of users that match the searchText.
+     */
     interface OnUserSearchListener {
         void onSearchResult(ArrayList<User> searchResult, String searchText);
     }
 
+    /**
+     * Interface for a listener that listens to the success of a follow request. The listener is
+     * invoked when the follow request is sent to the specified user.
+     */
     interface OnFollowRequestListener {
         void onRequestSuccess(User user);
     }
 
     /**
      * This function is called to check if there is an existing instance of the logged in user.
+     * @return Returns true if there is a logged in user; false otherwise.
      */
     boolean hasPreviousLogin();
 
@@ -55,7 +64,6 @@ public interface IUserServiceProvider {
      * @param listener Registration listener passed from fragment
      */
     void validateUsernameAndCreateUser(User user, String password, RegistrationListener listener);
-
 
     /**
      * This is a wrapper function that is called to login a user with their email and password.
@@ -71,8 +79,18 @@ public interface IUserServiceProvider {
      */
     void logoutUser();
 
+    /**
+     * Search for users of Moodlet that begin with the searchText. Pass the results to the listener.
+     * @param searchText The username prefix to search with
+     * @param listener The listener to pass the user search results to
+     */
     void searchForUsers(String searchText, OnUserSearchListener listener);
 
+    /**
+     * Send a follow request to the user specified.
+     * @param user The user to send the follow request to
+     * @param listener The listener to inform of a success
+     */
     void sendFollowRequest(User user, OnFollowRequestListener listener);
 
 }
