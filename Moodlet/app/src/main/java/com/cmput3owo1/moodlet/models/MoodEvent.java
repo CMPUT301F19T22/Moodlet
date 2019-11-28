@@ -14,6 +14,7 @@ public class MoodEvent extends Event implements Serializable {
     private String reasoning;
     private SocialSituation socialSituation;
     private String photographPath;
+    private String locationDescription;
 
     /**
      * Default constructor for the MoodEvent.
@@ -110,5 +111,21 @@ public class MoodEvent extends Event implements Serializable {
      */
     public void setPhotographPath(String photographPath) {
         this.photographPath = photographPath;
+    }
+
+    /**
+     * This gets the location description (place) associated with the MoodEvent.
+     * @return The location's description
+     */
+    public String getLocationDescription() {
+        return this.locationDescription;
+    }
+
+    /**
+     * This sets the location description (place) associated with the MoodEvent.
+     * @param locationDescription The location's description.
+     */
+    public void setLocationDescription(String locationDescription) {
+        this.locationDescription = locationDescription;
     }
 }

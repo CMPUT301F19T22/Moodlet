@@ -109,6 +109,7 @@ public class AddMoodFragment extends Fragment implements
     private LocationCallback locationCallback;
     private Location currentLocation;
     private GeoPoint placesLocation;
+    private String placesLocationDescription;
     private static final String[] PERMISSIONS = { Manifest.permission.ACCESS_FINE_LOCATION };
     private static final int LOCATION_REQUEST_CODE = 1;
     public static final int REQUEST_CHECK_SETTINGS = 2; // Keep public to access in parent activity
@@ -179,6 +180,7 @@ public class AddMoodFragment extends Fragment implements
             @Override
             public void onClick(View v) {
                 placesLocation = null;
+                placesLocationDescription = null;
                 locationEdit.setText("");
             }
         });
@@ -355,6 +357,7 @@ public class AddMoodFragment extends Fragment implements
                 Place place = Autocomplete.getPlaceFromIntent(data);
                 LatLng latLng = place.getLatLng();
                 placesLocation = new GeoPoint(latLng.latitude, latLng.longitude);
+                placesLocationDescription = place.getName();
                 locationEdit.setText(String.format("%s, %s", place.getName(), place.getAddress()));
             }
         } else {
@@ -502,6 +505,13 @@ public class AddMoodFragment extends Fragment implements
                 mood.setSocialSituation(selectedSocial);
                 mood.setEmotionalState(selectedMood);
 
+                if (currentLocationCheckbox.isChecked() && currentLocation != null) {
+                    mood.setLocation(new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude()));
+                } else if (placesLocation != null) {
+                    mood.setLocation(placesLocation);
+                    mood.setLocationDescription(placesLocationDescription);
+                }
+            
                 words = reasonEdit.getText().toString().split(" ");
                 if(words.length <= 3) {
                     mood.setReasoning(reasonEdit.getText().toString());
@@ -527,7 +537,7 @@ public class AddMoodFragment extends Fragment implements
                     mood.setLocation(new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude()));
                 } else if (placesLocation != null) {
                     mood.setLocation(placesLocation);
-                    // TODO: Set the place's description?
+                    mood.setLocationDescription(placesLocationDescription);
                 }
 
                 words = reasonEdit.getText().toString().split(" ");
