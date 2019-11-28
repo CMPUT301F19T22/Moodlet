@@ -127,6 +127,10 @@ public class MoodEventService implements IMoodEventServiceProvider {
         listener.onMoodUpdateSuccess();
     }
 
+    /**
+     * Update the feed or friend activity of the current user's followers with the specified MoodEvent
+     * @param moodEvent The most recent {@link MoodEvent} of the current user
+     */
     private void updateFollowersFeed(final MoodEvent moodEvent) {
         final String username = auth.getCurrentUser().getDisplayName();
 
