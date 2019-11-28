@@ -104,7 +104,7 @@ public class ViewMoodFragment extends Fragment {
      * This method changes the fragment to allow for the user to edit the selected mood
      * when the option is clicked.
      * @param item The menu item that was selected
-     * @return
+     * @return boolean indicating state of whether option item was selected
      */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {

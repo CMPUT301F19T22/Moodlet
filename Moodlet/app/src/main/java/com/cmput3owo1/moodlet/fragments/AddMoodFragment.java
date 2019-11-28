@@ -492,7 +492,7 @@ public class AddMoodFragment extends Fragment implements
      * This method handles the the addition and editing of moods when the corresponding
      * action item is clicked.
      * @param item The menu item that was selected
-     * @return
+     * @return boolean indicating state of whether option item was selected
      */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
