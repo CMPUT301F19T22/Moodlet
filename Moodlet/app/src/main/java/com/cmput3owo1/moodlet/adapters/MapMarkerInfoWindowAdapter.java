@@ -15,7 +15,8 @@ import com.google.android.gms.maps.model.Marker;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
+
+import static com.cmput3owo1.moodlet.utils.Utils.timeAgo;
 
 public class MapMarkerInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
@@ -110,40 +111,9 @@ public class MapMarkerInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
         emotionInfo.setText(moodEvent.getEmotionalState().getDisplayName());
         Date date = moodEvent.getDate();
         dateInfo.setText(sdf.format(date));
-        timeInfo.setText(getTimeDifference(date));
+        timeInfo.setText(timeAgo(date));
         setEmoticon(moodEvent.getEmotionalState());
         infoWindowBar.setColorFilter(moodEvent.getEmotionalState().getColor());
-    }
-
-    /**
-     * Helper function to obtain the time difference between the current date to the specified date
-     * @param date The date to compare with.
-     * @return A formatted string for the time difference
-     */
-    private String getTimeDifference(Date date) {
-        // Get the date difference in milliseconds
-        long dateDiff = (new Date()).getTime() - date.getTime();
-
-        // Separate into different time units
-        long diffSeconds = dateDiff / 1000;
-        long diffMinutes = diffSeconds / 60;
-        long diffHours = diffMinutes / 60;
-        long diffDays = diffHours / 24;
-        long diffYears = diffDays / 365;
-
-        if (diffYears >= 1) {
-            return String.format(Locale.US, "%d y", (int) diffYears);
-        } else if (diffDays >= 1) {
-            return String.format(Locale.US, "%d d", (int) diffDays);
-        } else if (diffHours >= 1) {
-            return String.format(Locale.US, "%d h", (int) diffHours);
-        } else if (diffMinutes >= 1) {
-            return String.format(Locale.US, "%d m", (int) diffMinutes);
-        } else if (diffSeconds >= 1) {
-            return String.format(Locale.US, "%d s", (int) diffSeconds);
-        } else {
-            return "0 s";
-        }
     }
 
     /**
