@@ -13,6 +13,9 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -29,6 +32,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.cmput3owo1.moodlet.R;
 import com.cmput3owo1.moodlet.models.EmotionalState;
@@ -87,6 +91,7 @@ public class AddMoodFragment extends Fragment implements
     //Add
     private String moodDisplayName;
     private String socialDisplayName;
+    private String[] words;
     private MoodEvent mood;
     private IMoodEventServiceProvider mes;
 
@@ -123,6 +128,8 @@ public class AddMoodFragment extends Fragment implements
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_mood,container,false);
+        setHasOptionsMenu(true);
+
         mes = new MoodEventService();
 
         //Generate current date/time
@@ -142,10 +149,6 @@ public class AddMoodFragment extends Fragment implements
         imageUpload = view.findViewById(R.id.imageToUpload);
         bg = view.findViewById(R.id.bg_vector);
 
-        //Temporary debug buttons
-        addMood = view.findViewById(R.id.add_mood);
-        confirmEdit = view.findViewById(R.id.confirm_edit);
-
         //Set up spinners
         moodAdapter = new ArrayAdapter<EmotionalState>(getActivity(), R.layout.mood_spinner_style, EmotionalState.values());
         moodAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -154,12 +157,10 @@ public class AddMoodFragment extends Fragment implements
         socialAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         socialSpinner.setAdapter(socialAdapter);
 
-
-        //fix logic up later
-        //Try catch for checking if in EditMode
-        try {
-            Bundle args = getArguments();
-            if(!args.isEmpty()){
+        //Fills in fields if editMode is active
+        Bundle args = getArguments();
+        if(args!=null){
+            if(args.getBoolean("edit") == true) {
                 editMode = true;
                 mood = (MoodEvent) args.getSerializable("MoodEvent");
                 final Date argDate = (Date) args.getSerializable("date");
@@ -170,41 +171,9 @@ public class AddMoodFragment extends Fragment implements
                 date.setText(sdf.format(argDate));
                 mood.setDate(argDate);
                 bg.setColorFilter(mood.getEmotionalState().getColor());
-
-                //REMOVE LATER, debugging Proof of Concept
-                if(args.getBoolean("edit")){
-                    addMood.setVisibility(View.INVISIBLE);
-                    confirmEdit.setVisibility(View.VISIBLE);
-
-                    confirmEdit.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-
-                            mood.setSocialSituation(selectedSocial);
-                            mood.setEmotionalState(selectedMood);
-
-                            String[] words = reasonEdit.getText().toString().split(" ");
-                            if(words.length <= 3) {
-                                mood.setReasoning(reasonEdit.getText().toString());
-                                if(selectedImage != null) {
-                                    progressDialog = new ProgressDialog(getActivity());
-                                    progressDialog.setTitle("Uploading...");
-                                    progressDialog.show();
-                                    mes.uploadImage(AddMoodFragment.this, selectedImage);
-                                }else{
-                                    mes.editMoodEvent(mood,AddMoodFragment.this);
-                                }
-                            }else{
-                                Toast.makeText(getActivity(), R.string.word_count_exceeded, Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-
-                }
             }
         }
-        catch(Exception e){
-        }
+
 
         // Set a click listener for the textview to clear the selected place
         clearLocation.setOnClickListener(new View.OnClickListener() {
@@ -311,37 +280,22 @@ public class AddMoodFragment extends Fragment implements
             }
         });
 
-        addMood.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mood = new MoodEvent();
-                mood.setEmotionalState(selectedMood);
-                mood.setSocialSituation(selectedSocial);
-
-                if (currentLocationCheckbox.isChecked() && currentLocation != null) {
-                    mood.setLocation(new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude()));
-                } else if (placesLocation != null) {
-                    mood.setLocation(placesLocation);
-                    mood.setLocationDescription(placesLocationDescription);
-                }
-
-                String[] words = reasonEdit.getText().toString().split(" ");
-                if(words.length <= 3) {
-                    mood.setReasoning(reasonEdit.getText().toString());
-                    if(selectedImage != null) {
-                        progressDialog = new ProgressDialog(getActivity());
-                        progressDialog.setTitle("Uploading...");
-                        progressDialog.show();
-                        mes.uploadImage(AddMoodFragment.this, selectedImage);
-                    }else{
-                        mes.addMoodEvent(mood,AddMoodFragment.this);
-                    }
-                }else{
-                    Toast.makeText(getActivity(), R.string.word_count_exceeded, Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
         return view;
+    }
+
+    /** Initialize the contents of the fragment's options menu.
+     * @param menu The options menu in which you place your items.
+     */
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        if(editMode){
+            inflater.inflate(R.menu.mood_edit_fragment_menu, menu);
+            getActivity().setTitle("Edit Mood");
+        }else{
+            inflater.inflate(R.menu.mood_add_fragment_menu, menu);
+            getActivity().setTitle("Add Mood");
+        }
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     /**
@@ -535,5 +489,74 @@ public class AddMoodFragment extends Fragment implements
                 }
             }
         });
+    }
+    /**
+     * A hook that is called whenever an item in the options menu is selected.
+     * This method handles the the addition and editing of moods when the corresponding
+     * action item is clicked.
+     * @param item The menu item that was selected
+     * @return boolean indicating state of whether option item was selected
+     */
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch(item.getItemId()){
+            case R.id.confirmEdit:
+                mood.setSocialSituation(selectedSocial);
+                mood.setEmotionalState(selectedMood);
+
+                if (currentLocationCheckbox.isChecked() && currentLocation != null) {
+                    mood.setLocation(new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude()));
+                } else if (placesLocation != null) {
+                    mood.setLocation(placesLocation);
+                    mood.setLocationDescription(placesLocationDescription);
+                }
+            
+                words = reasonEdit.getText().toString().split(" ");
+                if(words.length <= 3) {
+                    mood.setReasoning(reasonEdit.getText().toString());
+                    if(selectedImage != null) {
+                        progressDialog = new ProgressDialog(getActivity());
+                        progressDialog.setTitle("Uploading...");
+                        progressDialog.show();
+                        mes.uploadImage(AddMoodFragment.this, selectedImage);
+                    }else{
+                        mes.editMoodEvent(mood,AddMoodFragment.this);
+                    }
+                }else{
+                    Toast.makeText(getActivity(), R.string.word_count_exceeded, Toast.LENGTH_SHORT).show();
+                }
+                break;
+
+            case R.id.confirmAdd:
+                mood = new MoodEvent();
+                mood.setEmotionalState(selectedMood);
+                mood.setSocialSituation(selectedSocial);
+
+                if (currentLocationCheckbox.isChecked() && currentLocation != null) {
+                    mood.setLocation(new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude()));
+                } else if (placesLocation != null) {
+                    mood.setLocation(placesLocation);
+                    mood.setLocationDescription(placesLocationDescription);
+                }
+
+                words = reasonEdit.getText().toString().split(" ");
+                if(words.length <= 3) {
+                    mood.setReasoning(reasonEdit.getText().toString());
+                    if(selectedImage != null) {
+                        progressDialog = new ProgressDialog(getActivity());
+                        progressDialog.setTitle("Uploading...");
+                        progressDialog.show();
+                        mes.uploadImage(AddMoodFragment.this, selectedImage);
+                    }else{
+                        mes.addMoodEvent(mood,AddMoodFragment.this);
+                    }
+                }else{
+                    Toast.makeText(getActivity(), R.string.word_count_exceeded, Toast.LENGTH_SHORT).show();
+                }
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

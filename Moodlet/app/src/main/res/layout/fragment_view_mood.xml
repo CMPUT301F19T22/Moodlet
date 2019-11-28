@@ -6,30 +6,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-
-        <Button
-            android:id="@+id/toggle_edit"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="8dp"
-            android:text="toggle edit"
-            app:layout_constraintStart_toEndOf="@+id/add_mood"
-            app:layout_constraintTop_toTopOf="parent"></Button>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
