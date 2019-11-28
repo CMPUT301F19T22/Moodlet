@@ -89,22 +89,8 @@ public class MoodEventService implements IMoodEventServiceProvider {
         newMoodEventRef.update("username", username);
         newMoodEventRef.update("id", newMoodEventRef.getId());
 
-        Query followersQuery = db.collection("users/" + username + "/followers");
-        followersQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        String follower = document.getId();
-                        String path = "users/" + follower + "/following/" + username;
-                        db.document(path).set(moodEvent);
-                        db.document(path).update("username", username);
-                    }
-                } else {
-                    //Log.d(TAG, "Error getting documents: ", task.getException());
-                }
-            }
-        });
+        updateFollowersFeed(moodEvent);
+
         listener.onMoodUpdateSuccess();
         return newMoodEventRef.getId();
     }
@@ -116,15 +102,48 @@ public class MoodEventService implements IMoodEventServiceProvider {
      * @param listener The listener to notify upon completion of edit.
      */
     @Override
-    public void editMoodEvent(MoodEvent moodEvent, OnMoodUpdateListener listener){
+    public void editMoodEvent(final MoodEvent moodEvent, OnMoodUpdateListener listener){
         DocumentReference newMoodEventRef = db.collection("moodEvents").document(moodEvent.getId());
         newMoodEventRef.set(moodEvent);
 
         final String username = auth.getCurrentUser().getDisplayName();
         newMoodEventRef.update("username", username);
 
-        listener.onMoodUpdateSuccess();
+        Query moodHistoryQuery = db.collection("moodEvents")
+                .whereEqualTo("username", username)
+                .orderBy("date", Query.Direction.DESCENDING)
+                .limit(1);
 
+        moodHistoryQuery.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                    MoodEvent mostRecentEvent = doc.toObject(MoodEvent.class);
+                    if (mostRecentEvent.getId().equals(moodEvent.getId())) {
+                        updateFollowersFeed(moodEvent);
+                    }
+                }
+            }
+        });
+
+        listener.onMoodUpdateSuccess();
+    }
+
+    private void updateFollowersFeed(final MoodEvent moodEvent) {
+        final String username = auth.getCurrentUser().getDisplayName();
+
+        Query followersQuery = db.collection("users/" + username + "/followers");
+        followersQuery.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                    String follower = document.getId();
+                    String path = "users/" + follower + "/following/" + username;
+                    db.document(path).set(moodEvent);
+                    db.document(path).update("username", username);
+                }
+            }
+        });
     }
 
     /**
