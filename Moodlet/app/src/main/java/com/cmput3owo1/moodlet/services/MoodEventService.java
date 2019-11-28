@@ -1,20 +1,15 @@
 package com.cmput3owo1.moodlet.services;
 
-import android.content.Context;
 import android.net.Uri;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.cmput3owo1.moodlet.R;
 import com.cmput3owo1.moodlet.models.EmotionalState;
 import com.cmput3owo1.moodlet.models.MoodEvent;
 import com.cmput3owo1.moodlet.models.MoodEventAssociation;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
@@ -28,6 +23,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * A class that provides Firebase database services for the {@link MoodEvent} class.
@@ -89,6 +86,7 @@ public class MoodEventService implements IMoodEventServiceProvider {
         newMoodEventRef.update("username", username);
         newMoodEventRef.update("id", newMoodEventRef.getId());
 
+        moodEvent.setId(newMoodEventRef.getId());
         updateFollowersFeed(moodEvent);
 
         listener.onMoodUpdateSuccess();
@@ -139,8 +137,12 @@ public class MoodEventService implements IMoodEventServiceProvider {
                 for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                     String follower = document.getId();
                     String path = "users/" + follower + "/following/" + username;
-                    db.document(path).set(moodEvent);
-                    db.document(path).update("username", username);
+                    if (moodEvent != null) {
+                        db.document(path).set(moodEvent);
+                        db.document(path).update("username", username);
+                    } else {
+                        db.document(path).set(new HashMap<String, Object>());
+                    }
                 }
             }
         });
@@ -152,24 +154,49 @@ public class MoodEventService implements IMoodEventServiceProvider {
      * @param listener The listener to notify upon completion of deletion.
      */
     @Override
-    public void deleteMoodEvent(MoodEvent moodEvent, final OnMoodDeleteListener listener) {
-        DocumentReference newMoodEventRef = db.collection("moodEvents").document(moodEvent.getId());
+    public void deleteMoodEvent(final MoodEvent moodEvent, final OnMoodDeleteListener listener) {
+        String username = auth.getCurrentUser().getDisplayName();
+        Query moodHistoryQuery = db.collection("moodEvents")
+                .whereEqualTo("username", username)
+                .orderBy("date", Query.Direction.DESCENDING)
+                .limit(2);
 
+        moodHistoryQuery.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot snapshots) {
+                List<MoodEvent> moodEvents = snapshots.toObjects(MoodEvent.class);
+                if (!moodEvents.isEmpty()) {
+                    final MoodEvent mostRecentEvent = moodEvents.get(0);
+                    MoodEvent nextMostRecentEvent = null;
 
-        newMoodEventRef.delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        listener.onMoodDeleteSuccess();
+                    if (moodEvents.size() > 1) {
+                        nextMostRecentEvent = moodEvents.get(1);
                     }
-                })
 
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        listener.onMoodDeleteFailure();
-                    }
-                });
+                    final MoodEvent finalNextMostRecentEvent = nextMostRecentEvent;
+
+                    DocumentReference moodEventRef = db.collection("moodEvents").document(moodEvent.getId());
+                    moodEventRef.delete()
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    listener.onMoodDeleteSuccess();
+
+                                    // Most recent event was deleted
+                                    if (mostRecentEvent.getId().equals(moodEvent.getId())) {
+                                        updateFollowersFeed(finalNextMostRecentEvent);
+                                    }
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    listener.onMoodDeleteFailure();
+                                }
+                            });
+                }
+            }
+        });
     }
 
     /**
