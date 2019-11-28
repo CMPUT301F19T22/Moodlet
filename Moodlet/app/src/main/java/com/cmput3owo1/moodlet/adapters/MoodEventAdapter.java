@@ -16,7 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import static com.cmput3owo1.moodlet.utils.Utils.timeDifference;
+import static com.cmput3owo1.moodlet.utils.Utils.getTimeDifference;
 
 /**
  * This class is the adapter class to a RecyclerView containing {@link MoodEventAdapter.ViewHolder} objects
@@ -130,7 +130,7 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
                 holder.tvIcon.setImageResource(R.drawable.ic_mood_scared);
                 break;
         }
-        holder.tvTimeDiff.setText(timeDifference(mood.getDate()));
+        holder.tvTimeDiff.setText(getTimeDifference(mood.getDate()));
 
     }
 

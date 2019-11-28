@@ -11,7 +11,7 @@ public class Utils {
      * @param date The date to compare with.
      * @return A formatted string for the time difference.
      */
-    public static String timeDifference(Date date) {
+    public static String getTimeDifference(Date date) {
         // Get the date difference in milliseconds
         long dateDiff = (new Date()).getTime() - date.getTime();
 
