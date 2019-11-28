@@ -16,6 +16,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import static com.cmput3owo1.moodlet.utils.Utils.getTimeDifference;
+
 /**
  * This class is the adapter class to a ListView containing {@link MoodEventAssociation} objects.
  * The purpose is to connect the MoodEventAssociation data with the ListView and to create the
@@ -46,6 +48,7 @@ public class FeedListAdapter extends ArrayAdapter<MoodEventAssociation> {
         TextView usernameTextView;
         TextView emotionalStateTextView;
         TextView dateTextView;
+        TextView timeDifferenceTextView;
         ImageView emoticonImageView;
     }
 
@@ -67,6 +70,7 @@ public class FeedListAdapter extends ArrayAdapter<MoodEventAssociation> {
             holder.usernameTextView = (TextView) convertView.findViewById(R.id.feed_username);
             holder.emotionalStateTextView = (TextView) convertView.findViewById(R.id.feed_mood);
             holder.dateTextView = (TextView) convertView.findViewById(R.id.feed_date);
+            holder.timeDifferenceTextView = (TextView) convertView.findViewById(R.id.time_difference);
             holder.emoticonImageView = (ImageView) convertView.findViewById(R.id.feed_mood_emoji);
             convertView.setTag(holder);
         }
@@ -83,6 +87,7 @@ public class FeedListAdapter extends ArrayAdapter<MoodEventAssociation> {
         holder.usernameTextView.setText(usernameDisplayText);
         holder.emotionalStateTextView.setText(moodDisplayText);
         holder.dateTextView.setText(dateString);
+        holder.timeDifferenceTextView.setText(getTimeDifference(moodEvent.getDate()));
 
         switch(moodEvent.getEmotionalState()) {
             case SAD:

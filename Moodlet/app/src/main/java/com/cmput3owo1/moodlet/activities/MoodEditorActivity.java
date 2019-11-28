@@ -2,8 +2,16 @@ package com.cmput3owo1.moodlet.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 
 import com.cmput3owo1.moodlet.R;
 import com.cmput3owo1.moodlet.fragments.AddMoodFragment;
@@ -16,6 +24,7 @@ public class MoodEditorActivity extends AppCompatActivity {
 
     private AddMoodFragment addMoodFragment;
     private ViewMoodFragment viewMoodFragment;
+    private Toolbar toolbar;
 
     /**
      * Called when the activity is started and sets up the corresponding fragment to display.
@@ -26,9 +35,17 @@ public class MoodEditorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
 
-        if(getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
+        toolbar = findViewById(R.id.add_toolbar);
+        setSupportActionBar(toolbar);
+
+        // Manually replace navigation icon with custom icon.
+        toolbar.setNavigationIcon(R.drawable.ic_keyboard_arrow_left_24px);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         // Check that the activity is using the layout version with
         // the fragment_container FrameLayout
@@ -45,7 +62,9 @@ public class MoodEditorActivity extends AppCompatActivity {
             Intent intent = getIntent();
             if(intent.hasExtra("add")){
                 addMoodFragment = new AddMoodFragment();
-
+                Bundle args = new Bundle();
+                args.putBoolean("add",true);
+                addMoodFragment.setArguments(args);
                 getSupportFragmentManager().beginTransaction()
                         .add(R.id.fragment_container, addMoodFragment).commit();
             }
@@ -75,4 +94,5 @@ public class MoodEditorActivity extends AppCompatActivity {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
+
 }
