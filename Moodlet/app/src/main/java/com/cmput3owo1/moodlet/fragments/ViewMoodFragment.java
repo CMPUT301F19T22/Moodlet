@@ -39,12 +39,6 @@ public class ViewMoodFragment extends Fragment {
     private MoodEvent moodObj;
     private Date argDate;
     private GeoPoint argLocation;
-    /**
-     * Default constructor for the Fragment
-     */
-    public ViewMoodFragment(){
-
-    }
 
     /**
      * This function is called to have the fragment instantiate its user interface view.

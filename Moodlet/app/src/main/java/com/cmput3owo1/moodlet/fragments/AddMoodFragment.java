@@ -116,9 +116,6 @@ public class AddMoodFragment extends Fragment implements
     public static final int REQUEST_CHECK_SETTINGS = 2; // Keep public to access in parent activity
     private static final int PLACES_REQUEST_CODE = 3;
 
-    public AddMoodFragment(){
-    }
-
     /**
      * This function is called to have the fragment instantiate its user interface view.
      * @param inflater The LayoutInflater object that can be used to inflate any views in the fragment.

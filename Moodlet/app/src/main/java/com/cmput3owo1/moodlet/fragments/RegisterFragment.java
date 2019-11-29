@@ -37,7 +37,7 @@ public class RegisterFragment extends Fragment implements IUserServiceProvider.R
     private Button registerButton;
     private ProgressBar progressBar;
 
-    private UserService userService = new UserService();
+    private IUserServiceProvider userService = new UserService();
 
     /**
      * This function is called to have the fragment instantiate its user interface view.

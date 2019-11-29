@@ -28,12 +28,12 @@ import com.cmput3owo1.moodlet.services.UserService;
  */
 public class LoginFragment extends Fragment implements IUserServiceProvider.LoginListener {
 
-    EditText email, password;
-    TextView signupText;
-    Button loginButton;
-    ProgressBar progressBar;
+    private EditText email, password;
+    private TextView signupText;
+    private Button loginButton;
+    private ProgressBar progressBar;
 
-    UserService userService = new UserService();
+    private IUserServiceProvider userService = new UserService();
 
     /**
      * This function is called to have the fragment instantiate its user interface view.

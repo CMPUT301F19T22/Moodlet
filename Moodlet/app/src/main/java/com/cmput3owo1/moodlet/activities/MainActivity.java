@@ -63,12 +63,16 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Function that opens the {@link FollowRequestActivity} so the user can accept requests
+     */
     private void openFollowRequestActivity(){
         Intent intent = new Intent(this, FollowRequestActivity.class);
         startActivity(intent);
     }
 
-    /** Initialize the contents of the Activity's standard options menu.
+    /**
+     * Initialize the contents of the Activity's standard options menu.
      * @param menu The options menu in which you place your items.
      */
     @Override
@@ -86,13 +90,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
-        switch(item.getItemId()){
-            case R.id.logout:
-                userService.logoutUser();
-                Intent intent = new Intent(this, LoginActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                finish();
+        if(item.getItemId()== R.id.logout){
+            userService.logoutUser();
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
         }
 
         return super.onOptionsItemSelected(item);
