@@ -23,72 +23,72 @@
         <ImageView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_moodlet_icon" />
+            android:src="@drawable/ic_moodlet_icon_no_text" />
 
         <EditText
             android:id="@+id/full_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:singleLine="true"
-            android:hint="@string/full_name" />
+            android:hint="@string/full_name"
+            android:singleLine="true" />
 
         <EditText
             android:id="@+id/username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:singleLine="true"
-            android:hint="@string/username" />
+            android:hint="@string/username"
+            android:singleLine="true" />
 
         <EditText
             android:id="@+id/email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:singleLine="true"
-            android:hint="@string/email" />
+            android:hint="@string/email"
+            android:singleLine="true" />
 
         <EditText
             android:id="@+id/password"
-            android:inputType="textPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:hint="@string/password" />
+            android:hint="@string/password"
+            android:inputType="textPassword" />
 
         <EditText
             android:id="@+id/confirm_password"
-            android:inputType="textPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:hint="@string/confirm_password" />
+            android:hint="@string/confirm_password"
+            android:inputType="textPassword" />
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <com.google.android.material.button.MaterialButton
-                style="@style/Widget.AppCompat.Button"
                 android:id="@+id/btn_register"
+                style="@style/Widget.AppCompat.Button"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_marginTop="16dp"
                 android:text="@string/register"
                 android:textColor="#FFF"
-                app:cornerRadius="10dp"
-                app:backgroundTint="@color/colorAccent"/>
+                app:backgroundTint="@color/colorAccent"
+                app:cornerRadius="10dp" />
 
             <ProgressBar
                 android:id="@+id/register_progress_bar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:clickable="false"
                 android:background="@color/transparent"
-                android:visibility="invisible"
-                android:indeterminate="true" />
+                android:clickable="false"
+                android:indeterminate="true"
+                android:visibility="invisible" />
         </FrameLayout>
 
     </LinearLayout>
@@ -99,6 +99,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="16dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
