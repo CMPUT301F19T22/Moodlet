@@ -119,7 +119,6 @@ public class MoodHistoryFragmentTest {
         onView(withId(R.id.moodSelected)).perform(click());
 
         // Select confused from drop down
-//        onView(allOf(withId(R.id.standard_spinner_format), withText("Confused"))).perform(click());
         onData(allOf(is(instanceOf(EmotionalState.class)), is(EmotionalState.CONFUSED))).perform(click());
 
         onView(withId(R.id.currentLocationCheckbox)).perform(click());
