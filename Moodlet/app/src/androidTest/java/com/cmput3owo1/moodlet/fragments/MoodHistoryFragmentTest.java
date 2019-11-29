@@ -98,7 +98,7 @@ public class MoodHistoryFragmentTest {
         onData(allOf(is(instanceOf(EmotionalState.class)), is(EmotionalState.CONFUSED))).perform(click());
 
         // add mood event
-        onView(withId(R.id.add_mood)).perform(click());
+        onView(withId(R.id.confirmAdd)).perform(click());
 
         Thread.sleep(3000);
         onView(withId(R.id.mood_event_rv)).check(matches(atPosition(0, hasDescendant(withText("CONFUSED")))));
@@ -113,12 +113,12 @@ public class MoodHistoryFragmentTest {
 
         onView(withId(R.id.mood_event_rv)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
 
-        onView(withId(R.id.toggle_edit)).perform((click()));
+        onView(withId(R.id.editToggle)).perform((click()));
 
         onView(withId(R.id.moodSelected)).perform(click());
         onData(allOf(is(instanceOf(EmotionalState.class)), is(EmotionalState.HAPPY))).perform(click());
 
-        onView(withId(R.id.confirm_edit)).perform(click());
+        onView(withId(R.id.confirmEdit)).perform(click());
 
         // Sleep for async call to Firebase
         Thread.sleep(3000);
@@ -147,7 +147,7 @@ public class MoodHistoryFragmentTest {
         onData(allOf(is(instanceOf(EmotionalState.class)), is(EmotionalState.JEALOUS))).perform(click());
 
         // add mood event
-        onView(withId(R.id.add_mood)).perform(click());
+        onView(withId(R.id.confirmAdd)).perform(click());
 
         // Sleep for async call to Firebase
         Thread.sleep(3000);
