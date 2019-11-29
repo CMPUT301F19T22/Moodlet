@@ -262,6 +262,7 @@
                 android:layout_height="50dp"
                 android:layout_gravity="bottom"
                 android:background="@color/colorPrimary"
+                android:textStyle="bold"
                 android:text="APPLY"/>
 
         </LinearLayout>

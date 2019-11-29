@@ -67,8 +67,7 @@ public class MoodEditorActivity extends AppCompatActivity {
                 addMoodFragment.setArguments(args);
                 getSupportFragmentManager().beginTransaction()
                         .add(R.id.fragment_container, addMoodFragment).commit();
-            }
-            else if(intent.hasExtra("view")){
+            } else if(intent.hasExtra("view")){
                 viewMoodFragment = new ViewMoodFragment();
                 viewMoodFragment.setArguments(getIntent().getExtras());
 
@@ -89,6 +88,10 @@ public class MoodEditorActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == AddMoodFragment.REQUEST_CHECK_SETTINGS) {
+            // Check to see if the fragment is null, if not get the edit fragment using tag
+            if (addMoodFragment == null) {
+                addMoodFragment = (AddMoodFragment) getSupportFragmentManager().findFragmentByTag("EDIT_FRAGMENT");
+            }
             addMoodFragment.onActivityResult(requestCode, resultCode, data);
         } else {
             super.onActivityResult(requestCode, resultCode, data);
