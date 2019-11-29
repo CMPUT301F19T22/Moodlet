@@ -52,7 +52,7 @@ public class LoginFragment extends Fragment implements IUserServiceProvider.Logi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        // Inflate the layout for this fragment
+       // Inflate the layout for this fragment
         View loginFragmentView = inflater.inflate(R.layout.fragment_login, container, false);
 
         signupText = loginFragmentView.findViewById(R.id.sign_up_text);
