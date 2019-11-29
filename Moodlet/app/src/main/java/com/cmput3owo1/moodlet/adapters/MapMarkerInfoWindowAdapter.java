@@ -18,6 +18,10 @@ import java.util.Date;
 
 import static com.cmput3owo1.moodlet.utils.Utils.getTimeDifference;
 
+/**
+ * This class provides customized rendering of info windows for markers on the Google Map object. The
+ * methods of this provider are called when it is time to show an info window for a marker.
+ */
 public class MapMarkerInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
     private String pattern = "MMMM d, yyyy - h:mm a";
