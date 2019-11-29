@@ -18,8 +18,8 @@ import com.cmput3owo1.moodlet.services.UserService;
 import java.util.ArrayList;
 
 /**
- * The follow request activity. Holds the user's {@link FollowRequest} objects from other users. T
- * the user can accept or decline follow requests from this screen.
+ * The follow request activity. Holds the user's {@link FollowRequest} objects from other users.
+ * The user can accept or decline follow requests from this screen.
  */
 public class FollowRequestActivity extends AppCompatActivity implements
         IUserServiceProvider.OnRequestsUpdateListener,

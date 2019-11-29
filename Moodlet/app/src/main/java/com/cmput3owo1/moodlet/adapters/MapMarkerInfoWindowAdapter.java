@@ -112,7 +112,7 @@ public class MapMarkerInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
         Date date = moodEvent.getDate();
         dateInfo.setText(sdf.format(date));
         timeInfo.setText(getTimeDifference(date));
-                setEmoticon(moodEvent.getEmotionalState());
+        setEmoticon(moodEvent.getEmotionalState());
         infoWindowBar.setColorFilter(moodEvent.getEmotionalState().getColor());
     }
 
