@@ -1,12 +1,10 @@
 package com.cmput3owo1.moodlet.services;
 
 import android.net.Uri;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.cmput3owo1.moodlet.R;
 import com.cmput3owo1.moodlet.models.EmotionalState;
 import com.cmput3owo1.moodlet.models.MoodEvent;
 import com.cmput3owo1.moodlet.models.MoodEventAssociation;
@@ -273,7 +271,7 @@ public class MoodEventService implements IMoodEventServiceProvider {
      * method with the new mood history list when a change occurs.
      *
      * @param listener      The listener to pass the new mood history list to
-     * @param imageToUpload The Url to upload to FireBase.
+     * @param imageToUpload The Uri to upload to FireBase.
      */
     @Override
     public void uploadImage(final OnImageUploadListener listener, final Uri imageToUpload) {
