@@ -59,10 +59,12 @@
             <!-- Edit Mode -->
             <Spinner
                 android:id="@+id/moodSelected"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
                 android:layout_marginTop="4dp"
                 android:textSize="36sp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -83,10 +85,9 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
                 android:background="@android:color/darker_gray"
-                app:layout_constraintBottom_toTopOf="@+id/socialLabel"
+                app:layout_constraintTop_toBottomOf="@+id/moodLabel"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/moodLabel" />
+                app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
                 android:id="@+id/socialLabel"
@@ -104,13 +105,17 @@
             <!-- Edit Mode -->
             <Spinner
                 android:id="@+id/socialSelected"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
                 android:layout_marginTop="8dp"
+                android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/socialLabel" />
+                app:layout_constraintTop_toBottomOf="@+id/socialLabel"
+                android:spinnerMode="dropdown" />
 
             <!-- View Details -->
 
