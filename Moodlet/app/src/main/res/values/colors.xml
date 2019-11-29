@@ -4,7 +4,7 @@
     <color name="colorPrimaryDark">#141414</color>
     <color name="colorAccent">#2699FB</color>
     <color name="appBarTitle">#818282</color>
-    <color name="appBarBackground">#E9E9E9</color>
+    <color name="appBarBackground">#FCFCFC</color>
     <color name="transparent">#00E9E9E9</color>
     <color name="lightColorAccent">#D4E8F6</color>
     <color name="moodListColor">#3F3F3F</color>

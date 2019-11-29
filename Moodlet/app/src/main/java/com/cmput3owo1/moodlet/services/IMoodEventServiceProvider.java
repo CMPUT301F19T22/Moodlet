@@ -102,4 +102,5 @@ public interface IMoodEventServiceProvider {
      */
     void getMoodHistoryUpdates(OnMoodHistoryUpdateListener listener, EmotionalState filterBy);
 
+
 }

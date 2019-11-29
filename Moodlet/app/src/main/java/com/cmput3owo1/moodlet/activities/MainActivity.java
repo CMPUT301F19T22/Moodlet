@@ -27,8 +27,8 @@ import androidx.navigation.ui.NavigationUI;
 public class MainActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
-
     private IUserServiceProvider userService;
+
     /**
      * Called when the activity is starting. Sets up the navigation.
      * @param savedInstanceState Used to restore an activity's previous state
@@ -43,13 +43,14 @@ public class MainActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // Manually replace navigation icon with custom icon.
+//      Manually replace navigation icon with custom icon.
         toolbar.setNavigationIcon(R.drawable.ic_group_add_24px);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: Create intent to go to the follow requests fragment.
+//                 TODO: Create intent to go to the follow requests fragment.
                 Toast.makeText(MainActivity.this, "Follow requests", Toast.LENGTH_SHORT).show();
+                openFollowRequestActivity();
             }
         });
 
@@ -65,6 +66,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void openFollowRequestActivity(){
+        Intent intent = new Intent(this, FollowRequestActivity.class);
+        startActivity(intent);
+    }
 
     /** Initialize the contents of the Activity's standard options menu.
      * @param menu The options menu in which you place your items.

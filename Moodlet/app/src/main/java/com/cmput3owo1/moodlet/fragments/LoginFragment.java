@@ -46,6 +46,7 @@ public class LoginFragment extends Fragment implements IUserServiceProvider.Logi
          if(userService.hasPreviousLogin()){
              Intent intent = new Intent(getActivity(), MainActivity.class);
              startActivity(intent);
+             getActivity().finish();
          }
     }
 
