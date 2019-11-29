@@ -44,4 +44,13 @@ public class MoodEventTest {
         testEvent.setPhotographPath(photographPath);
         assertEquals(photographPath, testEvent.getPhotographPath());
     }
+
+    @Test
+    public void testLocationDescription() {
+        String locationDescription = "Peppa Pig's House";
+        MoodEvent testEvent = new MoodEvent(EmotionalState.JEALOUS);
+        testEvent.setLocationDescription(locationDescription);
+        assertEquals(locationDescription, testEvent.getLocationDescription());
+    }
+
 }

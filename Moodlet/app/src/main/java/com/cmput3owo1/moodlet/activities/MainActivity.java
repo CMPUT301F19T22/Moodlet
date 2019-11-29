@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
      * A hook that is called whenever an item in the options menu is selected.
      * This method can be used for adding functionality for specific selected menu items.
      * @param item The menu item that was selected
-     * @return
+     * @return Returns true if the event was handled and further processing should not occur
      */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
