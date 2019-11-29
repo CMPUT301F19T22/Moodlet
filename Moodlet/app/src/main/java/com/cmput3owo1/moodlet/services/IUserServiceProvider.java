@@ -1,5 +1,6 @@
 package com.cmput3owo1.moodlet.services;
 
+import com.cmput3owo1.moodlet.models.FollowRequest;
 import com.cmput3owo1.moodlet.models.User;
 import java.util.ArrayList;
 
@@ -49,6 +50,10 @@ public interface IUserServiceProvider {
         void onRequestSuccess(User user);
     }
 
+    interface OnAcceptRequestsListener {
+        void onAcceptRequestsUpdate(ArrayList<FollowRequest> newRequests);
+    }
+
     /**
      * This function is called to check if there is an existing instance of the logged in user.
      * @return Returns true if there is a logged in user; false otherwise.
@@ -92,5 +97,7 @@ public interface IUserServiceProvider {
      * @param listener The listener to inform of a success
      */
     void sendFollowRequest(User user, OnFollowRequestListener listener);
+
+    void getFollowRequests(User user, OnAcceptRequestsListener listener);
 
 }

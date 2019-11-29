@@ -1,5 +1,7 @@
 package com.cmput3owo1.moodlet.models;
 
+import com.google.firebase.firestore.Exclude;
+
 /**
  * Class to represent an app user. Contains just the basic info about the user: username, fullName,
  * and email.
