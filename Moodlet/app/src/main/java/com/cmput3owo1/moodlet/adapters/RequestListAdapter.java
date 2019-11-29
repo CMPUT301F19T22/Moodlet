@@ -22,10 +22,9 @@ public class RequestListAdapter extends ArrayAdapter<FollowRequest> {
     private OnRequestClickListener listener;
 
     public interface OnRequestClickListener {
-        void OnAcceptClick(FollowRequest requestFrom);
-        void OnDeclineClick(FollowRequest requestFrom);
+        void OnAcceptClick(FollowRequest request);
+        void OnDeclineClick(FollowRequest request);
     }
-
 
     public RequestListAdapter(Context context, ArrayList<FollowRequest> requestsList,
                               OnRequestClickListener listener) {
@@ -58,23 +57,21 @@ public class RequestListAdapter extends ArrayAdapter<FollowRequest> {
             holder = (RequestListAdapter.ViewHolder) convertView.getTag();
         }
 
-        final FollowRequest requestFrom = getItem(position);
-
-        String usernameDisplayText = "@" + requestFrom.getRequestFrom();
-
+        final FollowRequest request = getItem(position);
+        String usernameDisplayText = "@" + request.getRequestFrom();
         holder.usernameTextView.setText(usernameDisplayText);
 
         holder.acceptButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.OnAcceptClick(requestFrom);
+                listener.OnAcceptClick(request);
             }
         });
 
         holder.declineButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.OnDeclineClick(requestFrom);
+                listener.OnDeclineClick(request);
             }
         });
 

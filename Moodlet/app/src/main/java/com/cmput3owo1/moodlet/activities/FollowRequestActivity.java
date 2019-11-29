@@ -17,9 +17,10 @@ import com.cmput3owo1.moodlet.services.UserService;
 
 import java.util.ArrayList;
 
-public class FollowRequestActivity extends AppCompatActivity
-        implements IUserServiceProvider.OnRequestsUpdateListener,
-        RequestListAdapter.OnRequestClickListener, IUserServiceProvider.OnAcceptRequestListener {
+public class FollowRequestActivity extends AppCompatActivity implements
+        IUserServiceProvider.OnRequestsUpdateListener,
+        RequestListAdapter.OnRequestClickListener,
+        IUserServiceProvider.OnAcceptRequestListener {
 
     private Toolbar toolbar;
     private ListView requestsListView;
@@ -27,7 +28,6 @@ public class FollowRequestActivity extends AppCompatActivity
     private ArrayList<FollowRequest> requestDataList;
     private IUserServiceProvider userService;
     private IMoodEventServiceProvider moodEventService;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +37,7 @@ public class FollowRequestActivity extends AppCompatActivity
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //      Manually replace navigation icon with custom icon.
+        // Manually replace navigation icon with custom icon.
         toolbar.setNavigationIcon(R.drawable.ic_keyboard_arrow_left_24px);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,16 +46,16 @@ public class FollowRequestActivity extends AppCompatActivity
             }
         });
 
-        requestsListView = findViewById(R.id.requests_list_view);
         requestDataList = new ArrayList<>();
         requestsAdapter = new RequestListAdapter(this, requestDataList, this);
 
+        requestsListView = findViewById(R.id.requests_list_view);
         requestsListView.setAdapter(requestsAdapter);
 
         userService = new UserService();
-        userService.getRequestUpdates(this);
-
         moodEventService = new MoodEventService();
+
+        userService.getRequestUpdates(this);
     }
 
     @Override
@@ -66,8 +66,8 @@ public class FollowRequestActivity extends AppCompatActivity
     }
 
     @Override
-    public void OnAcceptClick(FollowRequest requestFrom) {
-        userService.acceptFollowRequest(requestFrom, this);
+    public void OnAcceptClick(FollowRequest request) {
+        userService.acceptFollowRequest(request, this);
     }
 
     @Override
