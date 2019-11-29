@@ -47,7 +47,6 @@ public class MoodHistoryFragment extends Fragment
         IMoodEventServiceProvider.OnMoodDeleteListener {
 
     private static final long BACK_BUTTON_TIMEOUT = 2000;
-    public static final String EXIT_EXTRAS_KEY = "EXIT";
 
     private RecyclerView recyclerView;
     private MoodEventAdapter recyclerAdapter;
