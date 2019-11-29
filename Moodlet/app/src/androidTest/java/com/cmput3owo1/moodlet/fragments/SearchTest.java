@@ -56,7 +56,7 @@ public class SearchTest {
 
     @Test
     public void testSearchUsers() throws InterruptedException {
-//        loginWithTestAccount();
+        loginWithTestAccount();
 
         // Navigate to Search fragment
         onView(withId(R.id.navigation_search)).perform(click());
@@ -73,7 +73,7 @@ public class SearchTest {
 
     @Test
     public void testSentRequest() throws InterruptedException {
-//        loginWithTestAccount();
+        loginWithTestAccount();
 
         // Navigate to Search fragment
         onView(withId(R.id.navigation_search)).perform(click());
