@@ -116,6 +116,9 @@ public class LoginFragment extends Fragment implements IUserServiceProvider.Logi
         Toast.makeText(getActivity(), R.string.authentication_failed, Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Function to set all fields to clickable, hides the progress bar and shows the login button
+     */
     private void hideProgressBar() {
 
         setAllToClickable();
@@ -124,6 +127,9 @@ public class LoginFragment extends Fragment implements IUserServiceProvider.Logi
         loginButton.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Function to set all fields to unclickable, shows the progress bar, and hides the login button
+     */
     private void showProgressBar() {
 
         setAllToUnclickable();
@@ -132,6 +138,9 @@ public class LoginFragment extends Fragment implements IUserServiceProvider.Logi
         progressBar.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Function to set all fields in login fragment to be unclickable
+     */
     private void setAllToUnclickable() {
         email.setEnabled(false);
         password.setEnabled(false);
@@ -139,6 +148,9 @@ public class LoginFragment extends Fragment implements IUserServiceProvider.Logi
         loginButton.setClickable(false);
     }
 
+    /**
+     * Function to set all fields in login fragment to be clickable
+     */
     private void setAllToClickable() {
         email.setEnabled(true);
         password.setEnabled(true);

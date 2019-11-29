@@ -139,6 +139,9 @@ public class RegisterFragment extends Fragment implements IUserServiceProvider.R
         Toast.makeText(getActivity(), R.string.username_taken, Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Function to set all fields to clickable, hides the progress bar, and shows the register button
+     */
     private void hideProgressBar(){
         setAllToClickable();
 
@@ -146,6 +149,9 @@ public class RegisterFragment extends Fragment implements IUserServiceProvider.R
         registerButton.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Function to set all fields to unclickable, shows the progress bar, and hides the register button
+     */
     private void showProgressBar() {
         setAllToUnclickable();
 
@@ -153,7 +159,9 @@ public class RegisterFragment extends Fragment implements IUserServiceProvider.R
         progressBar.setVisibility(View.VISIBLE);
     }
 
-
+    /**
+     * Function to set all fields in register fragment to unclickable
+     */
     private void setAllToUnclickable() {
         loginText.setClickable(false);
         registerButton.setClickable(false);
@@ -164,6 +172,9 @@ public class RegisterFragment extends Fragment implements IUserServiceProvider.R
         confirmPassword.setEnabled(false);
     }
 
+    /**
+     * Function to set all fields in register fragment to clickable
+     */
     private void setAllToClickable() {
         loginText.setClickable(true);
         registerButton.setClickable(true);
