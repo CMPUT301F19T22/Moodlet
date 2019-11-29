@@ -1,5 +1,8 @@
 package com.cmput3owo1.moodlet.utils;
 
+import com.cmput3owo1.moodlet.R;
+import com.cmput3owo1.moodlet.models.EmotionalState;
+
 import org.junit.Test;
 
 import java.util.Calendar;
@@ -60,5 +63,54 @@ public class UtilsTest {
         String timeDifference = getTimeDifference(date.getTime());
 
         assertEquals(timeDifference, "Just now");
+    }
+
+    @Test
+    public void testGetSadMoodEmoticon() {
+        int emoticonResource = getMoodEmoticon(EmotionalState.SAD);
+
+        assertEquals(emoticonResource, R.drawable.ic_mood_sad);
+    }
+
+    @Test
+    public void testGetAngryMoodEmoticon() {
+        int emoticonResource = getMoodEmoticon(EmotionalState.ANGRY);
+
+        assertEquals(emoticonResource, R.drawable.ic_mood_angry);
+    }
+
+    @Test
+    public void testGetConfusedMoodEmoticon() {
+        int emoticonResource = getMoodEmoticon(EmotionalState.CONFUSED);
+
+        assertEquals(emoticonResource, R.drawable.ic_mood_confused);
+    }
+
+    @Test
+    public void testGetExcitedMoodEmoticon() {
+        int emoticonResource = getMoodEmoticon(EmotionalState.EXCITED);
+
+        assertEquals(emoticonResource, R.drawable.ic_mood_excited);
+    }
+
+    @Test
+    public void testGetHappyMoodEmoticon() {
+        int emoticonResource = getMoodEmoticon(EmotionalState.HAPPY);
+
+        assertEquals(emoticonResource, R.drawable.ic_mood_happy);
+    }
+
+    @Test
+    public void testGetJealousMoodEmoticon() {
+        int emoticonResource = getMoodEmoticon(EmotionalState.JEALOUS);
+
+        assertEquals(emoticonResource, R.drawable.ic_mood_jealous);
+    }
+
+    @Test
+    public void testGetScaredMoodEmoticon() {
+        int emoticonResource = getMoodEmoticon(EmotionalState.SCARED);
+
+        assertEquals(emoticonResource, R.drawable.ic_mood_scared);
     }
 }
