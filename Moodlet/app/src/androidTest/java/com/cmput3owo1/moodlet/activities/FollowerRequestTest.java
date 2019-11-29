@@ -45,12 +45,6 @@ public class FollowerRequestTest {
     private String testPassword = "Password123!";
 
     private void loginWithTestAccount() throws InterruptedException {
-        // Logout first
-        openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getTargetContext());
-        onView(withText("Logout")).perform(click());
-
-        Thread.sleep(5000);
-
         onView(withId(R.id.edit_text_email)).perform(typeText(testEmail));
         pressBack();
         onView(withId(R.id.edit_text_password)).perform(typeText(testPassword));
