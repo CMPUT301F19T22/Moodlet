@@ -210,6 +210,11 @@ public class UserService implements IUserServiceProvider {
                 //TODO .addOnFailureListener() - Add this later
     }
 
+    /**
+     * Accept the specified follow request. Call the listener's callback function upon success
+     * @param request The follow request to accept
+     * @param listener The listener to notify upon success
+     */
     @Override
     public void acceptFollowRequest(FollowRequest request, final OnAcceptRequestListener listener) {
         final String newFollowerUsername = request.getRequestFrom();
@@ -240,6 +245,10 @@ public class UserService implements IUserServiceProvider {
         deleteFollowRequest(request);
     }
 
+    /**
+     * Deletes the follow request from Firestore database
+     * @param request The follow request to delete
+     */
     @Override
     public void deleteFollowRequest(FollowRequest request) {
         db.collection("requests")
@@ -298,7 +307,9 @@ public class UserService implements IUserServiceProvider {
     }
 
     /**
-     * Listen for follower request updates
+     * Listen to follow request updates of the current user. Calls the listener's onRequestUpdate
+     * method with the new follow request list when a change occurs.
+     * @param listener The listener to pass the new follow request list to
      */
     @Override
     public void getRequestUpdates(final OnRequestsUpdateListener listener) {

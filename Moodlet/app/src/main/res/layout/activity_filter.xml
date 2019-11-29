@@ -262,7 +262,9 @@
                 android:layout_height="50dp"
                 android:layout_gravity="bottom"
                 android:background="@color/colorPrimary"
-                android:text="APPLY"/>
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:text="@string/filter_apply_button"/>
 
         </LinearLayout>
 

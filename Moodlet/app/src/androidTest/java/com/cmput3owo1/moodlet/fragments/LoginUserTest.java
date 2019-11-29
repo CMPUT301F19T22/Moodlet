@@ -3,6 +3,7 @@ package com.cmput3owo1.moodlet.fragments;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
+import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
 import com.cmput3owo1.moodlet.R;
@@ -13,6 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
@@ -27,6 +29,7 @@ import static org.hamcrest.Matchers.not;
 /**
  * This tests for proper user login and failed user login with wrong
  * credentials and missing fields
+ *
  */
 @LargeTest
 @RunWith(AndroidJUnit4.class)
@@ -81,8 +84,27 @@ public class LoginUserTest {
 
         onView(withText(R.string.authentication_failed)).inRoot(withDecorView(not(mActivityTestRule.getActivity().getWindow().getDecorView()))).check(matches(isDisplayed()));
 
+    }
 
+    @Test
+    public void loginAndLogoutTest() throws InterruptedException {
 
+        ViewInteraction appCompatEditText = onView(withId(R.id.edit_text_email));
+        appCompatEditText.perform(replaceText("dtran1@ualberta.ca"), closeSoftKeyboard());
+
+        ViewInteraction appCompatEditText2 = onView(withId(R.id.edit_text_password));
+        appCompatEditText2.perform(replaceText("password"), closeSoftKeyboard());
+
+        ViewInteraction appCompatButton = onView(allOf(withId(R.id.btn_login), withText("Login")));
+        appCompatButton.perform(click());
+
+        Thread.sleep(1500);
+
+        openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getContext());
+        onView(withText(R.string.logout)).perform(click());
+
+        ViewInteraction loginLayout = onView(withId(R.id.login_layout));
+        loginLayout.check(matches(isDisplayed()));
     }
 
 }
