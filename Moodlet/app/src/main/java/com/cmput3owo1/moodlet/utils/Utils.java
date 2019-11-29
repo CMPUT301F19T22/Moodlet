@@ -6,6 +6,9 @@ import com.cmput3owo1.moodlet.models.EmotionalState;
 import java.util.Date;
 import java.util.Locale;
 
+/**
+ * A general utility class to hold functions used across multiple classes.
+ */
 public class Utils {
 
     /**

@@ -162,6 +162,11 @@ public class MoodEventService implements IMoodEventServiceProvider {
         });
     }
 
+    /**
+     * Updates the specified follower with the most recent mood of the current user. Updates the
+     * specified follower's feed
+     * @param followerUsername The username of the follower to update
+     */
     @Override
     public void updateFollowerWithMostRecentMood(final String followerUsername) {
         final String currentUser = auth.getCurrentUser().getDisplayName();

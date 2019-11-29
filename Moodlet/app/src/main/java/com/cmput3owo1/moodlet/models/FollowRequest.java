@@ -57,10 +57,18 @@ public class FollowRequest {
         this.requestTo = requestTo;
     }
 
+    /**
+     * This gets the ID of the follow request
+     * @return Returns the ID of the follow request
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     * This sets the ID of the follow request
+     * @param id The new ID of the follow request
+     */
     public void setId(String id) {
         this.id = id;
     }

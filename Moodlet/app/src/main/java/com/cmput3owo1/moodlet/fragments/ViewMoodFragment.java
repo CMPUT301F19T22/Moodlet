@@ -39,6 +39,7 @@ public class ViewMoodFragment extends Fragment {
     private MoodEvent moodObj;
     private Date argDate;
     private GeoPoint argLocation;
+
     /**
      * Default constructor for the Fragment
      */

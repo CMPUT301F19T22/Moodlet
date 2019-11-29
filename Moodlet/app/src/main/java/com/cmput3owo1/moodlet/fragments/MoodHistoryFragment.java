@@ -42,7 +42,9 @@ import java.util.Date;
  * date, and time sorted in reverse chronological order of each mood event.
  */
 public class MoodHistoryFragment extends Fragment
-        implements MoodEventAdapter.OnItemClickListener, IMoodEventServiceProvider.OnMoodHistoryUpdateListener, IMoodEventServiceProvider.OnMoodDeleteListener{
+        implements MoodEventAdapter.OnItemClickListener,
+        IMoodEventServiceProvider.OnMoodHistoryUpdateListener,
+        IMoodEventServiceProvider.OnMoodDeleteListener {
 
     private static final long BACK_BUTTON_TIMEOUT = 2000;
     public static final String EXIT_EXTRAS_KEY = "EXIT";
@@ -57,6 +59,13 @@ public class MoodHistoryFragment extends Fragment
     private ListenerRegistration unfilteredListenerRegistration;
     private ListenerRegistration filteredListenerRegistration;
     private long timeBackButtonPressed = 0;
+
+    /**
+     * Default constructor for the Fragment
+     */
+    public MoodHistoryFragment(){
+
+    }
 
     /**
      * Called when the fragment is starting.
