@@ -29,6 +29,10 @@ import static org.hamcrest.Matchers.not;
 /**
  * This tests for proper user login and failed user login with wrong
  * credentials and missing fields
+ *
+ * Note: The auto-login function in the login fragment must be commented out for the login tests
+ * to work. (lines 48-54) in {@link LoginFragment}
+ *
  */
 @LargeTest
 @RunWith(AndroidJUnit4.class)
