@@ -42,8 +42,12 @@ public interface IUserServiceProvider {
         void onRequestSuccess(User user);
     }
 
-    interface OnAcceptRequestsListener {
-        void onAcceptRequestsUpdate(ArrayList<FollowRequest> newRequests);
+    interface OnAcceptRequestListener {
+        void onAcceptRequestSuccess(String newFollowerUsername);
+    }
+
+    interface OnRequestsUpdateListener {
+        void onRequestsUpdate(ArrayList<FollowRequest> newRequests);
     }
 
     /**
@@ -80,6 +84,10 @@ public interface IUserServiceProvider {
 
     void sendFollowRequest(User user, OnFollowRequestListener listener);
 
-    void getFollowRequests(User user, OnAcceptRequestsListener listener);
+    void getRequestUpdates(OnRequestsUpdateListener listener);
+
+    void deleteFollowRequest(FollowRequest request);
+
+    void acceptFollowRequest(FollowRequest request, OnAcceptRequestListener listener);
 
 }

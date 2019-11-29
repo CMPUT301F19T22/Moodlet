@@ -6,25 +6,27 @@ import androidx.appcompat.widget.Toolbar;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.cmput3owo1.moodlet.R;
 import com.cmput3owo1.moodlet.adapters.RequestListAdapter;
 import com.cmput3owo1.moodlet.models.FollowRequest;
-import com.cmput3owo1.moodlet.models.User;
+import com.cmput3owo1.moodlet.services.IMoodEventServiceProvider;
 import com.cmput3owo1.moodlet.services.IUserServiceProvider;
+import com.cmput3owo1.moodlet.services.MoodEventService;
 import com.cmput3owo1.moodlet.services.UserService;
-import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
 
-public class FollowRequestActivity extends AppCompatActivity implements IUserServiceProvider.OnAcceptRequestsListener {
+public class FollowRequestActivity extends AppCompatActivity
+        implements IUserServiceProvider.OnRequestsUpdateListener,
+        RequestListAdapter.OnRequestClickListener, IUserServiceProvider.OnAcceptRequestListener {
 
-    Toolbar toolbar;
+    private Toolbar toolbar;
     private ListView requestsListView;
     private RequestListAdapter requestsAdapter;
     private ArrayList<FollowRequest> requestDataList;
-    private IUserServiceProvider service;
+    private IUserServiceProvider userService;
+    private IMoodEventServiceProvider moodEventService;
 
 
     @Override
@@ -40,28 +42,41 @@ public class FollowRequestActivity extends AppCompatActivity implements IUserSer
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//              TODO: Create intent to go to the follow requests fragment.
-                Toast.makeText(FollowRequestActivity.this, "Go back", Toast.LENGTH_SHORT).show();
-
                 finish();
-
             }
         });
 
-        service = new UserService();
-        service.getFollowRequests(this);
-
         requestsListView = findViewById(R.id.requests_list_view);
         requestDataList = new ArrayList<>();
-        requestsAdapter = new RequestListAdapter(this, requestDataList); // not sure how the listener works
+        requestsAdapter = new RequestListAdapter(this, requestDataList, this);
 
         requestsListView.setAdapter(requestsAdapter);
 
+        userService = new UserService();
+        userService.getRequestUpdates(this);
 
+        moodEventService = new MoodEventService();
     }
 
     @Override
-    public void onAcceptRequestsUpdate(ArrayList<FollowRequest> newRequests) {
+    public void onRequestsUpdate(ArrayList<FollowRequest> newRequests) {
+        requestDataList.clear();
+        requestDataList.addAll(newRequests);
+        requestsAdapter.notifyDataSetChanged();
+    }
 
+    @Override
+    public void OnAcceptClick(FollowRequest requestFrom) {
+        userService.acceptFollowRequest(requestFrom, this);
+    }
+
+    @Override
+    public void OnDeclineClick(FollowRequest request) {
+        userService.deleteFollowRequest(request);
+    }
+
+    @Override
+    public void onAcceptRequestSuccess(String newFollowerUsername) {
+        moodEventService.updateFollowerWithMostRecentMood(newFollowerUsername);
     }
 }

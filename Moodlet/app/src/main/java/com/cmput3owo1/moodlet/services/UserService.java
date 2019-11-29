@@ -24,8 +24,8 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static android.content.ContentValues.TAG;
@@ -35,7 +35,7 @@ import static android.content.ContentValues.TAG;
  * is required by a user. This service is to abstract the Firestore and
  * Firebase auth away from the rest of the fragments
  */
-public class UserService implements IUserServiceProvider{
+public class UserService implements IUserServiceProvider {
 
     private FirebaseAuth auth;
     private FirebaseFirestore db;
@@ -192,9 +192,10 @@ public class UserService implements IUserServiceProvider{
     public void sendFollowRequest(final User user, final OnFollowRequestListener listener) {
         String currentUser = auth.getCurrentUser().getDisplayName();
         FollowRequest followRequest = new FollowRequest(currentUser, user.getUsername());
-        db.collection("requests")
-                .document()
-                .set(followRequest)
+        DocumentReference doc = db.collection("requests").document();
+
+        doc.set(followRequest);
+        doc.update("id", doc.getId())
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -204,17 +205,42 @@ public class UserService implements IUserServiceProvider{
                 //TODO .addOnFailureListener() - Add this later
     }
 
-//    public void acceptFollowRequest(final User user, final OnFollowRequestListener listener) {
-//        String currentUser = auth.getCurrentUser().getDisplayName();
-//
-//        db.collection("requests")
-//
-//
-//    }
-//
-//    public void declineFollowRequest(final User user, final OnFollowRequestListener listener) {
-//
-//    }
+    @Override
+    public void acceptFollowRequest(FollowRequest request, final OnAcceptRequestListener listener) {
+        final String newFollowerUsername = request.getRequestFrom();
+        final String currentUser = request.getRequestTo();
+
+        HashMap<String, String> followerData = new HashMap<>();
+        followerData.put("username", newFollowerUsername);
+
+        HashMap<String, String> followingData = new HashMap<>();
+        followingData.put("username", currentUser);
+
+        db.collection("users")
+                .document(currentUser)
+                .collection("followers")
+                .document(newFollowerUsername)
+                .set(followerData);
+
+        db.collection("users")
+                .document(newFollowerUsername)
+                .collection("following")
+                .document(currentUser)
+                .set(followingData).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                listener.onAcceptRequestSuccess(newFollowerUsername);
+            }
+        });
+        deleteFollowRequest(request);
+    }
+
+    @Override
+    public void deleteFollowRequest(FollowRequest request) {
+        db.collection("requests")
+                .document(request.getId())
+                .delete();
+    }
 
     private Task<DocumentSnapshot> setFollowStatusForUser(final User user) {
         String currentUser = auth.getCurrentUser().getDisplayName();
@@ -254,21 +280,16 @@ public class UserService implements IUserServiceProvider{
                 });
     }
 
-
     /**
      * Listen for follower request updates
      */
     @Override
-    public void getFollowRequests(User user, OnAcceptRequestsListener listener) {
+    public void getRequestUpdates(final OnRequestsUpdateListener listener) {
         String username = auth.getCurrentUser().getDisplayName();
 
         Query requestsQuery = db.collection("requests")
                 .whereEqualTo("requestTo", username);
 
-        runRequestsQuery(requestsQuery, listener);
-    }
-
-    private void runRequestsQuery(Query requestsQuery, final OnAcceptRequestsListener listener) {
         requestsQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
@@ -277,9 +298,11 @@ public class UserService implements IUserServiceProvider{
                     FollowRequest followRequest = doc.toObject(FollowRequest.class);
                     newRequests.add(followRequest);
                 }
+                listener.onRequestsUpdate(newRequests);
             }
         });
     }
+
 }
 
 

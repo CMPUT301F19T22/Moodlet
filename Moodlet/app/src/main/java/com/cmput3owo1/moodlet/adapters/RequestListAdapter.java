@@ -1,8 +1,6 @@
 package com.cmput3owo1.moodlet.adapters;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,34 +13,26 @@ import androidx.annotation.Nullable;
 
 import com.cmput3owo1.moodlet.R;
 import com.cmput3owo1.moodlet.models.FollowRequest;
-import com.cmput3owo1.moodlet.models.User;
-import com.cmput3owo1.moodlet.services.IUserServiceProvider;
-import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 
 public class RequestListAdapter extends ArrayAdapter<FollowRequest> {
     private ArrayList<FollowRequest> requestsList;
     private Context context;
-    private OnAcceptClickListener acceptListener;
-    private OnDeclineClickListener declineListener;
+    private OnRequestClickListener listener;
 
-    public interface OnAcceptClickListener {
+    public interface OnRequestClickListener {
         void OnAcceptClick(FollowRequest requestFrom);
-    }
-
-    public interface OnDeclineClickListener {
         void OnDeclineClick(FollowRequest requestFrom);
     }
 
-    public RequestListAdapter(Context context,
-                              ArrayList<FollowRequest> requestsList,
-                              OnAcceptClickListener acceptListener, OnDeclineClickListener declineListener) {
 
+    public RequestListAdapter(Context context, ArrayList<FollowRequest> requestsList,
+                              OnRequestClickListener listener) {
         super(context, 0, requestsList);
         this.requestsList = requestsList;
-        this.acceptListener = acceptListener;
-        this.declineListener = declineListener;
+        this.context = context;
+        this.listener = listener;
     }
 
     static class ViewHolder {
@@ -70,17 +60,21 @@ public class RequestListAdapter extends ArrayAdapter<FollowRequest> {
 
         final FollowRequest requestFrom = getItem(position);
 
+        String usernameDisplayText = "@" + requestFrom.getRequestFrom();
+
+        holder.usernameTextView.setText(usernameDisplayText);
+
         holder.acceptButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                acceptListener.OnAcceptClick(requestFrom);
+                listener.OnAcceptClick(requestFrom);
             }
         });
 
         holder.declineButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                declineListener.OnDeclineClick(requestFrom);
+                listener.OnDeclineClick(requestFrom);
             }
         });
 
