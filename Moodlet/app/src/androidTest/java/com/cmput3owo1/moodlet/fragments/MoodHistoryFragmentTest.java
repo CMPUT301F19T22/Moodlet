@@ -112,26 +112,15 @@ public class MoodHistoryFragmentTest {
         // Navigate to the History Fragment
         onView(withId(R.id.navigation_mood_history)).perform(click());
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-        onView(withId(R.id.mood_event_rv)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-
-        onView(withId(R.id.editToggle)).perform((click()));
-=======
         // Click on the floating action button to go to add mood page
         onView(withId(R.id.add_mood_fab)).perform(click());
->>>>>>> 2dbdae3bfce3bc1774924afa5e99801e7486e089
 
         // Click on mood drop down and select a mood
         onView(withId(R.id.moodSelected)).perform(click());
 
-<<<<<<< HEAD
-        onView(withId(R.id.confirmEdit)).perform(click());
-=======
         // Select confused from drop down
         onData(allOf(is(instanceOf(EmotionalState.class)), is(EmotionalState.CONFUSED))).perform(click());
->>>>>>> 2dbdae3bfce3bc1774924afa5e99801e7486e089
-=======
+
         // Click on the floating action button to go to add mood page
         onView(withId(R.id.add_mood_fab)).perform(click());
 
@@ -140,7 +129,6 @@ public class MoodHistoryFragmentTest {
       
         // Select confused from drop down
         onData(allOf(is(instanceOf(EmotionalState.class)), is(EmotionalState.CONFUSED))).perform(click());
->>>>>>> a8af2fa3441b65b7613915dcb5a6de6ce06a4396
 
         onView(withId(R.id.currentLocationCheckbox)).perform(click());
 

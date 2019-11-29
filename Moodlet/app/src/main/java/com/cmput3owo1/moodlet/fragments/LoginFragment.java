@@ -52,22 +52,7 @@ public class LoginFragment extends Fragment implements IUserServiceProvider.Logi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-        if (userService.hasPreviousLogin()) {
-            Intent intent = new Intent(getActivity(), MainActivity.class);
-            startActivity(intent);
-
-            getActivity().finish();
-            return null;
-        }
-
-=======
->>>>>>> 2dbdae3bfce3bc1774924afa5e99801e7486e089
-        // Inflate the layout for this fragment
-=======
        // Inflate the layout for this fragment
->>>>>>> a8af2fa3441b65b7613915dcb5a6de6ce06a4396
         View loginFragmentView = inflater.inflate(R.layout.fragment_login, container, false);
 
         signupText = loginFragmentView.findViewById(R.id.sign_up_text);
