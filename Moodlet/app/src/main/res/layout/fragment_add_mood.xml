@@ -203,18 +203,35 @@
                 android:maxLines="1"
                 android:inputType="text"
                 android:scrollHorizontally="true"
+                android:focusable="false"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/locationLabelContainer" />
 
-            <CheckBox
-                android:id="@+id/currentLocationCheckbox"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/checkboxContainer"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/location_checkbox"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/locationEdit"/>
+                app:layout_constraintTop_toBottomOf="@+id/locationEdit"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/currentLocationCheckbox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/location_checkbox"
+                    android:layout_weight="1" />
+
+                <CheckBox
+                    android:id="@+id/usePreviousLocationCheckbox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/previous_location_checkbox"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -226,7 +243,7 @@
                 android:background="@color/darkgrey"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/currentLocationCheckbox" >
+                app:layout_constraintTop_toBottomOf="@+id/checkboxContainer" >
 
                 <ImageView
                     android:id="@+id/imageToUpload"

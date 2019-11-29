@@ -126,6 +126,8 @@ public class MoodHistoryFragment extends Fragment
         Intent intent = new Intent(getActivity(), MoodEditorActivity.class);
         intent.putExtra("MoodEvent",selected);
         intent.putExtra("date",selected.getDate());
+        intent.putExtra("location_lat",selected.getLocation().getLatitude());
+        intent.putExtra("location_lon",selected.getLocation().getLongitude());
         intent.putExtra("view",true);
         startActivity(intent);
     }

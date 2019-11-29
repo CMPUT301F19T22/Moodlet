@@ -17,6 +17,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.cmput3owo1.moodlet.R;
 import com.cmput3owo1.moodlet.models.MoodEvent;
+import com.google.firebase.firestore.GeoPoint;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
@@ -38,6 +39,7 @@ public class ViewMoodFragment extends Fragment {
     private Button toggleEdit;
     private MoodEvent moodObj;
     private Date argDate;
+    private GeoPoint argLocation;
     /**
      * Default constructor for the Fragment
      */
@@ -73,17 +75,20 @@ public class ViewMoodFragment extends Fragment {
         Bundle args = getArguments();
         moodObj = (MoodEvent) args.getSerializable("MoodEvent");
         argDate = (Date) args.getSerializable("date");
+        argLocation = new GeoPoint(args.getDouble("location_lat"), args.getDouble("location_lon"));
 
         //Set text after obtaining data
         moodDisplay.setText(moodObj.getEmotionalState().getDisplayName());
         socialDisplay.setText(moodObj.getSocialSituation().getDisplayName());
         reasonDisplay.setText(moodObj.getReasoning());
+
+        // TODO: set the text for location
+
         date.setText(sdf.format(argDate));
         bg.setColorFilter(moodObj.getEmotionalState().getColor());
 
         if(moodObj.getPhotographPath() != null){
             Picasso.get().load(moodObj.getPhotographPath()).into(imageDisplay);
-
         }
 
         return view;
@@ -115,6 +120,9 @@ public class ViewMoodFragment extends Fragment {
                 Bundle args = new Bundle();
                 args.putSerializable("MoodEvent",moodObj);
                 args.putSerializable("date",argDate);
+                args.putSerializable("location_lat", argLocation.getLatitude());
+                args.putSerializable("location_lon", argLocation.getLongitude());
+
                 args.putBoolean("edit",true);
                 fragment.setArguments(args);
                 FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
