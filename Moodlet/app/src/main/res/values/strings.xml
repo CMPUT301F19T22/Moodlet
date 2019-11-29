@@ -9,6 +9,7 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="username">Username</string>
     <string name="login">Login</string>
+    <string name="logout">Logout</string>
     <string name="full_name">Full Name</string>
     <string name="register">Register</string>
     <string name="all_fields_required">All fields are required</string>

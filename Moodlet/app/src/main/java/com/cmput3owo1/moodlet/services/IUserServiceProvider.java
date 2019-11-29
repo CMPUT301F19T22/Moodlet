@@ -51,14 +51,15 @@ public interface IUserServiceProvider {
     }
 
     /**
-     * Interface for a listener that receives the username of the follower after accepting the request.
+     * Interface for a listener that receives the username of the follower after accepting the
+     * request. The listener is invoked when the follow request is successfully accepted.
      */
     interface OnAcceptRequestListener {
         void onAcceptRequestSuccess(String newFollowerUsername);
     }
 
     /**
-     * Interface for a listener to constantly update whenever a request is sent from one user to another.
+     * Listener interface to get the new follow request list upon an update
      */
     interface OnRequestsUpdateListener {
         void onRequestsUpdate(ArrayList<FollowRequest> newRequests);
@@ -109,21 +110,22 @@ public interface IUserServiceProvider {
     void sendFollowRequest(User user, OnFollowRequestListener listener);
 
     /**
-     * Gets the request updates whenever a request is sent from one user to another.
-     * @param listener The listener to inform a request update.
+     * Listen to follow request updates of the current user. Calls the listener's onRequestUpdate
+     * method with the new follow request list when a change occurs.
+     * @param listener The listener to pass the new follow request list to
      */
     void getRequestUpdates(OnRequestsUpdateListener listener);
 
     /**
-     * Deletes the follow request from the Firestore database.
-     * @param request Request that is sent from one user to another
+     * Delete the specified follow request.
+     * @param request The follow request to delete
      */
     void deleteFollowRequest(FollowRequest request);
 
     /**
-     * Accepting the follow request being sent from one user to another.
-     * @param request Request that is sent from one user to another
-     * @param listener The listener to inform accepting the request
+     * Accept the specified follow request. Call the listener's callback function upon success
+     * @param request The follow request to accept
+     * @param listener The listener to notify upon success
      */
     void acceptFollowRequest(FollowRequest request, OnAcceptRequestListener listener);
 

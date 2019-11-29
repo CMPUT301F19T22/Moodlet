@@ -98,36 +98,37 @@ public class MoodHistoryFragmentTest {
         onData(allOf(is(instanceOf(EmotionalState.class)), is(EmotionalState.CONFUSED))).perform(click());
 
         // add mood event
-        onView(withId(R.id.add_mood)).perform(click());
+        onView(withId(R.id.confirmAdd)).perform(click());
 
         Thread.sleep(3000);
-        onView(withId(R.id.mood_event_rv)).check(matches(atPosition(0, hasDescendant(withText("CONFUSED")))));
+        onView(withId(R.id.mood_event_rv)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        onView(withId(R.id.moodDisplay)).check(matches(withText("Confused")));
     }
 
     @Test
-    public void testEditingMoodEvent() throws InterruptedException {
+    public void testAddMoodEventCurrLocation() throws InterruptedException {
         loginWithTestAccount();
 
         // Navigate to the History Fragment
         onView(withId(R.id.navigation_mood_history)).perform(click());
 
-        onView(withId(R.id.mood_event_rv)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        // Click on the floating action button to go to add mood page
+        onView(withId(R.id.add_mood_fab)).perform(click());
 
-        onView(withId(R.id.toggle_edit)).perform((click()));
-
+        // Click on mood drop down and select a mood
         onView(withId(R.id.moodSelected)).perform(click());
-        onData(allOf(is(instanceOf(EmotionalState.class)), is(EmotionalState.HAPPY))).perform(click());
 
-        onView(withId(R.id.confirm_edit)).perform(click());
+        // Select confused from drop down
+        onData(allOf(is(instanceOf(EmotionalState.class)), is(EmotionalState.CONFUSED))).perform(click());
 
-        // Sleep for async call to Firebase
+        onView(withId(R.id.currentLocationCheckbox)).perform(click());
+
+        // add mood event
+        onView(withId(R.id.confirmAdd)).perform(click());
+
         Thread.sleep(3000);
-
-        onView(withId(R.id.mood_event_rv)).check(matches(atPosition(0, hasDescendant(withText("HAPPY")))));
-
         onView(withId(R.id.mood_event_rv)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-
-        onView(withId(R.id.moodDisplay)).check(matches(withText("Happy")));
+        onView(withId(R.id.locationDisplay)).check(matches(not(withText("None"))));
     }
 
     @Test
@@ -147,7 +148,7 @@ public class MoodHistoryFragmentTest {
         onData(allOf(is(instanceOf(EmotionalState.class)), is(EmotionalState.JEALOUS))).perform(click());
 
         // add mood event
-        onView(withId(R.id.add_mood)).perform(click());
+        onView(withId(R.id.confirmAdd)).perform(click());
 
         // Sleep for async call to Firebase
         Thread.sleep(3000);
@@ -160,4 +161,6 @@ public class MoodHistoryFragmentTest {
 
         onView(withId(R.id.mood_event_rv)).check(matches(not(atPosition(0, hasDescendant(withText("JEALOUS"))))));
     }
+
+
 }

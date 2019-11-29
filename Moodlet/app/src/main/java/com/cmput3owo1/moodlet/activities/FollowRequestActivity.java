@@ -17,6 +17,10 @@ import com.cmput3owo1.moodlet.services.UserService;
 
 import java.util.ArrayList;
 
+/**
+ * The follow request activity. Holds the user's {@link FollowRequest} objects from other users.
+ * The user can accept or decline follow requests from this screen.
+ */
 public class FollowRequestActivity extends AppCompatActivity implements
         IUserServiceProvider.OnRequestsUpdateListener,
         RequestListAdapter.OnRequestClickListener,
@@ -63,8 +67,9 @@ public class FollowRequestActivity extends AppCompatActivity implements
     }
 
     /**
-     * Called when there is an update to a user's follow request list.
-     * @param newRequests New requests sent to the user.
+     * Callback function to receive follow request updates from Firestore. Updates the list view
+     * with the new follow requests.
+     * @param newRequests The list of new {@link FollowRequest} objects.
      */
     @Override
     public void onRequestsUpdate(ArrayList<FollowRequest> newRequests) {
@@ -74,8 +79,9 @@ public class FollowRequestActivity extends AppCompatActivity implements
     }
 
     /**
-     * Accepting the follow request by clicking the check button.
-     * @param request Request being sent from one user to another
+     * Click handler called when a follow request in the list is selected to be accepted. Passes
+     * the request to the service in order to accept it.
+     * @param request The follow request that accept was clicked on
      */
     @Override
     public void OnAcceptClick(FollowRequest request) {
@@ -83,8 +89,9 @@ public class FollowRequestActivity extends AppCompatActivity implements
     }
 
     /**
-     * Declining the follow request by clicking the x button.
-     * @param request Request being sent from one user to another
+     * Click handler called when a follow request in the list is selected to be decline. Passes
+     * the request to the service in order to decline it.
+     * @param request The follow request that decline was clicked on
      */
     @Override
     public void OnDeclineClick(FollowRequest request) {
@@ -92,8 +99,10 @@ public class FollowRequestActivity extends AppCompatActivity implements
     }
 
     /**
-     * Getting the username of the new follower after accepting the request.
-     * @param newFollowerUsername Username of the new follower
+     * Callback function when a request is successfully accepted on the database side. This function
+     * passes the new follower's username to the {@link MoodEventService} in order to update the
+     * follower's feed.
+     * @param newFollowerUsername The username of the new follower
      */
     @Override
     public void onAcceptRequestSuccess(String newFollowerUsername) {

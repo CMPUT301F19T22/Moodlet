@@ -29,6 +29,13 @@ public class FeedFragment extends Fragment implements IMoodEventServiceProvider.
     private IMoodEventServiceProvider service;
 
     /**
+     * Default constructor for the Fragment
+     */
+    public FeedFragment(){
+
+    }
+
+    /**
      * This function is called to have the fragment instantiate its user interface view.
      * @param inflater The LayoutInflater object that can be used to inflate any views in the fragment.
      * @param container  If non-null, this is the parent view that the fragment's UI should be attached to. The fragment should not add the view itself, but this can be used to generate the LayoutParams of the view.

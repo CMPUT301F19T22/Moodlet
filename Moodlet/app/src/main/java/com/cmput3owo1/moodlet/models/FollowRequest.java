@@ -58,16 +58,16 @@ public class FollowRequest {
     }
 
     /**
-     * Id of the user
-     * @return The Id of the user
+     * This gets the ID of the follow request
+     * @return Returns the ID of the follow request
      */
     public String getId() {
         return id;
     }
 
     /**
-     * Setting Id of the user
-     * @param id The Id of the user
+     * This sets the ID of the follow request
+     * @param id The new ID of the follow request
      */
     public void setId(String id) {
         this.id = id;
