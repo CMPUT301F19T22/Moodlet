@@ -44,7 +44,7 @@ public class ViewMoodFragmentTest {
         //Inelegant way to wait for network calls. Fix if there's time
         Thread.sleep(5000);
     }
-    
+
     @Test
     public void testEditingMoodEvent() throws InterruptedException {
         loginWithTestAccount();
