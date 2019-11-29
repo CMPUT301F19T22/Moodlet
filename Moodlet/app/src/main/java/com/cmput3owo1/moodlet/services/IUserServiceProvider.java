@@ -59,12 +59,6 @@ public interface IUserServiceProvider {
     }
 
     /**
-     * This function is called to check if there is an existing instance of the logged in user.
-     * @return Returns true if there is a logged in user; false otherwise.
-     */
-    boolean hasPreviousLogin();
-
-    /**
      * This function first checks if the username is taken. If the username is not taken,
      * the account will be created, otherwise it will notify the user that their username is already taken
      *
