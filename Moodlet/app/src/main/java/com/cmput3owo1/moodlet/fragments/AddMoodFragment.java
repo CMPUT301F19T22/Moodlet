@@ -117,6 +117,13 @@ public class AddMoodFragment extends Fragment implements
     private static final int PLACES_REQUEST_CODE = 3;
 
     /**
+     * Default public constructor
+     */
+    public AddMoodFragment(){
+
+    }
+
+    /**
      * This function is called to have the fragment instantiate its user interface view.
      * @param inflater The LayoutInflater object that can be used to inflate any views in the fragment.
      * @param container  If non-null, this is the parent view that the fragment's UI should be attached to. The fragment should not add the view itself, but this can be used to generate the LayoutParams of the view.

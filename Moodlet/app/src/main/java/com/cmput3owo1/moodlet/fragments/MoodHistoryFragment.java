@@ -61,6 +61,13 @@ public class MoodHistoryFragment extends Fragment
     private long timeBackButtonPressed = 0;
 
     /**
+     * Default constructor for the Fragment
+     */
+    public MoodHistoryFragment(){
+
+    }
+
+    /**
      * Called when the fragment is starting.
      * @param savedInstanceState Used to restore a fragment's previous state
      */
