@@ -91,6 +91,7 @@ public interface IMoodEventServiceProvider {
      * Listen to mood history updates of the current user. Calls the listener's onMoodHistoryUpdate
      * method with the new mood history list when a change occurs.
      * @param listener The listener to pass the new mood history list to
+     * @return Return a listener that can be removed.
      */
     ListenerRegistration getMoodHistoryUpdates(OnMoodHistoryUpdateListener listener);
 
@@ -99,6 +100,7 @@ public interface IMoodEventServiceProvider {
      * method with the new mood history list when a change occurs.
      * @param listener The listener to pass the new mood history list to
      * @param filterBy The list of {@link EmotionalState} to filter the list by.
+     * @return Return a listener that can be removed.
      */
     ListenerRegistration getMoodHistoryUpdates(OnMoodHistoryUpdateListener listener, ArrayList<String> filterBy);
 

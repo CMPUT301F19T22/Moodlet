@@ -214,6 +214,7 @@ public class MoodEventService implements IMoodEventServiceProvider {
      * method with the new mood history list when a change occurs.
      *
      * @param listener The listener to pass the new mood history list to
+     * @return Return a listener that can be removed.
      */
     @Override
     public ListenerRegistration getMoodHistoryUpdates(OnMoodHistoryUpdateListener listener) {
@@ -232,6 +233,7 @@ public class MoodEventService implements IMoodEventServiceProvider {
      *
      * @param listener The listener to pass the new mood history list to
      * @param filterBy The list of {@link EmotionalState} to filter the list by.
+     * @return Return a listener that can be removed.
      */
     @Override
     public ListenerRegistration getMoodHistoryUpdates(OnMoodHistoryUpdateListener listener, ArrayList<String> filterBy) {
@@ -250,6 +252,7 @@ public class MoodEventService implements IMoodEventServiceProvider {
      * Run the specified Mood History query and notify the listener on completion
      * @param moodHistoryQuery The query to run
      * @param listener The listener to pass the new mood history list to
+     * @return Return a listener that can be removed.
      */
     private ListenerRegistration runMoodHistoryQuery(Query moodHistoryQuery, final OnMoodHistoryUpdateListener listener) {
         return moodHistoryQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {

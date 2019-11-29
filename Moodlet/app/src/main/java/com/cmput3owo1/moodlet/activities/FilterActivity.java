@@ -211,7 +211,8 @@ public class FilterActivity extends AppCompatActivity {
         });
     }
 
-    /** Initialize the contents of the Activity's standard options menu.
+    /**
+     * Initialize the contents of the Activity's standard options menu.
      * @param menu The options menu in which you place your items.
      */
     @Override
