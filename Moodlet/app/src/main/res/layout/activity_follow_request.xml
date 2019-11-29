@@ -12,10 +12,11 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:gravity="center_vertical|start"
-        android:theme="@style/Theme.AppCompat.Light"
-        app:title="Requests"
+        android:theme="@style/ActionBarTheme"
+        android:elevation="4dp"
+        app:title="@string/follow_requests"
         app:layout_constraintTop_toTopOf="parent"
-        app:menu="@menu/general_fragment_menu">
+        app:layout_constraintStart_toStartOf="parent">
     </androidx.appcompat.widget.Toolbar>
 
     <LinearLayout

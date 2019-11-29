@@ -104,5 +104,5 @@ public interface IMoodEventServiceProvider {
      */
     ListenerRegistration getMoodHistoryUpdates(OnMoodHistoryUpdateListener listener, ArrayList<String> filterBy);
 
-
+    void updateFollowerWithMostRecentMood(String followerUsername);
 }

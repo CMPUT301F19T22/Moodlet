@@ -32,13 +32,14 @@ import com.cmput3owo1.moodlet.services.IMoodEventServiceProvider;
 import com.cmput3owo1.moodlet.services.MoodEventService;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.GeoPoint;
 
 import java.util.ArrayList;
 import java.util.Date;
 
 /**
- * A fragment that hold the list of user's mood events while displaying the emotion, date,
- * and time sorted in reverse chronological order of each mood event.
+ * A fragment that hold the list of user's {@link MoodEvent} objects while displaying the emotion,
+ * date, and time sorted in reverse chronological order of each mood event.
  */
 public class MoodHistoryFragment extends Fragment
         implements MoodEventAdapter.OnItemClickListener, IMoodEventServiceProvider.OnMoodHistoryUpdateListener, IMoodEventServiceProvider.OnMoodDeleteListener{
@@ -164,6 +165,11 @@ public class MoodHistoryFragment extends Fragment
         Intent intent = new Intent(getActivity(), MoodEditorActivity.class);
         intent.putExtra("MoodEvent",selected);
         intent.putExtra("date",selected.getDate());
+        GeoPoint location = selected.getLocation();
+        if (location != null) {
+            intent.putExtra("location_lat",location.getLatitude());
+            intent.putExtra("location_lon",location.getLongitude());
+        }
         intent.putExtra("view",true);
         startActivity(intent);
     }
