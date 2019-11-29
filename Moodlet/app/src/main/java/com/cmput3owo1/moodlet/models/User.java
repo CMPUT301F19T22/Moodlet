@@ -1,5 +1,7 @@
 package com.cmput3owo1.moodlet.models;
 
+import com.google.firebase.firestore.Exclude;
+
 /**
  * Class to represent an app user. Contains just the basic info about the user: username, fullName,
  * and email.
@@ -91,6 +93,7 @@ public class User {
      * this user
      * @return The request status of the user
      */
+    @Exclude
     public boolean isRequested() {
         return requested;
     }
@@ -108,6 +111,7 @@ public class User {
      * Returns the follow status of the user - true if the current user is following this user
      * @return The follow status of the user
      */
+    @Exclude
     public boolean isFollowing() {
         return following;
     }
