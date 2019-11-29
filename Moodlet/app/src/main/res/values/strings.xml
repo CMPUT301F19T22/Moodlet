@@ -49,4 +49,8 @@
     <string name="show_friends">Show Friends</string>
     <string name="follow_requests">Follow Requests</string>
     <string name="filter_apply_button">APPLY</string>
+    <string name="empty_follow_request">No follow requests found.</string>
+    <string name="empty_feed">No Friend Activity found. Try following friends!</string>
+    <string name="empty_mood">No Moods found. Try adding a mood!</string>
+    <string name="empty_search">No users found.</string>
 </resources>

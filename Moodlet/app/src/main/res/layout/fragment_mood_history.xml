@@ -21,17 +21,17 @@
         android:id="@+id/no_moods_found"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="No Moods Found"
+        android:text="@string/empty_mood"
         android:gravity="center"
-        android:visibility="invisible"/>
+        android:visibility="gone"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/mood_event_rv"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:scrollbars="vertical"
-            app:layout_constraintTop_toTopOf="parent">
-        </androidx.recyclerview.widget.RecyclerView>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/mood_event_rv"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbars="vertical"
+        app:layout_constraintTop_toTopOf="parent">
+    </androidx.recyclerview.widget.RecyclerView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
