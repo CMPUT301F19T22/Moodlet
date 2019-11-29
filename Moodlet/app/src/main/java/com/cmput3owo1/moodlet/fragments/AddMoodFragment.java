@@ -214,9 +214,14 @@ public class AddMoodFragment extends Fragment implements
                 if (editMode && usePreviousLocationCheckbox.isChecked() && usePreviousLocationCheckbox.isEnabled()) {
                     return;
                 }
+                // Clear the selected places autocomplete location
                 placesLocation = null;
                 placesLocationDescription = null;
                 placesLocationAddress = null;
+                // Clear the current location and uncheck the checkbox
+                currentLocation = null;
+                currentLocationCheckbox.setChecked(false);
+                // Reset the location edittext display
                 locationEdit.setText("");
             }
         });
@@ -258,6 +263,13 @@ public class AddMoodFragment extends Fragment implements
                 }
                 // Stop receiving location requests (only need current location)
                 fusedLocationProviderClient.removeLocationUpdates(locationCallback);
+                // Set the edittext to display the coordinates of the location
+                locationEdit.setText(String.format(
+                        Locale.US,
+                        "[%.3f, %.3f]",
+                        currentLocation.getLatitude(),
+                        currentLocation.getLongitude()
+                ));
             };
         };
 
@@ -277,6 +289,16 @@ public class AddMoodFragment extends Fragment implements
                     }
                 } else {
                     locationEdit.setEnabled(true);
+                    // Restore the places autocomplete location description, or empty if there is none
+                    if (placesLocation != null && placesLocationDescription != null) {
+                        if (placesLocationAddress != null) {
+                            locationEdit.setText(String.format("%s, %s", placesLocationDescription, placesLocationAddress));
+                        } else {
+                            locationEdit.setText(String.format(placesLocationDescription));
+                        }
+                    } else {
+                        locationEdit.setText("");
+                    }
                 }
             }
         });
