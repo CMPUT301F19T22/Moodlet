@@ -227,10 +227,10 @@ public class UserService implements IUserServiceProvider {
                 .collection("following")
                 .document(currentUser)
                 .set(followingData).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                listener.onAcceptRequestSuccess(newFollowerUsername);
-            }
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        listener.onAcceptRequestSuccess(newFollowerUsername);
+                    }
         });
         deleteFollowRequest(request);
     }

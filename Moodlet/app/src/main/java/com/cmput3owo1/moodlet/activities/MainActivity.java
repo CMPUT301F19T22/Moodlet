@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.cmput3owo1.moodlet.R;
 import com.cmput3owo1.moodlet.services.IUserServiceProvider;
@@ -48,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "Follow requests", Toast.LENGTH_SHORT).show();
                 openFollowRequestActivity();
             }
         });
