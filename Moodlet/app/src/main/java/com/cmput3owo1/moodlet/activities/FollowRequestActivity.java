@@ -34,7 +34,7 @@ public class FollowRequestActivity extends AppCompatActivity implements
     private IMoodEventServiceProvider moodEventService;
 
     /**
-     * Called when the activity is starting.
+     * Called when the activity starts and displays list view layout.
      * @param savedInstanceState Used to restore an activity's previous state
      */
     @Override

@@ -51,8 +51,8 @@ public interface IUserServiceProvider {
     }
 
     /**
-     * Interface for a listener that listens to the success of accepting a follow request.
-     * The listener is invoked when the follow request is successfully accepted.
+     * Interface for a listener that receives the username of the follower after accepting the
+     * request. The listener is invoked when the follow request is successfully accepted.
      */
     interface OnAcceptRequestListener {
         void onAcceptRequestSuccess(String newFollowerUsername);

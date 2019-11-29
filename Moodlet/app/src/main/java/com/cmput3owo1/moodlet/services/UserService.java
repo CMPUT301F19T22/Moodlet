@@ -255,7 +255,7 @@ public class UserService implements IUserServiceProvider {
     }
 
     /**
-     * Delete the specified follow request.
+     * Deletes the follow request from Firestore database
      * @param request The follow request to delete
      */
     @Override

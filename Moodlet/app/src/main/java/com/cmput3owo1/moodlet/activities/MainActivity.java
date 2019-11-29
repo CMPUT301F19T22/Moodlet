@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Function that opens the {@link FollowRequestActivity} so the user can accept requests
+     * Start follow request activity when menu item clicked.
      */
     private void openFollowRequestActivity(){
         Intent intent = new Intent(this, FollowRequestActivity.class);
