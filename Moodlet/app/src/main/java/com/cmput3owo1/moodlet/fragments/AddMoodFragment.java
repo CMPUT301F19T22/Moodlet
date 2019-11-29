@@ -180,7 +180,7 @@ public class AddMoodFragment extends Fragment implements
                 socialSpinner.setSelection(socialAdapter.getPosition(mood.getSocialSituation()));
                 reasonEdit.setText(mood.getReasoning());
 
-                // Set the previoius location checkbox to be initially checked
+                // Set the previous location checkbox to be initially checked
                 usePreviousLocationCheckbox.setChecked(true);
                 // Disable the checkbox and places autocomplete edittext
                 currentLocationCheckbox.setEnabled(false);
@@ -189,6 +189,8 @@ public class AddMoodFragment extends Fragment implements
                 if (previousLocationDescription == null && previousLocation == null) {
                     // Disable the checkbox if there was no previous location
                     usePreviousLocationCheckbox.setEnabled(false);
+                    // Uncheck the checkbox
+                    usePreviousLocationCheckbox.setChecked(false);
                     // Re-enable the checkbox and places autocomplete edittext
                     currentLocationCheckbox.setEnabled(true);
                     locationEdit.setEnabled(true);
@@ -209,7 +211,7 @@ public class AddMoodFragment extends Fragment implements
             @Override
             public void onClick(View v) {
                 // Do not clear using previous location
-                if (editMode && usePreviousLocationCheckbox.isChecked()) {
+                if (editMode && usePreviousLocationCheckbox.isChecked() && usePreviousLocationCheckbox.isEnabled()) {
                     return;
                 }
                 placesLocation = null;
