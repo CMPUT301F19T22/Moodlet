@@ -16,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import static com.cmput3owo1.moodlet.utils.Utils.getMoodEmoticon;
 import static com.cmput3owo1.moodlet.utils.Utils.getTimeDifference;
 
 /**
@@ -89,30 +90,7 @@ public class FeedListAdapter extends ArrayAdapter<MoodEventAssociation> {
         holder.dateTextView.setText(dateString);
         holder.timeDifferenceTextView.setText(getTimeDifference(moodEvent.getDate()));
 
-        switch(moodEvent.getEmotionalState()) {
-            case SAD:
-                holder.emoticonImageView.setImageResource(R.drawable.ic_mood_sad);
-                break;
-            case ANGRY:
-                holder.emoticonImageView.setImageResource(R.drawable.ic_mood_angry);
-                break;
-            case CONFUSED:
-                holder.emoticonImageView.setImageResource(R.drawable.ic_mood_confused);
-                break;
-            case EXCITED:
-                holder.emoticonImageView.setImageResource(R.drawable.ic_mood_excited);
-                break;
-            case HAPPY:
-                holder.emoticonImageView.setImageResource(R.drawable.ic_mood_happy);
-                break;
-            case JEALOUS:
-                holder.emoticonImageView.setImageResource(R.drawable.ic_mood_jealous);
-                break;
-            case SCARED:
-                holder.emoticonImageView.setImageResource(R.drawable.ic_mood_scared);
-                break;
-        }
-
+        holder.emoticonImageView.setImageResource(getMoodEmoticon(moodEvent.getEmotionalState()));
 
         return convertView;
     }
