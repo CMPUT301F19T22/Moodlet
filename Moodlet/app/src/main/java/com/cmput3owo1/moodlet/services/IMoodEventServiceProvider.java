@@ -5,6 +5,7 @@ import android.net.Uri;
 import com.cmput3owo1.moodlet.models.EmotionalState;
 import com.cmput3owo1.moodlet.models.MoodEvent;
 import com.cmput3owo1.moodlet.models.MoodEventAssociation;
+import com.google.firebase.firestore.ListenerRegistration;
 
 import java.util.ArrayList;
 
@@ -90,16 +91,18 @@ public interface IMoodEventServiceProvider {
      * Listen to mood history updates of the current user. Calls the listener's onMoodHistoryUpdate
      * method with the new mood history list when a change occurs.
      * @param listener The listener to pass the new mood history list to
+     * @return Return a listener that can be removed.
      */
-    void getMoodHistoryUpdates(OnMoodHistoryUpdateListener listener);
+    ListenerRegistration getMoodHistoryUpdates(OnMoodHistoryUpdateListener listener);
 
     /**
      * Listen to mood history updates of the current user. Calls the listener's onMoodHistoryUpdate
      * method with the new mood history list when a change occurs.
      * @param listener The listener to pass the new mood history list to
-     * @param filterBy The {@link EmotionalState} to filter the list by.
+     * @param filterBy The list of {@link EmotionalState} to filter the list by.
+     * @return Return a listener that can be removed.
      */
-    void getMoodHistoryUpdates(OnMoodHistoryUpdateListener listener, EmotionalState filterBy);
+    ListenerRegistration getMoodHistoryUpdates(OnMoodHistoryUpdateListener listener, ArrayList<String> filterBy);
 
     void updateFollowerWithMostRecentMood(String followerUsername);
 }

@@ -1,5 +1,6 @@
 package com.cmput3owo1.moodlet.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -11,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
@@ -22,12 +24,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cmput3owo1.moodlet.R;
+import com.cmput3owo1.moodlet.activities.FilterActivity;
 import com.cmput3owo1.moodlet.activities.MoodEditorActivity;
 import com.cmput3owo1.moodlet.adapters.MoodEventAdapter;
 import com.cmput3owo1.moodlet.models.MoodEvent;
 import com.cmput3owo1.moodlet.services.IMoodEventServiceProvider;
 import com.cmput3owo1.moodlet.services.MoodEventService;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.GeoPoint;
 
 import java.util.ArrayList;
@@ -48,6 +52,10 @@ public class MoodHistoryFragment extends Fragment
     private ArrayList<MoodEvent> moodEventList;
     private IMoodEventServiceProvider moodEventService;
     private FloatingActionButton addMood;
+    private ArrayList<String> applyFilters;
+    private TextView noMoodsFoundText;
+    private ListenerRegistration unfilteredListenerRegistration;
+    private ListenerRegistration filteredListenerRegistration;
     private long timeBackButtonPressed = 0;
 
     /**
@@ -87,11 +95,14 @@ public class MoodHistoryFragment extends Fragment
                              ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_mood_history, container, false);
 
+        noMoodsFoundText = view.findViewById(R.id.no_moods_found);
+
         recyclerView = view.findViewById(R.id.mood_event_rv);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         moodEventList = new ArrayList<>();
+        applyFilters = new ArrayList<>();
 
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
 
@@ -99,7 +110,7 @@ public class MoodHistoryFragment extends Fragment
         recyclerView.setAdapter(recyclerAdapter);
 
         moodEventService = new MoodEventService();
-        moodEventService.getMoodHistoryUpdates(this);
+        unfilteredListenerRegistration = moodEventService.getMoodHistoryUpdates(this);
 
         addMood = view.findViewById(R.id.add_mood_fab);
         addMood.setOnClickListener(new View.OnClickListener() {
@@ -125,13 +136,19 @@ public class MoodHistoryFragment extends Fragment
         super.onCreateOptionsMenu(menu, inflater);
     }
 
+    /**
+     * Starts Filtering Activity when menu item is clicked.
+     * @param item The filtering menu item
+     * @return Return true if menu item is clicked, else false.
+     */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
-        switch(item.getItemId()){
-            case R.id.filter:
-                // TODO: Create intent to go to activity to apply filter options
-                 Toast.makeText(getContext(), "Filter options", Toast.LENGTH_SHORT).show();
+        if (item.getItemId() == R.id.filter) {
+
+                Intent intent = new Intent(getActivity(), FilterActivity.class);
+                intent.putExtra("filter_checked", applyFilters);
+                startActivityForResult(intent, 1);
         }
 
         return super.onOptionsItemSelected(item);
@@ -144,7 +161,6 @@ public class MoodHistoryFragment extends Fragment
      */
     @Override
     public void onItemClick(int pos) {
-        // Implement for editing a mood event
         MoodEvent selected = moodEventList.get(pos);
         Intent intent = new Intent(getActivity(), MoodEditorActivity.class);
         intent.putExtra("MoodEvent",selected);
@@ -166,6 +182,11 @@ public class MoodHistoryFragment extends Fragment
     public void onMoodHistoryUpdate(ArrayList<MoodEvent> newHistory) {
         moodEventList.clear();
         moodEventList.addAll(newHistory);
+        if (newHistory.isEmpty()) {
+            noMoodsFoundText.setVisibility(View.VISIBLE);
+        } else {
+            noMoodsFoundText.setVisibility(View.INVISIBLE);
+        }
         recyclerAdapter.notifyDataSetChanged();
     }
 
@@ -234,6 +255,30 @@ public class MoodHistoryFragment extends Fragment
     public void onMoodDeleteFailure() {
         Toast.makeText(getActivity(), R.string.delete_failed, Toast.LENGTH_SHORT).show();
     }
-}
 
+    /**
+     * Callback function that is triggered when the activity we launched exits, and returns additional data
+     * @param requestCode The integer request code originally supplied to startActivityForResult(), allowing you to identify who this result came from.
+     * @param resultCode The integer result code returned by the child activity through its setResult().
+     * @param data An Intent, which can return result data to the caller (various data can be attached to Intent "extras").
+     */
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == 1) {
+            if (resultCode == Activity.RESULT_OK) {
+                if (data.hasExtra("filters")) {
+                    applyFilters = data.getStringArrayListExtra("filters");
+                    unfilteredListenerRegistration.remove();
+                    filteredListenerRegistration = moodEventService.getMoodHistoryUpdates(this, applyFilters);
+                }
+                else {
+                    applyFilters.clear();
+                    filteredListenerRegistration.remove();
+                    unfilteredListenerRegistration = moodEventService.getMoodHistoryUpdates(this);
+                }
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+}
 

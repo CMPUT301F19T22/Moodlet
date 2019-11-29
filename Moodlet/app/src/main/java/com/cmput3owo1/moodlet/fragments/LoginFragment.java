@@ -36,21 +36,6 @@ public class LoginFragment extends Fragment implements IUserServiceProvider.Logi
     UserService userService = new UserService();
 
     /**
-     * This function is called to do initial creation of a fragment.
-     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state as given here.
-     */
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-         if(userService.hasPreviousLogin()){
-             Intent intent = new Intent(getActivity(), MainActivity.class);
-             startActivity(intent);
-             getActivity().finish();
-         }
-    }
-
-    /**
      * This function is called to have the fragment instantiate its user interface view.
      * @param inflater The LayoutInflater object that can be used to inflate any views in the fragment.
      * @param container  If non-null, this is the parent view that the fragment's UI should be attached to. The fragment should not add the view itself, but this can be used to generate the LayoutParams of the view.
@@ -59,6 +44,14 @@ public class LoginFragment extends Fragment implements IUserServiceProvider.Logi
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        if(userService.hasPreviousLogin()){
+            Intent intent = new Intent(getActivity(), MainActivity.class);
+            startActivity(intent);
+
+            getActivity().finish();
+            return null;
+        }
 
         // Inflate the layout for this fragment
         View loginFragmentView = inflater.inflate(R.layout.fragment_login, container, false);

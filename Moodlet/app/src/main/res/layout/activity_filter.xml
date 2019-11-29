@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.FilterActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:gravity="center_horizontal|start"
+        android:theme="@style/ActionBarTheme"
+        android:elevation="4dp"
+        app:title="Filter"
+        app:layout_constraintTop_toTopOf="parent">
+    </androidx.appcompat.widget.Toolbar>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingHorizontal="15dp"
+            android:paddingVertical="12dp">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_mood_happy" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:paddingLeft="15dp"
+                android:paddingTop="5dp"
+                android:text="@string/filter_happy"
+                android:textColor="@color/moodListColor"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+            <CheckBox
+                android:id="@+id/filter_happy"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_weight="0.05" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingHorizontal="15dp"
+            android:paddingVertical="12dp">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_mood_sad" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:paddingLeft="15dp"
+                android:paddingTop="5dp"
+                android:text="@string/filter_sad"
+                android:textColor="@color/moodListColor"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+            <CheckBox
+                android:id="@+id/filter_sad"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_weight="0.05" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingHorizontal="15dp"
+            android:paddingVertical="12dp">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_mood_angry" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:paddingLeft="15dp"
+                android:paddingTop="5dp"
+                android:text="@string/filter_angry"
+                android:textColor="@color/moodListColor"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+            <CheckBox
+                android:id="@+id/filter_angry"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_weight="0.05" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingHorizontal="15dp"
+            android:paddingVertical="12dp">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_mood_excited" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:paddingLeft="15dp"
+                android:paddingTop="5dp"
+                android:text="@string/filter_excited"
+                android:textColor="@color/moodListColor"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+            <CheckBox
+                android:id="@+id/filter_excited"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_weight="0.05" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingHorizontal="15dp"
+            android:paddingVertical="12dp">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_mood_confused" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:paddingLeft="15dp"
+                android:paddingTop="5dp"
+                android:text="@string/filter_confused"
+                android:textColor="@color/moodListColor"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+            <CheckBox
+                android:id="@+id/filter_confused"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_weight="0.05" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingHorizontal="15dp"
+            android:paddingVertical="12dp">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_mood_scared" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:paddingLeft="15dp"
+                android:paddingTop="5dp"
+                android:text="@string/filter_scared"
+                android:textColor="@color/moodListColor"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+            <CheckBox
+                android:id="@+id/filter_scared"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_weight="0.05" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingHorizontal="15dp"
+            android:paddingVertical="12dp">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_mood_jealous" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:paddingLeft="15dp"
+                android:paddingTop="5dp"
+                android:text="@string/filter_jealous"
+                android:textColor="@color/moodListColor"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+            <CheckBox
+                android:id="@+id/filter_jealous"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_weight="0.05" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/apply_filter_button"
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="bottom"
+                android:background="@color/colorPrimary"
+                android:text="APPLY"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
