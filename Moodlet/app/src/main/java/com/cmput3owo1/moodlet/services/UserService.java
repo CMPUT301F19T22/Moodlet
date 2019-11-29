@@ -3,6 +3,7 @@ package com.cmput3owo1.moodlet.services;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.cmput3owo1.moodlet.models.FollowRequest;
 import com.cmput3owo1.moodlet.models.User;
@@ -14,11 +15,16 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -262,6 +268,31 @@ public class UserService implements IUserServiceProvider{
                 });
     }
 
+    /**
+     * Listen for follower request updates
+     */
+    @Override
+    public void getFollowRequests(User user, OnAcceptRequestsListener listener) {
+        String username = auth.getCurrentUser().getDisplayName();
+
+        Query requestsQuery = db.collection("requests")
+                .whereEqualTo("requestTo", username);
+
+        runRequestsQuery(requestsQuery, listener);
+    }
+
+    private void runRequestsQuery(Query requestsQuery, final OnAcceptRequestsListener listener) {
+        requestsQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                ArrayList<FollowRequest> newRequests = new ArrayList<>();
+                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                    FollowRequest followRequest = doc.toObject(FollowRequest.class);
+                    newRequests.add(followRequest);
+                }
+            }
+        });
+    }
 }
 
 

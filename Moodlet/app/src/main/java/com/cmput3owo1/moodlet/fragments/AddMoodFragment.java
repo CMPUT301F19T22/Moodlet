@@ -409,7 +409,6 @@ public class AddMoodFragment extends Fragment implements
         getActivity().finish();
     }
 
-
     /**
      * A function that launches the autocomplete widget to prompt the user to search for a place
      */
