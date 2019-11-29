@@ -2,6 +2,7 @@ package com.cmput3owo1.moodlet.fragments;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
+import androidx.test.filters.SdkSuppress;
 import androidx.test.rule.ActivityTestRule;
 
 import com.cmput3owo1.moodlet.R;
@@ -24,6 +25,7 @@ import static org.hamcrest.Matchers.allOf;
  * This tests to see if the Google Map is loaded when navigating to the Map section
  */
 @RunWith(AndroidJUnit4.class)
+@SdkSuppress(minSdkVersion = 18)
 @LargeTest
 public class MapFragmentTest {
 
@@ -41,5 +43,10 @@ public class MapFragmentTest {
 
         // Check that the MapView is displayed
         onView(withId(R.id.mapView)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void myTest() {
+
     }
 }
