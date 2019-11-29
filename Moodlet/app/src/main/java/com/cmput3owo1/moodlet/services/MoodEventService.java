@@ -1,10 +1,12 @@
 package com.cmput3owo1.moodlet.services;
 
 import android.net.Uri;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.cmput3owo1.moodlet.R;
 import com.cmput3owo1.moodlet.models.EmotionalState;
 import com.cmput3owo1.moodlet.models.MoodEvent;
 import com.cmput3owo1.moodlet.models.MoodEventAssociation;
@@ -92,6 +94,7 @@ public class MoodEventService implements IMoodEventServiceProvider {
         listener.onMoodUpdateSuccess();
         return newMoodEventRef.getId();
     }
+
 
     /**
      * Edit an existing MoodEvent on the database.
@@ -202,6 +205,32 @@ public class MoodEventService implements IMoodEventServiceProvider {
                 }
             }
         });
+    }
+
+    /**
+     * Delete swiped MoodEvent from database.
+     * @param moodEvent The mood event to be deleted.
+     * @param listener The listener to notify upon completion of deletion.
+     */
+    @Override
+    public void deleteMoodEvent(MoodEvent moodEvent, final OnMoodDeleteListener listener) {
+        DocumentReference newMoodEventRef = db.collection("moodEvents").document(moodEvent.getId());
+
+
+        newMoodEventRef.delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        listener.onMoodDeleteSuccess();
+                    }
+                })
+
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        listener.onMoodDeleteFailure();
+                    }
+                });
     }
 
     /**
