@@ -28,6 +28,12 @@ public class User {
         this.username = username;
     }
 
+    /**
+     * Constructor that takes the user's username, the user's full name, and the user's email
+     * @param username Username of the user
+     * @param fullName Full name of the user
+     * @param email Email of the user
+     */
     public User(String username, String fullName, String email) {
         this.username = username;
         this.fullName = fullName;
@@ -82,24 +88,48 @@ public class User {
         this.email = email;
     }
 
+    /**
+     * Returns the request status of the user - true if the current user has requested to follow
+     * this user
+     * @return The request status of the user
+     */
     @Exclude
     public boolean isRequested() {
         return requested;
     }
 
+    /**
+     * Set the request status of the user - true if the current user has requested to follow this
+     * user
+     * @param requested The new request status
+     */
     public void setRequested(boolean requested) {
         this.requested = requested;
     }
 
+    /**
+     * Returns the follow status of the user - true if the current user is following this user
+     * @return The follow status of the user
+     */
     @Exclude
     public boolean isFollowing() {
         return following;
     }
 
+    /**
+     * Set the follow status of the user - true if the current user is following this user
+     * @param following The new follow status
+     */
     public void setFollowing(boolean following) {
         this.following = following;
     }
 
+    /**
+     * Indicates whether some other user is "equal to" this user. Users with the same username are
+     * the same, since the username is unique
+     * @param obj The reference object with which to compare
+     * @return Returns true if this object is the same as the obj argument; false otherwise.
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
