@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.cmput3owo1.moodlet.R;
 import com.cmput3owo1.moodlet.adapters.RequestListAdapter;
@@ -32,6 +33,7 @@ public class FollowRequestActivity extends AppCompatActivity implements
     private ArrayList<FollowRequest> requestDataList;
     private IUserServiceProvider userService;
     private IMoodEventServiceProvider moodEventService;
+    private TextView noRequestsFoundText;
 
     /**
      * Called when the activity starts and displays list view layout.
@@ -44,6 +46,8 @@ public class FollowRequestActivity extends AppCompatActivity implements
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        noRequestsFoundText = findViewById(R.id.no_requests_found);
 
         // Manually replace navigation icon with custom icon.
         toolbar.setNavigationIcon(R.drawable.ic_keyboard_arrow_left_24px);
@@ -75,6 +79,11 @@ public class FollowRequestActivity extends AppCompatActivity implements
     public void onRequestsUpdate(ArrayList<FollowRequest> newRequests) {
         requestDataList.clear();
         requestDataList.addAll(newRequests);
+        if (newRequests.isEmpty()) {
+            noRequestsFoundText.setVisibility(View.VISIBLE);
+        } else {
+            noRequestsFoundText.setVisibility(View.GONE);
+        }
         requestsAdapter.notifyDataSetChanged();
     }
 

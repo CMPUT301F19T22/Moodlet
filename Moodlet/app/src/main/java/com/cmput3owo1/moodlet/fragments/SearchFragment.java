@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -33,6 +34,7 @@ public class SearchFragment extends Fragment implements
     private ArrayList<User> userDataList;
     private UserListAdapter userAdapter;
     private IUserServiceProvider service;
+    private TextView noUsersFoundText;
 
     /**
      * Default constructor for the Fragment
@@ -52,6 +54,8 @@ public class SearchFragment extends Fragment implements
                              ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_search, container, false);
         service = new UserService();
+
+        noUsersFoundText = rootView.findViewById(R.id.no_users_found);
 
         userSearchView = rootView.findViewById(R.id.user_search_view);
         userListView = rootView.findViewById(R.id.user_list_view);
@@ -86,6 +90,7 @@ public class SearchFragment extends Fragment implements
     public boolean onQueryTextChange(String newString) {
         if (newString.isEmpty()) {
             userDataList.clear();
+            noUsersFoundText.setVisibility(View.GONE);
             userAdapter.notifyDataSetChanged();
         } else {
             service.searchForUsers(newString, this);
@@ -103,6 +108,11 @@ public class SearchFragment extends Fragment implements
         if (searchText.equals(userSearchView.getQuery().toString())) {
             userDataList.clear();
             userDataList.addAll(searchResult);
+            if (searchResult.isEmpty()) {
+                noUsersFoundText.setVisibility(View.VISIBLE);
+            } else {
+                noUsersFoundText.setVisibility(View.GONE);
+            }
             userAdapter.notifyDataSetChanged();
         }
     }

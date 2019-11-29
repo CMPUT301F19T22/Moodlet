@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -27,6 +28,7 @@ public class FeedFragment extends Fragment implements IMoodEventServiceProvider.
     private FeedListAdapter feedAdapter;
     private ArrayList<MoodEventAssociation> feedDataList;
     private IMoodEventServiceProvider service;
+    private TextView noFeedFoundText;
 
     /**
      * Default constructor for the Fragment
@@ -47,6 +49,7 @@ public class FeedFragment extends Fragment implements IMoodEventServiceProvider.
 
         View rootView = inflater.inflate(R.layout.fragment_feed, container, false);
 
+        noFeedFoundText = rootView.findViewById(R.id.no_feed_found);
         service = new MoodEventService();
         service.getFeedUpdates(this);
 
@@ -67,6 +70,11 @@ public class FeedFragment extends Fragment implements IMoodEventServiceProvider.
     public void onFeedUpdate(ArrayList<MoodEventAssociation> newFeed) {
         feedDataList.clear();
         feedDataList.addAll(newFeed);
+        if (newFeed.isEmpty()) {
+            noFeedFoundText.setVisibility(View.VISIBLE);
+        } else {
+            noFeedFoundText.setVisibility(View.GONE);
+        }
         feedAdapter.notifyDataSetChanged();
     }
 }
