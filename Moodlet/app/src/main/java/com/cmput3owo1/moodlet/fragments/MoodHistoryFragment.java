@@ -176,7 +176,7 @@ public class MoodHistoryFragment extends Fragment
     public void onMoodHistoryUpdate(ArrayList<MoodEvent> newHistory) {
         moodEventList.clear();
         moodEventList.addAll(newHistory);
-        if(newHistory.isEmpty()) {
+        if (newHistory.isEmpty()) {
             noMoodsFoundText.setVisibility(View.VISIBLE);
         } else {
             noMoodsFoundText.setVisibility(View.INVISIBLE);

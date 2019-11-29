@@ -227,15 +227,14 @@ public class FilterActivity extends AppCompatActivity {
      */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.clear:
-                happyBox.setChecked(false);
-                sadBox.setChecked(false);
-                angryBox.setChecked(false);
-                excitedBox.setChecked(false);
-                confusedBox.setChecked(false);
-                scaredBox.setChecked(false);
-                jealousBox.setChecked(false);
+        if (item.getItemId() == R.id.clear) {
+            happyBox.setChecked(false);
+            sadBox.setChecked(false);
+            angryBox.setChecked(false);
+            excitedBox.setChecked(false);
+            confusedBox.setChecked(false);
+            scaredBox.setChecked(false);
+            jealousBox.setChecked(false);
         }
 
         return super.onOptionsItemSelected(item);

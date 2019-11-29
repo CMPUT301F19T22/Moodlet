@@ -9,12 +9,4 @@
         app:showAsAction="always"
         />
 
-    <item
-        android:id="@+id/logout"
-        android:orderInCategory="1"
-        android:title="Logout"
-        android:icon="@drawable/ic_more_vert_24px"
-        android:iconTint="#000"
-        />
-
 </menu>

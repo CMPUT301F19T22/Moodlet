@@ -15,8 +15,7 @@
         android:theme="@style/ActionBarTheme"
         android:elevation="4dp"
         app:title="Filter"
-        app:layout_constraintTop_toTopOf="parent"
-        app:menu="@menu/general_fragment_menu">
+        app:layout_constraintTop_toTopOf="parent">
     </androidx.appcompat.widget.Toolbar>
 
 
