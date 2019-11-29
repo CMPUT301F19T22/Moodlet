@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -33,6 +34,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.ListenerRegistration;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * A fragment that hold the list of user's mood events while displaying the emotion, date,
@@ -40,6 +42,9 @@ import java.util.ArrayList;
  */
 public class MoodHistoryFragment extends Fragment
         implements MoodEventAdapter.OnItemClickListener, IMoodEventServiceProvider.OnMoodHistoryUpdateListener, IMoodEventServiceProvider.OnMoodDeleteListener{
+
+    private static final long BACK_BUTTON_TIMEOUT = 2000;
+    public static final String EXIT_EXTRAS_KEY = "EXIT";
 
     private RecyclerView recyclerView;
     private MoodEventAdapter recyclerAdapter;
@@ -50,6 +55,7 @@ public class MoodHistoryFragment extends Fragment
     private TextView noMoodsFoundText;
     private ListenerRegistration unfilteredListenerRegistration;
     private ListenerRegistration filteredListenerRegistration;
+    private long timeBackButtonPressed = 0;
 
     /**
      * Called when the fragment is starting.
@@ -58,6 +64,22 @@ public class MoodHistoryFragment extends Fragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Set custom back navigation
+        // Source: https://developer.android.com/guide/navigation/navigation-custom-back
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if ((new Date()).getTime() - timeBackButtonPressed < BACK_BUTTON_TIMEOUT) {
+                    getActivity().finish();
+                } else {
+                    timeBackButtonPressed = (new Date()).getTime();
+                    Toast.makeText(getContext(), "Press back again to exit!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
+
         setHasOptionsMenu(true);
     }
 

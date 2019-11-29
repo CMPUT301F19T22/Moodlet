@@ -35,7 +35,6 @@ public class LoginFragment extends Fragment implements IUserServiceProvider.Logi
 
     UserService userService = new UserService();
 
-
     /**
      * This function is called to have the fragment instantiate its user interface view.
      * @param inflater The LayoutInflater object that can be used to inflate any views in the fragment.

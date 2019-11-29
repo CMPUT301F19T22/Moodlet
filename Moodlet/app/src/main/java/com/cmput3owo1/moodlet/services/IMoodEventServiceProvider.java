@@ -103,4 +103,5 @@ public interface IMoodEventServiceProvider {
      */
     ListenerRegistration getMoodHistoryUpdates(OnMoodHistoryUpdateListener listener, ArrayList<String> filterBy);
 
+
 }

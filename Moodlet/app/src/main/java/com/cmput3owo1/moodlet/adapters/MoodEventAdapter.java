@@ -16,6 +16,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import static com.cmput3owo1.moodlet.utils.Utils.getTimeDifference;
+
 /**
  * This class is the adapter class to a RecyclerView containing {@link MoodEventAdapter.ViewHolder} objects
  * The purpose is to create the {@link ViewHolder} objects that will display the data of user's mood events by
@@ -53,14 +55,14 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView tvMood, tvDateTime;
         ImageView tvIcon;
-//        TextView tvTimeDiff;
+        TextView tvTimeDiff;
 
         ViewHolder(View itemView) {
             super(itemView);
             tvMood = itemView.findViewById(R.id.mood_textview);
             tvDateTime = itemView.findViewById(R.id.date_time_textview);
             tvIcon = itemView.findViewById(R.id.mood_emoji);
-//            tvTimeDiff = itemView.findViewById(R.id.time_difference);
+            tvTimeDiff = itemView.findViewById(R.id.time_difference);
             itemView.setOnClickListener(this);
         }
 
@@ -128,7 +130,7 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
                 holder.tvIcon.setImageResource(R.drawable.ic_mood_scared);
                 break;
         }
-//        holder.tvTimeDiff.setText("1s");
+        holder.tvTimeDiff.setText(getTimeDifference(mood.getDate()));
 
     }
 
