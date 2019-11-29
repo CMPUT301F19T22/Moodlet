@@ -22,6 +22,7 @@ import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * A fragment that displays the details of a specific MoodEvent and optionally
@@ -29,14 +30,13 @@ import java.util.Date;
  */
 public class ViewMoodFragment extends Fragment {
 
-    private boolean editMode;
     private ImageView bg;
     private TextView moodDisplay;
     private TextView socialDisplay;
     private TextView date;
     private TextView reasonDisplay;
+    private TextView locationDisplay;
     private ImageView imageDisplay;
-    private Button toggleEdit;
     private MoodEvent moodObj;
     private Date argDate;
     private GeoPoint argLocation;
@@ -69,19 +69,44 @@ public class ViewMoodFragment extends Fragment {
         moodDisplay = view.findViewById(R.id.moodDisplay);
         socialDisplay = view.findViewById(R.id.socialDisplay);
         reasonDisplay = view.findViewById(R.id.reasonDisplay);
+        locationDisplay = view.findViewById(R.id.locationDisplay);
         bg = view.findViewById(R.id.bg_vector);
 
         //Get parameters from Mood
         Bundle args = getArguments();
         moodObj = (MoodEvent) args.getSerializable("MoodEvent");
         argDate = (Date) args.getSerializable("date");
-        argLocation = new GeoPoint(args.getDouble("location_lat"), args.getDouble("location_lon"));
+        double lat = args.getDouble("location_lat", -99999);
+        double lon = args.getDouble("location_lon", -99999);
+        if (lat != -99999 && lon != -99999) {
+            argLocation = new GeoPoint(lat, lon);
+        }
 
         //Set text after obtaining data
         moodDisplay.setText(moodObj.getEmotionalState().getDisplayName());
         socialDisplay.setText(moodObj.getSocialSituation().getDisplayName());
-        reasonDisplay.setText(moodObj.getReasoning());
-
+        String reasoning = moodObj.getReasoning();
+        if (!reasoning.isEmpty()) {
+            reasonDisplay.setText(moodObj.getReasoning());
+        }
+        String locationDescription = moodObj.getLocationDescription();
+        String locationAddress = moodObj.getLocationAddress();
+        if (locationDescription != null) {
+            if (locationAddress != null) {
+                locationDisplay.setText(String.format("%s,\n%s", locationDescription, locationAddress));
+            } else {
+                locationDisplay.setText(locationDescription);
+            }
+        } else {
+            if (argLocation != null) {
+                locationDisplay.setText(String.format(
+                        Locale.US,
+                        "[%.3f, %.3f]",
+                        argLocation.getLatitude(),
+                        argLocation.getLongitude()
+                ));
+            }
+        }
         // TODO: set the text for location
 
         date.setText(sdf.format(argDate));
