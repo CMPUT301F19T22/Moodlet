@@ -29,6 +29,10 @@ public class FollowRequestActivity extends AppCompatActivity implements
     private IUserServiceProvider userService;
     private IMoodEventServiceProvider moodEventService;
 
+    /**
+     * Called when the activity starts and displays list view layout.
+     * @param savedInstanceState Used to restore an activity's previous state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +62,10 @@ public class FollowRequestActivity extends AppCompatActivity implements
         userService.getRequestUpdates(this);
     }
 
+    /**
+     * Called when there is an update to a user's follow request list.
+     * @param newRequests New requests sent to the user.
+     */
     @Override
     public void onRequestsUpdate(ArrayList<FollowRequest> newRequests) {
         requestDataList.clear();
@@ -65,16 +73,28 @@ public class FollowRequestActivity extends AppCompatActivity implements
         requestsAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * Accepting the follow request by clicking the check button.
+     * @param request Request being sent from one user to another
+     */
     @Override
     public void OnAcceptClick(FollowRequest request) {
         userService.acceptFollowRequest(request, this);
     }
 
+    /**
+     * Declining the follow request by clicking the x button.
+     * @param request Request being sent from one user to another
+     */
     @Override
     public void OnDeclineClick(FollowRequest request) {
         userService.deleteFollowRequest(request);
     }
 
+    /**
+     * Getting the username of the new follower after accepting the request.
+     * @param newFollowerUsername Username of the new follower
+     */
     @Override
     public void onAcceptRequestSuccess(String newFollowerUsername) {
         moodEventService.updateFollowerWithMostRecentMood(newFollowerUsername);

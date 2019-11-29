@@ -50,10 +50,16 @@ public interface IUserServiceProvider {
         void onRequestSuccess(User user);
     }
 
+    /**
+     * Interface for a listener that receives the username of the follower after accepting the request.
+     */
     interface OnAcceptRequestListener {
         void onAcceptRequestSuccess(String newFollowerUsername);
     }
 
+    /**
+     * Interface for a listener to constantly update whenever a request is sent from one user to another.
+     */
     interface OnRequestsUpdateListener {
         void onRequestsUpdate(ArrayList<FollowRequest> newRequests);
     }
@@ -102,10 +108,23 @@ public interface IUserServiceProvider {
      */
     void sendFollowRequest(User user, OnFollowRequestListener listener);
 
+    /**
+     * Gets the request updates whenever a request is sent from one user to another.
+     * @param listener The listener to inform a request update.
+     */
     void getRequestUpdates(OnRequestsUpdateListener listener);
 
+    /**
+     * Deletes the follow request from the Firestore database.
+     * @param request Request that is sent from one user to another
+     */
     void deleteFollowRequest(FollowRequest request);
 
+    /**
+     * Accepting the follow request being sent from one user to another.
+     * @param request Request that is sent from one user to another
+     * @param listener The listener to inform accepting the request
+     */
     void acceptFollowRequest(FollowRequest request, OnAcceptRequestListener listener);
 
 }
