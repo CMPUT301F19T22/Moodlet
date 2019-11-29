@@ -47,8 +47,8 @@ public class MoodEventTest {
 
     @Test
     public void testLocationDescription() {
-        MoodEvent testEvent = new MoodEvent(EmotionalState.HAPPY);
-        String locationDescription = "Location Description";
+        String locationDescription = "Peppa Pig's House";
+        MoodEvent testEvent = new MoodEvent(EmotionalState.JEALOUS);
         testEvent.setLocationDescription(locationDescription);
         assertEquals(locationDescription, testEvent.getLocationDescription());
     }

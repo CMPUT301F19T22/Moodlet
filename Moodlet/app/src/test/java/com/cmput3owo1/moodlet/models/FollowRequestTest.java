@@ -8,32 +8,30 @@ public class FollowRequestTest {
 
     private String user1Username = "User 1";
     private String user2Username = "User 2";
-    private User user1 = new User(user1Username);
-    private User user2 = new User(user2Username);
 
     private FollowRequest mockFollowRequest() {
-        return new FollowRequest(user1, user2);
+        return new FollowRequest(user1Username, user2Username);
     }
 
     @Test
     public void testConstructor() {
-        FollowRequest request = new FollowRequest(user1, user2);
+        FollowRequest request = new FollowRequest(user1Username, user2Username);
         assertNotNull(request);
-        assertEquals(user1, request.getRequestFrom());
-        assertEquals(user2, request.getRequestTo());
+        assertEquals(user1Username, request.getRequestFrom());
+        assertEquals(user2Username, request.getRequestTo());
     }
 
     @Test
     public void testRequestFrom() {
         FollowRequest request = mockFollowRequest();
-        request.setRequestFrom(user2);
-        assertEquals(user2, request.getRequestFrom());
+        request.setRequestFrom(user2Username);
+        assertEquals(user2Username, request.getRequestFrom());
     }
 
     @Test
     public void testRequestTo() {
         FollowRequest request = mockFollowRequest();
-        request.setRequestTo(user1);
-        assertEquals(user1, request.getRequestTo());
+        request.setRequestTo(user1Username);
+        assertEquals(user1Username, request.getRequestTo());
     }
 }

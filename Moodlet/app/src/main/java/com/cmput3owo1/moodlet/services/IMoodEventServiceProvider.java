@@ -1,6 +1,5 @@
 package com.cmput3owo1.moodlet.services;
 
-import android.content.Context;
 import android.net.Uri;
 
 import com.cmput3owo1.moodlet.models.EmotionalState;
@@ -102,5 +101,5 @@ public interface IMoodEventServiceProvider {
      */
     void getMoodHistoryUpdates(OnMoodHistoryUpdateListener listener, EmotionalState filterBy);
 
-
+    void updateFollowerWithMostRecentMood(String followerUsername);
 }

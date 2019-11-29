@@ -28,7 +28,6 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
     private ArrayList<MoodEvent> moodEventList;
     private OnItemClickListener listener;
     private SimpleDateFormat simpleDateFormat;
-    private ImageView tvIcon;
 
     /**
      * Listener interface to get the position of a mood event upon a click on the RecyclerView
@@ -39,15 +38,14 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
 
     /**
      * Constructor that takes ArrayList of {@link MoodEvent} and the item click listener
-     * @param moodEventList
-     * @param listener
+     * @param moodEventList The list of the MoodEvents to display
+     * @param listener The listener to call on item clicks
      */
     public MoodEventAdapter(ArrayList<MoodEvent> moodEventList, OnItemClickListener listener) {
         this.moodEventList = moodEventList;
         this.listener = listener;
         this.simpleDateFormat = new SimpleDateFormat("MMMM d, yyyy - h:mm a", Locale.US);
     }
-
 
     /**
      * ViewHolder that holds the views of the feed of a user's mood event history list
@@ -57,6 +55,10 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
         ImageView tvIcon;
         TextView tvTimeDiff;
 
+        /**
+         * Constructor for the view holder that takes the view of the item
+         * @param itemView The view of the item
+         */
         ViewHolder(View itemView) {
             super(itemView);
             tvMood = itemView.findViewById(R.id.mood_textview);

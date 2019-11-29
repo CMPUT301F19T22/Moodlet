@@ -39,4 +39,5 @@
     <string name="location_permissions_denied">Location permissions are needed to tag the current location</string>
     <string name="location_settings_denied">Location settings are needed to tag the current location</string>
     <string name="show_friends">Show Friends</string>
+    <string name="follow_requests">Follow Requests</string>
 </resources>

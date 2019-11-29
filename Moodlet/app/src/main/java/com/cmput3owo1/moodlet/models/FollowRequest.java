@@ -6,6 +6,7 @@ package com.cmput3owo1.moodlet.models;
 public class FollowRequest {
     private String requestFrom;
     private String requestTo;
+    private String id;
 
     /**
      * Default constructor for the FollowRequest
@@ -54,5 +55,13 @@ public class FollowRequest {
      */
     public void setRequestTo(String requestTo) {
         this.requestTo = requestTo;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
