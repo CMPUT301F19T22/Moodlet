@@ -55,18 +55,39 @@ public class SearchTest {
     }
 
     @Test
-    public void testSearchUser() throws InterruptedException {
-        loginWithTestAccount();
+    public void testSearchUsers() throws InterruptedException {
+//        loginWithTestAccount();
 
         // Navigate to Search fragment
         onView(withId(R.id.navigation_search)).perform(click());
 
         // Enter in an existing user
-        onView(withId(R.id.user_search_view)).perform(typeText("toad"));
+        onView(withId(R.id.user_search_view)).perform(typeText("testsearch"));
 
         Thread.sleep(3000);
 
         // Check if user shows
-        onView(withText("@toad")).check(matches(isDisplayed()));
+        onView(withText("@testsearch1")).check(matches(isDisplayed()));
+        onView(withText("Follow")).check(matches(isDisplayed()));
     }
+
+    @Test
+    public void testSentRequest() throws InterruptedException {
+//        loginWithTestAccount();
+
+        // Navigate to Search fragment
+        onView(withId(R.id.navigation_search)).perform(click());
+
+        // Enter in an existing user
+        onView(withId(R.id.user_search_view)).perform(typeText("testsearch"));
+
+        Thread.sleep(3000);
+
+        // Check if user shows
+        onView(withText("@testsearch2")).check(matches(isDisplayed()));
+        onView(withText("Requested")).check(matches(isDisplayed()));
+    }
+
+
+
 }
