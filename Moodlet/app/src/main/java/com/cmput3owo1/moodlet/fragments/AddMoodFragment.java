@@ -166,15 +166,19 @@ public class AddMoodFragment extends Fragment implements
                 editMode = true;
                 mood = (MoodEvent) args.getSerializable("MoodEvent");
                 final Date argDate = (Date) args.getSerializable("date");
-                final GeoPoint argLocation = new GeoPoint(args.getDouble("location_lat"), args.getDouble("location_lon"));
+
+                double lat = args.getDouble("location_lat", -99999);
+                double lon = args.getDouble("location_lon", -99999);
+                if (lat != -99999 && lon != -99999) {
+                    previousLocation = new GeoPoint(lat, lon);
+                }
+                previousLocationDescription = mood.getLocationDescription();
+                previousLocationAddress = mood.getLocationAddress();
+
                 //Fill in fields
                 moodSpinner.setSelection(moodAdapter.getPosition(mood.getEmotionalState()));
                 socialSpinner.setSelection(socialAdapter.getPosition(mood.getSocialSituation()));
                 reasonEdit.setText(mood.getReasoning());
-
-                previousLocation = argLocation;
-                previousLocationDescription = mood.getLocationDescription();
-                previousLocationAddress = mood.getLocationAddress();
 
                 // Set the previoius location checkbox to be initially checked
                 usePreviousLocationCheckbox.setChecked(true);
@@ -185,6 +189,9 @@ public class AddMoodFragment extends Fragment implements
                 if (previousLocationDescription == null && previousLocation == null) {
                     // Disable the checkbox if there was no previous location
                     usePreviousLocationCheckbox.setEnabled(false);
+                    // Re-enable the checkbox and places autocomplete edittext
+                    currentLocationCheckbox.setEnabled(true);
+                    locationEdit.setEnabled(true);
                 } else {
                     // Set the location description or its coordinates if possible
                     setPreviousLocationInfo();

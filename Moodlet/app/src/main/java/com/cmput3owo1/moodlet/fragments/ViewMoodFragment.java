@@ -144,13 +144,14 @@ public class ViewMoodFragment extends Fragment {
                 Bundle args = new Bundle();
                 args.putSerializable("MoodEvent",moodObj);
                 args.putSerializable("date",argDate);
-                args.putSerializable("location_lat", argLocation.getLatitude());
-                args.putSerializable("location_lon", argLocation.getLongitude());
-
+                if (argLocation != null) {
+                    args.putSerializable("location_lat", argLocation.getLatitude());
+                    args.putSerializable("location_lon", argLocation.getLongitude());
+                }
                 args.putBoolean("edit",true);
                 fragment.setArguments(args);
                 FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.fragment_container, fragment);
+                fragmentTransaction.replace(R.id.fragment_container, fragment, "EDIT_FRAGMENT");
                 fragmentTransaction.commit();
         }
 
