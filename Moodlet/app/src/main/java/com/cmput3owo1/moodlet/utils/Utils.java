@@ -1,5 +1,8 @@
 package com.cmput3owo1.moodlet.utils;
 
+import com.cmput3owo1.moodlet.R;
+import com.cmput3owo1.moodlet.models.EmotionalState;
+
 import java.util.Date;
 import java.util.Locale;
 
@@ -37,4 +40,36 @@ public class Utils {
         }
     }
 
+    /**
+     * Helper function to return the mood emoticon of the specified {@link EmotionalState}
+     * @param emotionalState The emotional state to get the emoticon of
+     */
+    public static int getMoodEmoticon(EmotionalState emotionalState) {
+        int moodImage = R.drawable.ic_mood_happy;
+
+        switch(emotionalState) {
+            case SAD:
+                moodImage = R.drawable.ic_mood_sad;
+                break;
+            case ANGRY:
+                moodImage = R.drawable.ic_mood_angry;
+                break;
+            case CONFUSED:
+                moodImage = R.drawable.ic_mood_confused;
+                break;
+            case EXCITED:
+                moodImage = R.drawable.ic_mood_excited;
+                break;
+            case HAPPY:
+                moodImage = R.drawable.ic_mood_happy;
+                break;
+            case JEALOUS:
+                moodImage = R.drawable.ic_mood_jealous;
+                break;
+            case SCARED:
+                moodImage = R.drawable.ic_mood_scared;
+                break;
+        }
+        return moodImage;
+    }
 }

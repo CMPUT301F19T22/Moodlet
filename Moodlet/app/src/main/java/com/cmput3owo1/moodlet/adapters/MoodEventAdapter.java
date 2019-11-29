@@ -16,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import static com.cmput3owo1.moodlet.utils.Utils.getMoodEmoticon;
 import static com.cmput3owo1.moodlet.utils.Utils.getTimeDifference;
 
 /**
@@ -107,33 +108,8 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
         // set TextViews in RecyclerView
         holder.tvMood.setText(mood.getEmotionalState().getDisplayName());
         holder.tvDateTime.setText(simpleDateFormat.format(mood.getDate()));
-
-
-        switch(mood.getEmotionalState()) {
-            case SAD:
-                holder.tvIcon.setImageResource(R.drawable.ic_mood_sad);
-                break;
-            case ANGRY:
-                holder.tvIcon.setImageResource(R.drawable.ic_mood_angry);
-                break;
-            case CONFUSED:
-                holder.tvIcon.setImageResource(R.drawable.ic_mood_confused);
-                break;
-            case EXCITED:
-                holder.tvIcon.setImageResource(R.drawable.ic_mood_excited);
-                break;
-            case HAPPY:
-                holder.tvIcon.setImageResource(R.drawable.ic_mood_happy);
-                break;
-            case JEALOUS:
-                holder.tvIcon.setImageResource(R.drawable.ic_mood_jealous);
-                break;
-            case SCARED:
-                holder.tvIcon.setImageResource(R.drawable.ic_mood_scared);
-                break;
-        }
+        holder.tvIcon.setImageResource(getMoodEmoticon(mood.getEmotionalState()));
         holder.tvTimeDiff.setText(getTimeDifference(mood.getDate()));
-
     }
 
     /**
