@@ -214,6 +214,7 @@ public class FilterActivity extends AppCompatActivity {
     /**
      * Initialize the contents of the Activity's standard options menu.
      * @param menu The options menu in which you place your items.
+     * @return Return true if menu displayed, else nothing shown.
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
