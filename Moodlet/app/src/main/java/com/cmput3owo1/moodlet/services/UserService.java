@@ -47,7 +47,7 @@ public class UserService implements IUserServiceProvider {
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
     }
-    
+
     /**
      * This function is called to check if there is an existing instance of the logged in user.
      * @return Returns true if there is a logged in user; false otherwise.

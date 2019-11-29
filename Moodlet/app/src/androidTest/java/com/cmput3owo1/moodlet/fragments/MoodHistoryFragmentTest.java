@@ -121,15 +121,6 @@ public class MoodHistoryFragmentTest {
         // Select confused from drop down
         onData(allOf(is(instanceOf(EmotionalState.class)), is(EmotionalState.CONFUSED))).perform(click());
 
-        // Click on the floating action button to go to add mood page
-        onView(withId(R.id.add_mood_fab)).perform(click());
-
-        // Click on mood drop down and select a mood
-        onView(withId(R.id.moodSelected)).perform(click());
-      
-        // Select confused from drop down
-        onData(allOf(is(instanceOf(EmotionalState.class)), is(EmotionalState.CONFUSED))).perform(click());
-
         onView(withId(R.id.currentLocationCheckbox)).perform(click());
 
         // add mood event
