@@ -53,10 +53,10 @@ public class FeedTest {
         //Inelegant way to wait for network calls. Fix if there's time
         Thread.sleep(5000);
 
-        onView(withText("personUserFollows1")).check(matches(isDisplayed()));
-        onView(withText("ANGRY")).check(matches(isDisplayed()));
-        onView(withText("personUserFollows2")).check(matches(isDisplayed()));
-        onView(withText("SAD")).check(matches(isDisplayed()));
+        onView(withText("@personUserFollows1")).check(matches(isDisplayed()));
+        onView(withText("Angry")).check(matches(isDisplayed()));
+        onView(withText("@personUserFollows2")).check(matches(isDisplayed()));
+        onView(withText("Sad")).check(matches(isDisplayed()));
     }
 
 }

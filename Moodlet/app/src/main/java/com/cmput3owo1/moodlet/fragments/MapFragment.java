@@ -256,7 +256,7 @@ public class MapFragment extends Fragment implements
                             .position(latLng)
                             .icon(BitmapDescriptorFactory.defaultMarker(FOLLOWER_MARKER_COLOR))
                             .alpha(0.8f)
-                            .title(moodEventAssociation.getMoodEvent().getLocationDescription())
+                            .title(moodEventAssociation.getUsername())
                     );
                     marker.setTag(moodEventAssociation);
                 }

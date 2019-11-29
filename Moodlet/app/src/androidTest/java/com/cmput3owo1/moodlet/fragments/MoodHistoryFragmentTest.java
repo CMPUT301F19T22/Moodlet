@@ -26,6 +26,7 @@ import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.action.ViewActions.swipeLeft;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -91,7 +92,7 @@ public class MoodHistoryFragmentTest {
         onView(withId(R.id.add_mood_fab)).perform(click());
 
         // Click on mood drop down and select a mood
-        onView(withId(R.id.moodSelected)).perform(click());
+        onView(withId(R.id.moodSelected)).perform(scrollTo(), click());
 
         // Select confused from drop down
 //        onView(allOf(withId(R.id.standard_spinner_format), withText("Confused"))).perform(click());
@@ -116,12 +117,12 @@ public class MoodHistoryFragmentTest {
         onView(withId(R.id.add_mood_fab)).perform(click());
 
         // Click on mood drop down and select a mood
-        onView(withId(R.id.moodSelected)).perform(click());
+        onView(withId(R.id.moodSelected)).perform(scrollTo(), click());
 
         // Select confused from drop down
         onData(allOf(is(instanceOf(EmotionalState.class)), is(EmotionalState.CONFUSED))).perform(click());
 
-        onView(withId(R.id.currentLocationCheckbox)).perform(click());
+        onView(withId(R.id.currentLocationCheckbox)).perform(scrollTo(), click());
 
         // add mood event
         onView(withId(R.id.confirmAdd)).perform(click());
@@ -142,7 +143,7 @@ public class MoodHistoryFragmentTest {
         onView(withId(R.id.add_mood_fab)).perform(click());
 
         // Click on mood drop down and select a mood
-        onView(withId(R.id.moodSelected)).perform(click());
+        onView(withId(R.id.moodSelected)).perform(scrollTo(), click());
 
         // Select jealous from drop down
         onData(allOf(is(instanceOf(EmotionalState.class)), is(EmotionalState.JEALOUS))).perform(click());
