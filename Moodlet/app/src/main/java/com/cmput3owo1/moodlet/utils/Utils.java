@@ -43,6 +43,7 @@ public class Utils {
     /**
      * Helper function to return the mood emoticon of the specified {@link EmotionalState}
      * @param emotionalState The emotional state to get the emoticon of
+     * @return Returns the image resource of the mood emoticon
      */
     public static int getMoodEmoticon(EmotionalState emotionalState) {
         int moodImage = R.drawable.ic_mood_happy;
