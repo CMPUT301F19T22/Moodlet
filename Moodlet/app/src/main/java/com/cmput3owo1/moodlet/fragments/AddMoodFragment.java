@@ -201,6 +201,10 @@ public class AddMoodFragment extends Fragment implements
         clearLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Do not clear using previous location
+                if (editMode && usePreviousLocationCheckbox.isChecked()) {
+                    return;
+                }
                 placesLocation = null;
                 placesLocationDescription = null;
                 placesLocationAddress = null;
@@ -286,7 +290,13 @@ public class AddMoodFragment extends Fragment implements
                         locationEdit.setEnabled(true);
                         // If there is a location description, restore the description
                         if (placesLocationDescription != null) {
-                            locationEdit.setText(String.format("%s, %s", placesLocationDescription, placesLocationAddress));
+                            if (placesLocationAddress != null) {
+                                locationEdit.setText(String.format("%s, %s", placesLocationDescription, placesLocationAddress));
+                            } else {
+                                locationEdit.setText(String.format(placesLocationDescription));
+                            }
+                        } else {
+                            locationEdit.setText("");
                         }
                     }
                 }
