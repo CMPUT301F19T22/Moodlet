@@ -59,6 +59,12 @@ public interface IUserServiceProvider {
     }
 
     /**
+     * This function is called to check if there is an existing instance of the logged in user.
+     * @return Returns true if there is a logged in user; false otherwise.
+     */
+    boolean hasPreviousLogin();
+
+    /**
      * Listener interface to get the new follow request list upon an update
      */
     interface OnRequestsUpdateListener {
