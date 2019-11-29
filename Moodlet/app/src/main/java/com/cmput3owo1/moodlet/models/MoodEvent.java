@@ -130,8 +130,16 @@ public class MoodEvent extends Event implements Serializable {
         this.locationDescription = locationDescription;
     }
 
+    /**
+     * This gets the location address associated with the MoodEvent.
+     * @return The location's address
+     */
     public String getLocationAddress() { return this.locationAddress; }
 
+    /**
+     * This sets the location address associaated with the MoodEvent
+     * @param locationAddress The location's address
+     */
     public void setLocationAddress(String locationAddress) {
         this.locationAddress = locationAddress;
     }
