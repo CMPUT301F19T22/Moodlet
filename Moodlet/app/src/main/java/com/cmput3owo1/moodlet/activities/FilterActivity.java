@@ -237,6 +237,7 @@ public class FilterActivity extends AppCompatActivity {
             confusedBox.setChecked(false);
             scaredBox.setChecked(false);
             jealousBox.setChecked(false);
+            selectedFilters.clear();
         }
 
         return super.onOptionsItemSelected(item);
