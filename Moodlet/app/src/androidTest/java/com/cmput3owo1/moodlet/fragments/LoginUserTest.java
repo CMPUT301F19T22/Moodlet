@@ -98,7 +98,7 @@ public class LoginUserTest {
         ViewInteraction appCompatButton = onView(allOf(withId(R.id.btn_login), withText("Login")));
         appCompatButton.perform(click());
 
-        Thread.sleep(1500);
+        Thread.sleep(3000);
 
         openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getContext());
         onView(withText(R.string.logout)).perform(click());

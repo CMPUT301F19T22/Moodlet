@@ -116,12 +116,12 @@ public class MapFragmentTest {
 
         // Get the marker
         UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
-        UiObject marker = device.findObject(new UiSelector().descriptionContains("Electrical and Computer Engineering Research Facility"));
+        UiObject marker = device.findObject(new UiSelector().descriptionContains("maptest2"));
         assertFalse(marker.exists());
 
         onView(withId(R.id.showFollowers)).perform(click());
 
-        marker = device.findObject(new UiSelector().descriptionContains("Electrical and Computer Engineering Research Facility"));
+        marker = device.findObject(new UiSelector().descriptionContains("maptest2"));
         assertTrue(marker.exists());
         marker.click();
     }
