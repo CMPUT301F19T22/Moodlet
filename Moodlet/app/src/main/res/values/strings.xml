@@ -29,5 +29,13 @@
     <string name="mood">Mood</string>
     <string name="social_situation">Social Situation</string>
     <string name="reason">Reason</string>
+    <string name="filter_happy">Happy</string>
+    <string name="filter_sad">Sad</string>
+    <string name="filter_angry">Angry</string>
+    <string name="filter_excited">Excited</string>
+    <string name="filter_confused">Confused</string>
+    <string name="filter_scared">Scared</string>
+    <string name="filter_jealous">Jealous</string>
+
 
 </resources>

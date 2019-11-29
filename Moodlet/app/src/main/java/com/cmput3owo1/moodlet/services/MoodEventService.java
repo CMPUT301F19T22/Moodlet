@@ -20,6 +20,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -53,13 +54,14 @@ public class MoodEventService implements IMoodEventServiceProvider {
     /**
      * Listen to feed updates of the current user. Calls the listener onFeedUpdate with the new
      * feed when a change occurs.
+     *
      * @param listener The listener to pass the new feed to
      */
     @Override
     public void getFeedUpdates(final OnFeedUpdateListener listener) {
         String username = auth.getCurrentUser().getDisplayName();
 
-        Query followingQuery = db.collection("users/"+ username + "/following");
+        Query followingQuery = db.collection("users/" + username + "/following");
 
         followingQuery.orderBy("date", Query.Direction.DESCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -77,8 +79,9 @@ public class MoodEventService implements IMoodEventServiceProvider {
 
     /**
      * Add a Mood Event to the database.
+     *
      * @param moodEvent The {@link MoodEvent} to add to the database.
-     * @param listener The listener to notify upon completion of add.
+     * @param listener  The listener to notify upon completion of add.
      */
     @Override
     public String addMoodEvent(final MoodEvent moodEvent, OnMoodUpdateListener listener) {
@@ -112,11 +115,12 @@ public class MoodEventService implements IMoodEventServiceProvider {
 
     /**
      * Edit an existing MoodEvent on the database.
+     *
      * @param moodEvent The {@link MoodEvent} to edit.
-     * @param listener The listener to notify upon completion of edit.
+     * @param listener  The listener to notify upon completion of edit.
      */
     @Override
-    public void editMoodEvent(MoodEvent moodEvent, OnMoodUpdateListener listener){
+    public void editMoodEvent(MoodEvent moodEvent, OnMoodUpdateListener listener) {
         DocumentReference newMoodEventRef = db.collection("moodEvents").document(moodEvent.getId());
         newMoodEventRef.set(moodEvent);
 
@@ -129,8 +133,9 @@ public class MoodEventService implements IMoodEventServiceProvider {
 
     /**
      * Delete swiped MoodEvent from database.
+     *
      * @param moodEvent The mood event to be deleted.
-     * @param listener The listener to notify upon completion of deletion.
+     * @param listener  The listener to notify upon completion of deletion.
      */
     @Override
     public void deleteMoodEvent(MoodEvent moodEvent, final OnMoodDeleteListener listener) {
@@ -156,39 +161,42 @@ public class MoodEventService implements IMoodEventServiceProvider {
     /**
      * Listen to mood history updates of the current user. Calls the listener's onMoodHistoryUpdate
      * method with the new mood history list when a change occurs.
+     *
      * @param listener The listener to pass the new mood history list to
      */
     @Override
-    public void getMoodHistoryUpdates(OnMoodHistoryUpdateListener listener) {
+    public ListenerRegistration getMoodHistoryUpdates(OnMoodHistoryUpdateListener listener) {
         String username = auth.getCurrentUser().getDisplayName();
 
         Query moodHistoryQuery = db.collection("moodEvents")
                 .whereEqualTo("username", username)
                 .orderBy("date", Query.Direction.DESCENDING);
 
-        runMoodHistoryQuery(moodHistoryQuery, listener);
+        return runMoodHistoryQuery(moodHistoryQuery, listener);
     }
 
     /**
      * Listen to mood history updates of the current user. Calls the listener's onMoodHistoryUpdate
      * method with the new mood history list when a change occurs.
+     *
      * @param listener The listener to pass the new mood history list to
-     * @param filterBy The {@link EmotionalState} to filter the list by.
+     * @param filterBy The list of {@link EmotionalState} to filter the list by.
      */
     @Override
-    public void getMoodHistoryUpdates(OnMoodHistoryUpdateListener listener, EmotionalState filterBy) {
+    public ListenerRegistration getMoodHistoryUpdates(OnMoodHistoryUpdateListener listener, ArrayList<String> filterBy) {
         String username = auth.getCurrentUser().getDisplayName();
 
         Query moodHistoryQuery = db.collection("moodEvents")
                 .whereEqualTo("username", username)
-                .whereEqualTo("emotionalState", filterBy)
+                .whereIn("emotionalState", filterBy)
                 .orderBy("date", Query.Direction.DESCENDING);
 
-        runMoodHistoryQuery(moodHistoryQuery, listener);
+
+        return runMoodHistoryQuery(moodHistoryQuery, listener);
     }
-    
-    private void runMoodHistoryQuery(Query moodHistoryQuery, final OnMoodHistoryUpdateListener listener) {
-        moodHistoryQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
+
+    private ListenerRegistration runMoodHistoryQuery(Query moodHistoryQuery, final OnMoodHistoryUpdateListener listener) {
+        return moodHistoryQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 ArrayList<MoodEvent> newHistory = new ArrayList<>();
@@ -200,14 +208,16 @@ public class MoodEventService implements IMoodEventServiceProvider {
             }
         });
     }
+
     /**
      * Listen to mood history updates of the current user. Calls the listener's onMoodHistoryUpdate
      * method with the new mood history list when a change occurs.
-     * @param listener The listener to pass the new mood history list to
-     * @param imageToUpload The Uri to upload to FireBase.
+     *
+     * @param listener      The listener to pass the new mood history list to
+     * @param imageToUpload The Url to upload to FireBase.
      */
     @Override
-    public void uploadImage(final OnImageUploadListener listener, final Uri imageToUpload){
+    public void uploadImage(final OnImageUploadListener listener, final Uri imageToUpload) {
 
         final String username = auth.getCurrentUser().getDisplayName();
         final String filepath = "images/" + username + "/" + imageToUpload.getLastPathSegment();
@@ -233,6 +243,5 @@ public class MoodEventService implements IMoodEventServiceProvider {
         });
 
     }
-
 }
 

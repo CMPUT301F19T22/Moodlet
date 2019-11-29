@@ -1,0 +1,20 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/clear"
+        android:orderInCategory="1"
+        android:title="Clear filters"
+        android:icon="@drawable/ic_clear_all_24px"
+        app:showAsAction="always"
+        />
+
+    <item
+        android:id="@+id/logout"
+        android:orderInCategory="1"
+        android:title="Logout"
+        android:icon="@drawable/ic_more_vert_24px"
+        android:iconTint="#000"
+        />
+
+</menu>

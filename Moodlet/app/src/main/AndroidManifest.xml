@@ -26,6 +26,7 @@
             android:label="@string/app_name">
         </activity>
         <activity android:name=".activities.MoodEditorActivity"></activity>
+        <activity android:name=".activities.FilterActivity"></activity>
     </application>
 
 </manifest>
