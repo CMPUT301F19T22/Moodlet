@@ -7,7 +7,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,10 +16,12 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.cmput3owo1.moodlet.R;
 import com.cmput3owo1.moodlet.models.MoodEvent;
+import com.google.firebase.firestore.GeoPoint;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * A fragment that displays the details of a specific MoodEvent and optionally
@@ -28,16 +29,16 @@ import java.util.Date;
  */
 public class ViewMoodFragment extends Fragment {
 
-    private boolean editMode;
     private ImageView bg;
     private TextView moodDisplay;
     private TextView socialDisplay;
     private TextView date;
     private TextView reasonDisplay;
+    private TextView locationDisplay;
     private ImageView imageDisplay;
-    private Button toggleEdit;
     private MoodEvent moodObj;
     private Date argDate;
+    private GeoPoint argLocation;
     /**
      * Default constructor for the Fragment
      */
@@ -67,23 +68,51 @@ public class ViewMoodFragment extends Fragment {
         moodDisplay = view.findViewById(R.id.moodDisplay);
         socialDisplay = view.findViewById(R.id.socialDisplay);
         reasonDisplay = view.findViewById(R.id.reasonDisplay);
+        locationDisplay = view.findViewById(R.id.locationDisplay);
         bg = view.findViewById(R.id.bg_vector);
 
         //Get parameters from Mood
         Bundle args = getArguments();
         moodObj = (MoodEvent) args.getSerializable("MoodEvent");
         argDate = (Date) args.getSerializable("date");
+        double lat = args.getDouble("location_lat", -99999);
+        double lon = args.getDouble("location_lon", -99999);
+        if (lat != -99999 && lon != -99999) {
+            argLocation = new GeoPoint(lat, lon);
+        }
 
         //Set text after obtaining data
         moodDisplay.setText(moodObj.getEmotionalState().getDisplayName());
         socialDisplay.setText(moodObj.getSocialSituation().getDisplayName());
-        reasonDisplay.setText(moodObj.getReasoning());
+        String reasoning = moodObj.getReasoning();
+        if (!reasoning.isEmpty()) {
+            reasonDisplay.setText(moodObj.getReasoning());
+        }
+        String locationDescription = moodObj.getLocationDescription();
+        String locationAddress = moodObj.getLocationAddress();
+        if (locationDescription != null) {
+            if (locationAddress != null) {
+                locationDisplay.setText(String.format("%s,\n%s", locationDescription, locationAddress));
+            } else {
+                locationDisplay.setText(locationDescription);
+            }
+        } else {
+            if (argLocation != null) {
+                locationDisplay.setText(String.format(
+                        Locale.US,
+                        "[%.3f, %.3f]",
+                        argLocation.getLatitude(),
+                        argLocation.getLongitude()
+                ));
+            }
+        }
+        // TODO: set the text for location
+
         date.setText(sdf.format(argDate));
         bg.setColorFilter(moodObj.getEmotionalState().getColor());
 
         if(moodObj.getPhotographPath() != null){
             Picasso.get().load(moodObj.getPhotographPath()).into(imageDisplay);
-
         }
 
         return view;
@@ -115,6 +144,9 @@ public class ViewMoodFragment extends Fragment {
                 Bundle args = new Bundle();
                 args.putSerializable("MoodEvent",moodObj);
                 args.putSerializable("date",argDate);
+                args.putSerializable("location_lat", argLocation.getLatitude());
+                args.putSerializable("location_lon", argLocation.getLongitude());
+
                 args.putBoolean("edit",true);
                 fragment.setArguments(args);
                 FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();

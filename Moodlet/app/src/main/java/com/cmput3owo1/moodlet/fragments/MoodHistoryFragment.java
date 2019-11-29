@@ -28,6 +28,7 @@ import com.cmput3owo1.moodlet.models.MoodEvent;
 import com.cmput3owo1.moodlet.services.IMoodEventServiceProvider;
 import com.cmput3owo1.moodlet.services.MoodEventService;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.GeoPoint;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -148,6 +149,11 @@ public class MoodHistoryFragment extends Fragment
         Intent intent = new Intent(getActivity(), MoodEditorActivity.class);
         intent.putExtra("MoodEvent",selected);
         intent.putExtra("date",selected.getDate());
+        GeoPoint location = selected.getLocation();
+        if (location != null) {
+            intent.putExtra("location_lat",location.getLatitude());
+            intent.putExtra("location_lon",location.getLongitude());
+        }
         intent.putExtra("view",true);
         startActivity(intent);
     }

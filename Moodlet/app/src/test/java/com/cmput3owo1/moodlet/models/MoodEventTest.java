@@ -53,4 +53,11 @@ public class MoodEventTest {
         assertEquals(locationDescription, testEvent.getLocationDescription());
     }
 
+    @Test
+    public void testLocationAddress() {
+        MoodEvent testEvent = new MoodEvent(EmotionalState.HAPPY);
+        String locationAddress = "123 St, 123 Ave";
+        testEvent.setLocationAddress(locationAddress);
+        assertEquals(locationAddress, testEvent.getLocationAddress());
+    }
 }
