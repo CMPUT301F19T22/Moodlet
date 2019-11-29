@@ -29,7 +29,6 @@
     <string name="mood">Mood</string>
     <string name="social_situation">Social Situation</string>
     <string name="reason">Reason</string>
-<<<<<<< HEAD
     <string name="filter_happy">Happy</string>
     <string name="filter_sad">Sad</string>
     <string name="filter_angry">Angry</string>
@@ -37,9 +36,6 @@
     <string name="filter_confused">Confused</string>
     <string name="filter_scared">Scared</string>
     <string name="filter_jealous">Jealous</string>
-
-
-=======
     <string name="location_label">Location</string>
     <string name="location_checkbox">Use current location?</string>
     <string name="location_hint">Search for a location</string>
@@ -47,5 +43,4 @@
     <string name="location_permissions_denied">Location permissions are needed to tag the current location</string>
     <string name="location_settings_denied">Location settings are needed to tag the current location</string>
     <string name="show_friends">Show Friends</string>
->>>>>>> abcedb59c4a9ee28c452baa4ad63d8e90ed1e087
 </resources>

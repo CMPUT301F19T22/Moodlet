@@ -6,7 +6,8 @@
         android:id="@+id/editToggle"
         android:orderInCategory="1"
         android:title="Edit Mood"
-        android:icon="@drawable/ic_more_vert_24px"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_edit_24px"
         android:iconTint="#000"
         />
 
