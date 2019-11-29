@@ -102,12 +102,17 @@ public class MoodEventService implements IMoodEventServiceProvider {
      * @param listener The listener to notify upon completion of edit.
      */
     @Override
-    public void editMoodEvent(final MoodEvent moodEvent, OnMoodUpdateListener listener){
+    public void editMoodEvent(final MoodEvent moodEvent, final OnMoodUpdateListener listener){
         DocumentReference newMoodEventRef = db.collection("moodEvents").document(moodEvent.getId());
         newMoodEventRef.set(moodEvent);
 
         final String username = auth.getCurrentUser().getDisplayName();
-        newMoodEventRef.update("username", username);
+        newMoodEventRef.update("username", username).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                listener.onMoodUpdateSuccess();
+            }
+        });
 
         // See if moodEvent is the most recent - if so, we have to notify followers
         Query moodHistoryQuery = db.collection("moodEvents")
@@ -126,8 +131,6 @@ public class MoodEventService implements IMoodEventServiceProvider {
                 }
             }
         });
-
-        listener.onMoodUpdateSuccess();
     }
 
     /**
@@ -148,8 +151,32 @@ public class MoodEventService implements IMoodEventServiceProvider {
                         db.document(path).set(moodEvent);
                         db.document(path).update("username", username);
                     } else {
-                        db.document(path).set(new HashMap<String, Object>());
+                        HashMap<String, String> data = new HashMap<String, String>();
+                        data.put("username", username);
+                        db.document(path).set(data);
                     }
+                }
+            }
+        });
+    }
+
+    @Override
+    public void updateFollowerWithMostRecentMood(final String followerUsername) {
+        final String currentUser = auth.getCurrentUser().getDisplayName();
+
+        Query moodHistoryQuery = db.collection("moodEvents")
+                .whereEqualTo("username", currentUser)
+                .orderBy("date", Query.Direction.DESCENDING)
+                .limit(1);
+
+        moodHistoryQuery.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot snapshots) {
+                for (QueryDocumentSnapshot doc : snapshots) {
+                    String path = "users/" + followerUsername + "/following/" + currentUser;
+                    MoodEvent mostRecentEvent = doc.toObject(MoodEvent.class);
+                    db.document(path).set(mostRecentEvent);
+                    db.document(path).update("username", currentUser);
                 }
             }
         });
@@ -208,32 +235,6 @@ public class MoodEventService implements IMoodEventServiceProvider {
                 }
             }
         });
-    }
-
-    /**
-     * Delete swiped MoodEvent from database.
-     * @param moodEvent The mood event to be deleted.
-     * @param listener The listener to notify upon completion of deletion.
-     */
-    @Override
-    public void deleteMoodEvent(MoodEvent moodEvent, final OnMoodDeleteListener listener) {
-        DocumentReference newMoodEventRef = db.collection("moodEvents").document(moodEvent.getId());
-
-
-        newMoodEventRef.delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        listener.onMoodDeleteSuccess();
-                    }
-                })
-
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        listener.onMoodDeleteFailure();
-                    }
-                });
     }
 
     /**

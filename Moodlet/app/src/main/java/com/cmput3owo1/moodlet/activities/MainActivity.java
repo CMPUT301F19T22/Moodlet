@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.cmput3owo1.moodlet.R;
 import com.cmput3owo1.moodlet.services.IUserServiceProvider;
@@ -43,13 +42,11 @@ public class MainActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-//      Manually replace navigation icon with custom icon.
+        //  Manually replace navigation icon with custom icon.
         toolbar.setNavigationIcon(R.drawable.ic_group_add_24px);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                 TODO: Create intent to go to the follow requests fragment.
-                Toast.makeText(MainActivity.this, "Follow requests", Toast.LENGTH_SHORT).show();
                 openFollowRequestActivity();
             }
         });

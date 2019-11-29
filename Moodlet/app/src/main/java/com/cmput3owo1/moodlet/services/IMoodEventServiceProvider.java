@@ -101,5 +101,5 @@ public interface IMoodEventServiceProvider {
      */
     void getMoodHistoryUpdates(OnMoodHistoryUpdateListener listener, EmotionalState filterBy);
 
-
+    void updateFollowerWithMostRecentMood(String followerUsername);
 }
