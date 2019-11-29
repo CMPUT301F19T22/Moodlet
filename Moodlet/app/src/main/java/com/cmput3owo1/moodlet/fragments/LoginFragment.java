@@ -28,12 +28,19 @@ import com.cmput3owo1.moodlet.services.UserService;
  */
 public class LoginFragment extends Fragment implements IUserServiceProvider.LoginListener {
 
-    EditText email, password;
-    TextView signupText;
-    Button loginButton;
-    ProgressBar progressBar;
+    private EditText email, password;
+    private TextView signupText;
+    private Button loginButton;
+    private ProgressBar progressBar;
 
-    UserService userService = new UserService();
+    private IUserServiceProvider userService = new UserService();
+
+    /**
+     * Default constructor for the Fragment
+     */
+    public LoginFragment(){
+
+    }
 
     /**
      * This function is called to have the fragment instantiate its user interface view.
@@ -45,15 +52,7 @@ public class LoginFragment extends Fragment implements IUserServiceProvider.Logi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        if (userService.hasPreviousLogin()) {
-            Intent intent = new Intent(getActivity(), MainActivity.class);
-            startActivity(intent);
-
-            getActivity().finish();
-            return null;
-        }
-
-        // Inflate the layout for this fragment
+       // Inflate the layout for this fragment
         View loginFragmentView = inflater.inflate(R.layout.fragment_login, container, false);
 
         signupText = loginFragmentView.findViewById(R.id.sign_up_text);

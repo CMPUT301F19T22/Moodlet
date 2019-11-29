@@ -116,7 +116,11 @@ public class AddMoodFragment extends Fragment implements
     public static final int REQUEST_CHECK_SETTINGS = 2; // Keep public to access in parent activity
     private static final int PLACES_REQUEST_CODE = 3;
 
+    /**
+     * Default public constructor
+     */
     public AddMoodFragment(){
+
     }
 
     /**
@@ -166,17 +170,21 @@ public class AddMoodFragment extends Fragment implements
                 editMode = true;
                 mood = (MoodEvent) args.getSerializable("MoodEvent");
                 final Date argDate = (Date) args.getSerializable("date");
-                final GeoPoint argLocation = new GeoPoint(args.getDouble("location_lat"), args.getDouble("location_lon"));
+
+                double lat = args.getDouble("location_lat", -99999);
+                double lon = args.getDouble("location_lon", -99999);
+                if (lat != -99999 && lon != -99999) {
+                    previousLocation = new GeoPoint(lat, lon);
+                }
+                previousLocationDescription = mood.getLocationDescription();
+                previousLocationAddress = mood.getLocationAddress();
+
                 //Fill in fields
                 moodSpinner.setSelection(moodAdapter.getPosition(mood.getEmotionalState()));
                 socialSpinner.setSelection(socialAdapter.getPosition(mood.getSocialSituation()));
                 reasonEdit.setText(mood.getReasoning());
 
-                previousLocation = argLocation;
-                previousLocationDescription = mood.getLocationDescription();
-                previousLocationAddress = mood.getLocationAddress();
-
-                // Set the previoius location checkbox to be initially checked
+                // Set the previous location checkbox to be initially checked
                 usePreviousLocationCheckbox.setChecked(true);
                 // Disable the checkbox and places autocomplete edittext
                 currentLocationCheckbox.setEnabled(false);
@@ -185,6 +193,11 @@ public class AddMoodFragment extends Fragment implements
                 if (previousLocationDescription == null && previousLocation == null) {
                     // Disable the checkbox if there was no previous location
                     usePreviousLocationCheckbox.setEnabled(false);
+                    // Uncheck the checkbox
+                    usePreviousLocationCheckbox.setChecked(false);
+                    // Re-enable the checkbox and places autocomplete edittext
+                    currentLocationCheckbox.setEnabled(true);
+                    locationEdit.setEnabled(true);
                 } else {
                     // Set the location description or its coordinates if possible
                     setPreviousLocationInfo();
@@ -202,12 +215,17 @@ public class AddMoodFragment extends Fragment implements
             @Override
             public void onClick(View v) {
                 // Do not clear using previous location
-                if (editMode && usePreviousLocationCheckbox.isChecked()) {
+                if (editMode && usePreviousLocationCheckbox.isChecked() && usePreviousLocationCheckbox.isEnabled()) {
                     return;
                 }
+                // Clear the selected places autocomplete location
                 placesLocation = null;
                 placesLocationDescription = null;
                 placesLocationAddress = null;
+                // Clear the current location and uncheck the checkbox
+                currentLocation = null;
+                currentLocationCheckbox.setChecked(false);
+                // Reset the location edittext display
                 locationEdit.setText("");
             }
         });
@@ -249,6 +267,13 @@ public class AddMoodFragment extends Fragment implements
                 }
                 // Stop receiving location requests (only need current location)
                 fusedLocationProviderClient.removeLocationUpdates(locationCallback);
+                // Set the edittext to display the coordinates of the location
+                locationEdit.setText(String.format(
+                        Locale.US,
+                        "[%.3f, %.3f]",
+                        currentLocation.getLatitude(),
+                        currentLocation.getLongitude()
+                ));
             };
         };
 
@@ -268,6 +293,16 @@ public class AddMoodFragment extends Fragment implements
                     }
                 } else {
                     locationEdit.setEnabled(true);
+                    // Restore the places autocomplete location description, or empty if there is none
+                    if (placesLocation != null && placesLocationDescription != null) {
+                        if (placesLocationAddress != null) {
+                            locationEdit.setText(String.format("%s, %s", placesLocationDescription, placesLocationAddress));
+                        } else {
+                            locationEdit.setText(String.format(placesLocationDescription));
+                        }
+                    } else {
+                        locationEdit.setText("");
+                    }
                 }
             }
         });

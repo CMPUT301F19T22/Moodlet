@@ -50,10 +50,17 @@ public interface IUserServiceProvider {
         void onRequestSuccess(User user);
     }
 
+    /**
+     * Interface for a listener that receives the username of the follower after accepting the
+     * request. The listener is invoked when the follow request is successfully accepted.
+     */
     interface OnAcceptRequestListener {
         void onAcceptRequestSuccess(String newFollowerUsername);
     }
 
+    /**
+     * Listener interface to get the new follow request list upon an update
+     */
     interface OnRequestsUpdateListener {
         void onRequestsUpdate(ArrayList<FollowRequest> newRequests);
     }
@@ -102,10 +109,24 @@ public interface IUserServiceProvider {
      */
     void sendFollowRequest(User user, OnFollowRequestListener listener);
 
+    /**
+     * Listen to follow request updates of the current user. Calls the listener's onRequestUpdate
+     * method with the new follow request list when a change occurs.
+     * @param listener The listener to pass the new follow request list to
+     */
     void getRequestUpdates(OnRequestsUpdateListener listener);
 
+    /**
+     * Delete the specified follow request.
+     * @param request The follow request to delete
+     */
     void deleteFollowRequest(FollowRequest request);
 
+    /**
+     * Accept the specified follow request. Call the listener's callback function upon success
+     * @param request The follow request to accept
+     * @param listener The listener to notify upon success
+     */
     void acceptFollowRequest(FollowRequest request, OnAcceptRequestListener listener);
 
 }

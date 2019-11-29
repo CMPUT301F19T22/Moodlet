@@ -2,16 +2,10 @@ package com.cmput3owo1.moodlet.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.NavigationUI;
 
 import com.cmput3owo1.moodlet.R;
 import com.cmput3owo1.moodlet.fragments.AddMoodFragment;
@@ -67,8 +61,7 @@ public class MoodEditorActivity extends AppCompatActivity {
                 addMoodFragment.setArguments(args);
                 getSupportFragmentManager().beginTransaction()
                         .add(R.id.fragment_container, addMoodFragment).commit();
-            }
-            else if(intent.hasExtra("view")){
+            } else if(intent.hasExtra("view")){
                 viewMoodFragment = new ViewMoodFragment();
                 viewMoodFragment.setArguments(getIntent().getExtras());
 
@@ -89,6 +82,10 @@ public class MoodEditorActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == AddMoodFragment.REQUEST_CHECK_SETTINGS) {
+            // Check to see if the fragment is null, if not get the edit fragment using tag
+            if (addMoodFragment == null) {
+                addMoodFragment = (AddMoodFragment) getSupportFragmentManager().findFragmentByTag("EDIT_FRAGMENT");
+            }
             addMoodFragment.onActivityResult(requestCode, resultCode, data);
         } else {
             super.onActivityResult(requestCode, resultCode, data);

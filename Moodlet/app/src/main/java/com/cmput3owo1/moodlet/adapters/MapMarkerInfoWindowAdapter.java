@@ -7,7 +7,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.cmput3owo1.moodlet.R;
-import com.cmput3owo1.moodlet.models.EmotionalState;
 import com.cmput3owo1.moodlet.models.MoodEvent;
 import com.cmput3owo1.moodlet.models.MoodEventAssociation;
 import com.google.android.gms.maps.GoogleMap;
@@ -16,8 +15,13 @@ import com.google.android.gms.maps.model.Marker;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static com.cmput3owo1.moodlet.utils.Utils.getMoodEmoticon;
 import static com.cmput3owo1.moodlet.utils.Utils.getTimeDifference;
 
+/**
+ * This class provides customized rendering of info windows for markers on the Google Map object. The
+ * methods of this provider are called when it is time to show an info window for a marker.
+ */
 public class MapMarkerInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
     private String pattern = "MMMM d, yyyy - h:mm a";
@@ -112,37 +116,8 @@ public class MapMarkerInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
         Date date = moodEvent.getDate();
         dateInfo.setText(sdf.format(date));
         timeInfo.setText(getTimeDifference(date));
-        setEmoticon(moodEvent.getEmotionalState());
+        emoticonInfo.setImageResource(getMoodEmoticon(moodEvent.getEmotionalState()));
         infoWindowBar.setColorFilter(moodEvent.getEmotionalState().getColor());
     }
 
-    /**
-     * Helper function to set the ImageView to the correct emoticon for the mood
-     * @param emotionalState The emotional state to set the emoticon to.
-     */
-    private void setEmoticon(EmotionalState emotionalState) {
-        switch(emotionalState) {
-            case SAD:
-                emoticonInfo.setImageResource(R.drawable.ic_mood_sad);
-                break;
-            case ANGRY:
-                emoticonInfo.setImageResource(R.drawable.ic_mood_angry);
-                break;
-            case CONFUSED:
-                emoticonInfo.setImageResource(R.drawable.ic_mood_confused);
-                break;
-            case EXCITED:
-                emoticonInfo.setImageResource(R.drawable.ic_mood_excited);
-                break;
-            case HAPPY:
-                emoticonInfo.setImageResource(R.drawable.ic_mood_happy);
-                break;
-            case JEALOUS:
-                emoticonInfo.setImageResource(R.drawable.ic_mood_jealous);
-                break;
-            case SCARED:
-                emoticonInfo.setImageResource(R.drawable.ic_mood_scared);
-                break;
-        }
-    }
 }
