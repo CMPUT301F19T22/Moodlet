@@ -12,8 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:gravity="center_horizontal|start"
-        android:theme="@style/Theme.AppCompat.Light"
-        android:background="@color/appBarBackground"
+        android:theme="@style/ActionBarTheme"
+        android:elevation="4dp"
         app:title="Filter"
         app:layout_constraintTop_toTopOf="parent"
         app:menu="@menu/general_fragment_menu">
