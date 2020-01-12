@@ -1,6 +1,9 @@
-# 3OwO1
+# Moodlet
 
-CMPUT 301 Fa19 Group Project
+An Android application that tracks your moods!
+
+## Preview
+![](https://puu.sh/EJTCn/8b2deec0dd.png)
 
 # Setup
 
